@@ -37,6 +37,10 @@ describe('when the receipt must not estimate', () => {
     expect(computeReceipt({ assessed2026: 0, assessed2025: 0, units: 0, cityGarbage: false, view: 'owner',
       assessmentClass: '9' }, RATES)).toEqual({ kind: 'exempt' })
   })
+  it('renter view of a parcel with no homes: no renter share', () => {
+    expect(computeReceipt({ assessed2026: 7_800, assessed2025: 7_800, units: 0, cityGarbage: false, view: 'renter' }, RATES))
+      .toEqual({ kind: 'no_dwellings' })
+  })
   it('manufacturing is state-assessed (class 3)', () => {
     expect(computeReceipt({ assessed2026: 0, assessed2025: 0, units: 0, cityGarbage: false, view: 'owner',
       assessmentClass: '3' }, RATES)).toEqual({ kind: 'state_assessed' })

@@ -25,18 +25,34 @@ function sourceList(cites: Cite[]) {
   return { list, index }
 }
 
-const Mark = ({ n }: { n: number }) => (
+// The mark stays glyph-sized; an invisible 24x24 px hit area (WCAG 2.2 target size) sits around it.
+// When a source mark is followed by a note mark, the two areas meet in the gap between the glyphs
+// instead of overlapping (otherwise the later note would swallow taps on the source number).
+const TAP = "relative no-underline hover:underline before:absolute before:-inset-y-[7px] before:content-['']"
+const FULL = 'before:-inset-x-[10px]'
+const SOURCE_BEFORE_NOTE = 'before:-left-[10px] before:-right-[3px]'
+const NOTE_AFTER_SOURCE = 'ml-[3px] before:-left-[3px] before:-right-[10px]'
+
+/** Keeps a label's last word on the same line as its marks, so a mark never starts a line. */
+function Tail({ label, children }: { label: string; children: React.ReactNode }) {
+  const i = label.lastIndexOf(' ')
+  return <>{i > 0 ? label.slice(0, i + 1) : ''}<span className="whitespace-nowrap">{i > 0 ? label.slice(i + 1) : label}{children}</span></>
+}
+
+const Mark = ({ n, paired = false }: { n: number; paired?: boolean }) => (
   <sup className="ml-0.5 text-[0.7em] font-semibold">
-    <a href={`#fn-${n}`} className="text-ref no-underline hover:underline" aria-label={`Source ${n}`}>{n}</a>
+    <a href={`#fn-${n}`} className={`${TAP} ${paired ? SOURCE_BEFORE_NOTE : FULL} text-ref`} aria-label={`Source ${n}`}>{n}</a>
   </sup>
 )
-const Note = ({ l }: { l: string }) => (
+const Note = ({ l, paired = false }: { l: string; paired?: boolean }) => (
   <sup className="ml-0.5 text-[0.7em] italic text-ink-soft">
-    <a href={`#note-${l}`} className="text-ink-soft no-underline hover:underline" aria-label={`Note ${l}`}>{l}</a>
+    <a href={`#note-${l}`} className={`${TAP} ${paired ? NOTE_AFTER_SOURCE : FULL} text-ink-soft`} aria-label={`Note ${l}`}>{l}</a>
   </sup>
 )
 
-export function ReceiptTable({ receipt, parcel }: { receipt: Estimate; parcel: ParcelInfo }) {
+export type Entered = { assessed2026: number; assessed2025?: number } | null
+
+export function ReceiptTable({ receipt, parcel, entered = null }: { receipt: Estimate; parcel: ParcelInfo; entered?: Entered }) {
   const renter = receipt.view === 'renter'
   const usesFrontage = receipt.defaults.includes('frontage_40ft')
   const src = sourceList([...receipt.lines.map((l) => l.cite), ...(usesFrontage ? [FRONTAGE] : []), ...receipt.split.map((s) => s.cite), DEADLINE])
@@ -63,6 +79,27 @@ export function ReceiptTable({ receipt, parcel }: { receipt: Estimate; parcel: P
       : null
   }
   const noteFor = Object.fromEntries(receipt.lines.map((l) => [l.key, rowNote[l.key]?.() ?? null]))
+  const entered2025Note = entered && entered.assessed2025 === undefined
+    ? note('entered2025', 'You didn’t enter a 2025 value, so it’s assumed to equal 2026; the 2026 figures may be off.')
+    : null
+
+  // 1. every source and note links back to the rows that use it (fires the row highlight)
+  const rows = [...receipt.lines.map((l) => ({ id: `row-${l.key}`, label: l.label, cite: l.cite })),
+    ...receipt.split.map((s) => ({ id: `row-${s.key}`, label: s.label, cite: s.cite }))]
+  const usedBy = (n: number) => rows.filter((r) => src.index(r.cite) === n)
+  const noteRows = (l: string) => [
+    ...(l === rentNote ? [{ id: 'receipt-summary', label: 'the estimate at the top' }] : []),
+    ...receipt.lines.filter((x) => noteFor[x.key] === l).map((x) => ({ id: `row-${x.key}`, label: x.label })),
+    ...(l === entered2025Note ? [{ id: 'assessed-line', label: 'the assessed value' }] : []),
+  ]
+  const Back = ({ to }: { to: { id: string; label: string }[] }) => to.length ? (
+    <span className="ml-1 text-ink-soft">
+      Used for{' '}
+      {to.map((r, i) => (
+        <span key={r.id}>{i > 0 && (i === to.length - 1 ? ' and ' : ', ')}<a href={`#${r.id}`} className="text-ref underline">{r.label}</a></span>
+      ))}.
+    </span>
+  ) : null
   const change = receipt.total.c2027 - receipt.total.c2026
   const direction = change > 0 ? 'up' : change < 0 ? 'down' : 'unchanged'
 
@@ -70,7 +107,7 @@ export function ReceiptTable({ receipt, parcel }: { receipt: Estimate; parcel: P
     <section aria-labelledby="receipt-heading" className="mt-10">
       <h2 id="receipt-heading" className="sr-only">Your estimated city charges</h2>
 
-      <p className="text-sm text-ink-soft">
+      <p id="receipt-summary" className="row-target -mx-1 px-1 text-sm text-ink-soft">
         {renter ? 'Your unit’s share of this building, 2027 estimate' : 'What the city charges this property, 2027 estimate'}
         {rentNote && <Note l={rentNote} />}
       </p>
@@ -93,41 +130,48 @@ export function ReceiptTable({ receipt, parcel }: { receipt: Estimate; parcel: P
         <thead>
           <tr className="border-y-2 border-ink text-left text-xs font-semibold uppercase tracking-[0.06em] text-ink">
             <th scope="col" className="py-2 pr-2 font-semibold">Charge</th>
-            <th scope="col" className="py-2 pl-2 text-right font-semibold">2026</th>
-            <th scope="col" className="py-2 pl-2 text-right font-semibold">2027 est.</th>
-            <th scope="col" className="hidden py-2 pl-2 text-right font-semibold sm:table-cell">Change</th>
+            <th scope="col" className="py-2 pl-3 text-right font-semibold sm:pl-4">2026<br />adopted</th>
+            <th scope="col" className="py-2 pl-3 text-right font-semibold sm:pl-4">2027<br />proposed<span className="hidden sm:inline"> (est.)</span></th>
+            <th scope="col" className="hidden py-2 pl-4 text-right align-bottom font-semibold sm:table-cell">Change</th>
           </tr>
         </thead>
         <tbody>
           {receipt.lines.map((l) => (
             <tr key={l.key} id={`row-${l.key}`} className="row-target border-b border-rule align-baseline">
               <th scope="row" className="py-3 pr-2 text-left font-normal text-ink">
-                {l.label}<Mark n={src.index(l.cite)} />{noteFor[l.key] && <Note l={noteFor[l.key]!} />}
+                <Tail label={l.label}><Mark n={src.index(l.cite)} paired={!!noteFor[l.key]} />{noteFor[l.key] && <Note l={noteFor[l.key]!} paired />}</Tail>
               </th>
-              <td className="py-3 pl-2 text-right text-ink-soft">{cents(l.c2026)}</td>
-              <td className="py-3 pl-2 text-right font-semibold text-ink">{cents(l.c2027)}</td>
-              <td className="hidden py-3 pl-2 text-right text-ink-soft sm:table-cell">{signedCents(l.c2027 - l.c2026)}</td>
+              <td className="py-3 pl-3 text-right sm:pl-4 text-[1.05rem] text-ink-soft">{cents(l.c2026)}</td>
+              <td className="py-3 pl-3 text-right sm:pl-4 text-[1.05rem] font-semibold text-ink">{cents(l.c2027)}</td>
+              <td className="hidden py-3 pl-3 text-right sm:pl-4 text-[1.05rem] text-ink-soft sm:table-cell">{signedCents(l.c2027 - l.c2026)}</td>
             </tr>
           ))}
         </tbody>
         <tfoot>
           <tr className="border-y-2 border-ink">
             <th scope="row" className="py-3 pr-2 text-left font-semibold">{renter ? 'Per unit, per year' : 'Total'}</th>
-            <td className="py-3 pl-2 text-right font-semibold">{cents(receipt.total.c2026)}</td>
-            <td className="py-3 pl-2 text-right text-lg font-bold">{cents(receipt.total.c2027)}</td>
-            <td className="hidden py-3 pl-2 text-right font-semibold sm:table-cell">{signedCents(change)}</td>
+            <td className="py-3 pl-3 text-right sm:pl-4 text-[1.05rem] font-semibold">{cents(receipt.total.c2026)}</td>
+            <td className="py-3 pl-3 text-right sm:pl-4 text-lg font-bold">{cents(receipt.total.c2027)}</td>
+            <td className="hidden py-3 pl-3 text-right sm:pl-4 text-[1.05rem] font-semibold sm:table-cell">{signedCents(change)}</td>
           </tr>
           {renter && (
             <tr className="border-b-2 border-ink">
               <th scope="row" className="py-3 pr-2 text-left font-semibold">Per unit, per month</th>
-              <td className="py-3 pl-2 text-right font-semibold">{cents(receipt.perMonth.c2026)}</td>
-              <td className="py-3 pl-2 text-right font-bold">{cents(receipt.perMonth.c2027)}</td>
-              <td className="hidden py-3 pl-2 text-right font-semibold sm:table-cell">{signedCents(receipt.perMonth.c2027 - receipt.perMonth.c2026)}</td>
+              <td className="py-3 pl-3 text-right sm:pl-4 text-[1.05rem] font-semibold">{cents(receipt.perMonth.c2026)}</td>
+              <td className="py-3 pl-3 text-right sm:pl-4 text-[1.05rem] font-bold">{cents(receipt.perMonth.c2027)}</td>
+              <td className="hidden py-3 pl-3 text-right sm:pl-4 text-[1.05rem] font-semibold sm:table-cell">{signedCents(receipt.perMonth.c2027 - receipt.perMonth.c2026)}</td>
             </tr>
           )}
         </tfoot>
       </table>
 
+      {entered && (
+        <p id="assessed-line" className="row-target tabular -mx-1 mt-4 px-1 text-sm text-ink-soft">
+          Assessed value you entered: {dollars(entered.assessed2026)} for 2026
+          {entered.assessed2025 !== undefined ? ` and ${dollars(entered.assessed2025)} for 2025` : ''}.
+          {entered2025Note && <Note l={entered2025Note} />}
+        </p>
+      )}
       {parcel && (
         <p className="tabular mt-4 text-sm text-ink-soft">
           Assessed value: {dollars(parcel.assessed2026)} for 2026
@@ -152,18 +196,24 @@ export function ReceiptTable({ receipt, parcel }: { receipt: Estimate; parcel: P
         </thead>
         <tbody>
           {receipt.split.map((s) => (
-            <tr key={s.key} className="border-b border-rule">
-              <th scope="row" className="py-3 pr-2 text-left font-normal">{s.label}<Mark n={src.index(s.cite)} /></th>
-              <td className="py-3 pl-2 text-right font-semibold">{cents(s.c2027)}</td>
+            <tr key={s.key} id={`row-${s.key}`} className="row-target border-b border-rule">
+              <th scope="row" className="py-3 pr-2 text-left font-normal"><Tail label={s.label}><Mark n={src.index(s.cite)} /></Tail></th>
+              <td className="py-3 pl-3 text-right sm:pl-4 text-[1.05rem] font-semibold">{cents(s.c2027)}</td>
             </tr>
           ))}
           {receipt.splitRemainderC2027 !== 0 && (
             <tr className="border-b border-rule text-ink-soft">
               <th scope="row" className="py-3 pr-2 text-left font-normal">Rounding</th>
-              <td className="py-3 pl-2 text-right">{signedCents(receipt.splitRemainderC2027)}</td>
+              <td className="py-3 pl-3 text-right sm:pl-4 text-[1.05rem]">{signedCents(receipt.splitRemainderC2027)}</td>
             </tr>
           )}
         </tbody>
+        <tfoot>
+          <tr className="border-y-2 border-ink">
+            <th scope="row" className="py-3 pr-2 text-left font-semibold">City property tax, 2027</th>
+            <td className="py-3 pl-3 text-right sm:pl-4 text-lg font-bold">{cents(receipt.lines[0].c2027)}</td>
+          </tr>
+        </tfoot>
       </table>
 
       <footer className="mt-12 border-t-2 border-ink pt-4 text-sm leading-relaxed text-ink">
@@ -177,6 +227,7 @@ export function ReceiptTable({ receipt, parcel }: { receipt: Estimate; parcel: P
             <li key={i} id={`fn-${i + 1}`} className="fn-target -mx-1 rounded-sm px-1">
               <span className="tabular mr-1 font-semibold text-ref">{i + 1}.</span>
               City of Milwaukee 2027 {DOCS[c.doc]}, {c.printed_page === 'front matter' ? 'budget calendar' : `page ${c.printed_page}`} (PDF page {c.pdf_page}).
+              <Back to={usedBy(i + 1)} />
             </li>
           ))}
         </ol>
@@ -185,6 +236,7 @@ export function ReceiptTable({ receipt, parcel }: { receipt: Estimate; parcel: P
           {notes.map(({ l, text, cite }) => (
             <li key={l} id={`note-${l}`} className="fn-target -mx-1 rounded-sm px-1 text-ink-soft">
               <span className="mr-1 font-semibold italic text-ink">{l}.</span>{text}{cite && <Mark n={src.index(cite)} />}
+              <Back to={noteRows(l)} />
             </li>
           ))}
         </ul>

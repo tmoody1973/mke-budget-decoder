@@ -30,6 +30,7 @@ export type Receipt =
   | { kind: 'exempt' }
   | { kind: 'state_assessed' }
   | { kind: 'no_assessment' }
+  | { kind: 'no_dwellings' } // renter view of a parcel with no homes on it
   | {
       kind: 'estimate'
       view: ReceiptInput['view']
@@ -51,6 +52,7 @@ export function computeReceipt(input: ReceiptInput, rates: ReceiptRates): Receip
   if (input.assessmentClass === '9') return { kind: 'exempt' }
   if (input.assessmentClass === '3') return { kind: 'state_assessed' }
   if (!(input.assessed2026 > 0)) return { kind: 'no_assessment' }
+  if (input.view === 'renter' && input.units === 0) return { kind: 'no_dwellings' }
 
   const units = Math.max(1, input.units)
   const share = input.view === 'renter' ? units : 1 // renter sees their unit's share; owner/landlord the parcel
@@ -72,15 +74,15 @@ export function computeReceipt(input: ReceiptInput, rates: ReceiptRates): Receip
     if (input.extraCarts) lines.push({ key: 'extra_carts', label: 'Extra garbage carts', cite: f.extra_cart.cite, ...fee('extra_cart', input.extraCarts) })
   }
   if (input.view === 'owner') {
-    lines.push({ key: 'snow_ice', label: `Snow & ice (${frontage} ft)`, cite: f.snow_ice.cite, ...fee('snow_ice', frontage) })
-    lines.push({ key: 'street_lighting', label: `Street lighting (${frontage} ft)`, cite: f.street_lighting.cite, ...fee('street_lighting', frontage) })
+    lines.push({ key: 'snow_ice', label: `Snow & ice (${frontage}\u00a0ft)`, cite: f.snow_ice.cite, ...fee('snow_ice', frontage) })
+    lines.push({ key: 'street_lighting', label: `Street lighting (${frontage}\u00a0ft)`, cite: f.street_lighting.cite, ...fee('street_lighting', frontage) })
   } else {
     const s = fee('snow_ice', frontage), l = fee('street_lighting', frontage)
-    lines.push({ key: 'frontage', label: `Snow & ice and street lighting (${frontage} ft)`, cite: f.snow_ice.cite,
+    lines.push({ key: 'frontage', label: `Snow & ice and lighting (${frontage}\u00a0ft)`, cite: f.snow_ice.cite,
       c2026: s.c2026 + l.c2026, c2027: s.c2027 + l.c2027 })
   }
   // Sewer is an average-household charge per dwelling unit (docs/07 §3); vacant land has none.
-  if (input.units > 0) lines.push({ key: 'sewer_stormwater', label: 'Sewer + stormwater (average household)',
+  if (input.units > 0) lines.push({ key: 'sewer_stormwater', label: 'Sewer + stormwater',
     cite: f.sewer_stormwater_avg.cite, ...fee('sewer_stormwater_avg', input.units) })
 
   const split = rates.components.map((c) => ({
