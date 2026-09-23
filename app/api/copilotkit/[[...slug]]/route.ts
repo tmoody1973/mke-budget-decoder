@@ -14,7 +14,12 @@ const runtime = new CopilotRuntime({
 
 const handler = createCopilotRuntimeHandler({ runtime, basePath: '/api/copilotkit' })
 
-export const GET = handler
+// Off unless CHAT_ENABLED=true (D19: the chat launches after its answer check), so nobody can
+// spend model calls through the endpoint while the button is hidden.
+const off = () => process.env.CHAT_ENABLED !== 'true'
+const notFound = () => new Response('Not found', { status: 404 })
+
+export const GET = (req: Request) => (off() ? notFound() : handler(req))
 // Each chat turn is a paid model call: 10 per minute per visitor.
-export const POST = (req: Request) =>
-  allow(`chat:${clientKey(req)}`, 10, 60_000) ? handler(req) : Response.json({ error: 'Too many questions. Try again in a minute.' }, { status: 429 })
+export const POST = (req: Request) => off() ? notFound()
+  : allow(`chat:${clientKey(req)}`, 10, 60_000) ? handler(req) : Response.json({ error: 'Too many questions. Try again in a minute.' }, { status: 429 })

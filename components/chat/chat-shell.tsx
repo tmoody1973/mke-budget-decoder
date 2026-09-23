@@ -9,7 +9,7 @@ import { createContext, useCallback, useContext, useMemo, useState } from 'react
 import { Renderers } from './tool-renderers'
 
 const AGENT = 'budgetGuide'
-type Ask = { open: boolean; setOpen: (open: boolean) => void; ask: (question: string) => void }
+type Ask = { enabled: boolean; open: boolean; setOpen: (open: boolean) => void; ask: (question: string) => void }
 const AskContext = createContext<Ask | null>(null)
 
 export function useAsk() {
@@ -28,7 +28,7 @@ function Panel({ children }: { children: React.ReactNode }) {
     agent.addMessage({ id: crypto.randomUUID(), role: 'user', content: question })
     void copilotkit.runAgent({ agent })
   }, [agent, copilotkit])
-  const value = useMemo(() => ({ open, setOpen, ask }), [open, ask])
+  const value = useMemo(() => ({ enabled: true, open, setOpen, ask }), [open, ask])
 
   return (
     <AskContext.Provider value={value}>
@@ -59,7 +59,11 @@ function Panel({ children }: { children: React.ReactNode }) {
   )
 }
 
-export function ChatShell({ children }: { children: React.ReactNode }) {
+const OFF: Ask = { enabled: false, open: false, setOpen: () => {}, ask: () => {} }
+
+/** `enabled` comes from the CHAT_ENABLED setting (read on the server in app/layout.tsx). */
+export function ChatShell({ enabled, children }: { enabled: boolean; children: React.ReactNode }) {
+  if (!enabled) return <AskContext.Provider value={OFF}>{children}</AskContext.Provider>
   return (
     <CopilotKit runtimeUrl="/api/copilotkit" agent={AGENT} useSingleEndpoint={false}>
       <Panel>{children}</Panel>
@@ -69,7 +73,8 @@ export function ChatShell({ children }: { children: React.ReactNode }) {
 
 /** Header button that opens and closes the panel. */
 export function AskButton() {
-  const { open, setOpen } = useAsk()
+  const { enabled, open, setOpen } = useAsk()
+  if (!enabled) return null
   return (
     <button type="button" onClick={() => setOpen(!open)} aria-expanded={open}
       className="border-2 border-ink px-3 py-1.5 text-sm font-semibold text-ink hover:border-ref hover:text-ref">
@@ -80,7 +85,8 @@ export function AskButton() {
 
 /** "Ask about this": opens the panel and sends a prepared question. */
 export function AskLink({ question, children }: { question: string; children: React.ReactNode }) {
-  const { ask } = useAsk()
+  const { enabled, ask } = useAsk()
+  if (!enabled) return null
   return (
     <button type="button" onClick={() => ask(question)} className="text-sm font-semibold text-ref underline underline-offset-4">
       {children}

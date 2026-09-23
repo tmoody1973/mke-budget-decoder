@@ -24,7 +24,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={`${franklin.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col">
-        <ChatShell>
+        <ChatShell enabled={process.env.CHAT_ENABLED === 'true'}>
           <header className="border-b border-rule">
             <nav aria-label="Site" className="mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-4 py-2.5 sm:px-6 lg:px-8">
               <Link href="/" className="font-bold text-ink no-underline">MKE Budget Decoder</Link>
