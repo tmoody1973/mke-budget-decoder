@@ -1,0 +1,882 @@
+[
+  {
+    "dept": "administration",
+    "summary_pdf_pages": [
+      39,
+      49
+    ],
+    "summary_printed_pages": [
+      29,
+      39
+    ],
+    "detailed_page_prefix": [
+      "110"
+    ],
+    "org_codes": [
+      "1510",
+      "1511",
+      "1512",
+      "1513",
+      "1514",
+      "1515",
+      "1517",
+      "1518",
+      "1520"
+    ],
+    "fund_codes": [
+      "0001"
+    ]
+  },
+  {
+    "dept": "assessor",
+    "summary_pdf_pages": [
+      50,
+      52
+    ],
+    "summary_printed_pages": [
+      40,
+      42
+    ],
+    "detailed_page_prefix": [
+      "120"
+    ],
+    "org_codes": [
+      "2300"
+    ],
+    "fund_codes": [
+      "0001"
+    ]
+  },
+  {
+    "dept": "city-attorney",
+    "summary_pdf_pages": [
+      53,
+      56
+    ],
+    "summary_printed_pages": [
+      43,
+      46
+    ],
+    "detailed_page_prefix": [
+      "130"
+    ],
+    "org_codes": [
+      "1490"
+    ],
+    "fund_codes": [
+      "0001"
+    ]
+  },
+  {
+    "dept": "city-development",
+    "summary_pdf_pages": [
+      57,
+      65
+    ],
+    "summary_printed_pages": [
+      47,
+      55
+    ],
+    "detailed_page_prefix": [
+      "140"
+    ],
+    "org_codes": [
+      "1910",
+      "1911",
+      "1912"
+    ],
+    "fund_codes": [
+      "0001"
+    ]
+  },
+  {
+    "dept": "city-treasurer",
+    "summary_pdf_pages": [
+      66,
+      69
+    ],
+    "summary_printed_pages": [
+      56,
+      59
+    ],
+    "detailed_page_prefix": [
+      "150"
+    ],
+    "org_codes": [
+      "2210"
+    ],
+    "fund_codes": [
+      "0001",
+      "0150"
+    ]
+  },
+  {
+    "dept": "common-council-city-clerk",
+    "summary_pdf_pages": [
+      70,
+      74
+    ],
+    "summary_printed_pages": [
+      60,
+      64
+    ],
+    "detailed_page_prefix": [
+      "160"
+    ],
+    "org_codes": [
+      "1310"
+    ],
+    "fund_codes": [
+      "0001"
+    ]
+  },
+  {
+    "dept": "community-wellness-safety",
+    "summary_pdf_pages": [
+      75,
+      76
+    ],
+    "summary_printed_pages": [
+      65,
+      66
+    ],
+    "detailed_page_prefix": [
+      "170"
+    ],
+    "org_codes": [
+      "1540"
+    ],
+    "fund_codes": [
+      "0001"
+    ]
+  },
+  {
+    "dept": "compliance-engagement",
+    "summary_pdf_pages": [
+      77,
+      79
+    ],
+    "summary_printed_pages": [
+      67,
+      69
+    ],
+    "detailed_page_prefix": [
+      "180"
+    ],
+    "org_codes": [
+      "1530"
+    ],
+    "fund_codes": [
+      "0001"
+    ]
+  },
+  {
+    "dept": "comptroller",
+    "summary_pdf_pages": [
+      80,
+      83
+    ],
+    "summary_printed_pages": [
+      70,
+      73
+    ],
+    "detailed_page_prefix": [
+      "190"
+    ],
+    "org_codes": [
+      "2110"
+    ],
+    "fund_codes": [
+      "0001"
+    ]
+  },
+  {
+    "dept": "election-commission",
+    "summary_pdf_pages": [
+      84,
+      86
+    ],
+    "summary_printed_pages": [
+      74,
+      76
+    ],
+    "detailed_page_prefix": [
+      "200"
+    ],
+    "org_codes": [
+      "1700"
+    ],
+    "fund_codes": [
+      "0001"
+    ]
+  },
+  {
+    "dept": "emergency-communications",
+    "summary_pdf_pages": [
+      87,
+      90
+    ],
+    "summary_printed_pages": [
+      77,
+      80
+    ],
+    "detailed_page_prefix": [
+      "210"
+    ],
+    "org_codes": [
+      "3400"
+    ],
+    "fund_codes": [
+      "0001"
+    ]
+  },
+  {
+    "dept": "employee-relations",
+    "summary_pdf_pages": [
+      91,
+      96
+    ],
+    "summary_printed_pages": [
+      81,
+      86
+    ],
+    "detailed_page_prefix": [
+      "220"
+    ],
+    "org_codes": [
+      "1650",
+      "1651",
+      "1652",
+      "1654"
+    ],
+    "fund_codes": [
+      "0001"
+    ]
+  },
+  {
+    "dept": "fire-police-commission",
+    "summary_pdf_pages": [
+      97,
+      100
+    ],
+    "summary_printed_pages": [
+      87,
+      90
+    ],
+    "detailed_page_prefix": [
+      "230"
+    ],
+    "org_codes": [
+      "3100"
+    ],
+    "fund_codes": [
+      "0001"
+    ]
+  },
+  {
+    "dept": "fire",
+    "summary_pdf_pages": [
+      101,
+      104
+    ],
+    "summary_printed_pages": [
+      91,
+      94
+    ],
+    "detailed_page_prefix": [
+      "240"
+    ],
+    "org_codes": [
+      "3280",
+      "3281",
+      "3282",
+      "3283"
+    ],
+    "fund_codes": [
+      "0001"
+    ]
+  },
+  {
+    "dept": "health",
+    "summary_pdf_pages": [
+      105,
+      109
+    ],
+    "summary_printed_pages": [
+      95,
+      99
+    ],
+    "detailed_page_prefix": [
+      "250"
+    ],
+    "org_codes": [
+      "3810",
+      "3811",
+      "3812",
+      "3813",
+      "3814",
+      "3815"
+    ],
+    "fund_codes": [
+      "0001"
+    ]
+  },
+  {
+    "dept": "library",
+    "summary_pdf_pages": [
+      110,
+      114
+    ],
+    "summary_printed_pages": [
+      100,
+      104
+    ],
+    "detailed_page_prefix": [
+      "260"
+    ],
+    "org_codes": [
+      "8610",
+      "8611",
+      "8612",
+      "8613",
+      "8615",
+      "8616",
+      "8617"
+    ],
+    "fund_codes": [
+      "0001"
+    ]
+  },
+  {
+    "dept": "mayor",
+    "summary_pdf_pages": [
+      115,
+      117
+    ],
+    "summary_printed_pages": [
+      105,
+      107
+    ],
+    "detailed_page_prefix": [
+      "270"
+    ],
+    "org_codes": [
+      "1110"
+    ],
+    "fund_codes": [
+      "0001"
+    ]
+  },
+  {
+    "dept": "municipal-court",
+    "summary_pdf_pages": [
+      118,
+      121
+    ],
+    "summary_printed_pages": [
+      108,
+      111
+    ],
+    "detailed_page_prefix": [
+      "280"
+    ],
+    "org_codes": [
+      "1320"
+    ],
+    "fund_codes": [
+      "0001"
+    ]
+  },
+  {
+    "dept": "neighborhood-services",
+    "summary_pdf_pages": [
+      122,
+      125
+    ],
+    "summary_printed_pages": [
+      112,
+      115
+    ],
+    "detailed_page_prefix": [
+      "290"
+    ],
+    "org_codes": [
+      "3600"
+    ],
+    "fund_codes": [
+      "0001"
+    ]
+  },
+  {
+    "dept": "police",
+    "summary_pdf_pages": [
+      126,
+      130
+    ],
+    "summary_printed_pages": [
+      116,
+      120
+    ],
+    "detailed_page_prefix": [
+      "300"
+    ],
+    "org_codes": [
+      "3310"
+    ],
+    "fund_codes": [
+      "0001"
+    ]
+  },
+  {
+    "dept": "port",
+    "summary_pdf_pages": [
+      131,
+      133
+    ],
+    "summary_printed_pages": [
+      121,
+      123
+    ],
+    "detailed_page_prefix": [
+      "310"
+    ],
+    "org_codes": [
+      "4280"
+    ],
+    "fund_codes": [
+      "0480"
+    ]
+  },
+  {
+    "dept": "dpw",
+    "summary_pdf_pages": null,
+    "summary_printed_pages": null,
+    "detailed_page_prefix": [
+      "320"
+    ],
+    "org_codes": [],
+    "fund_codes": []
+  },
+  {
+    "dept": "dpw-administrative-services",
+    "summary_pdf_pages": [
+      134,
+      136
+    ],
+    "summary_printed_pages": [
+      124,
+      126
+    ],
+    "detailed_page_prefix": [
+      "330"
+    ],
+    "org_codes": [
+      "5140"
+    ],
+    "fund_codes": [
+      "0001"
+    ]
+  },
+  {
+    "dept": "dpw-infrastructure",
+    "summary_pdf_pages": [
+      137,
+      146
+    ],
+    "summary_printed_pages": [
+      127,
+      136
+    ],
+    "detailed_page_prefix": [
+      "340"
+    ],
+    "org_codes": [
+      "5230",
+      "5231",
+      "5235",
+      "5237",
+      "5239"
+    ],
+    "fund_codes": [
+      "0001"
+    ]
+  },
+  {
+    "dept": "dpw-operations",
+    "summary_pdf_pages": [
+      147,
+      153
+    ],
+    "summary_printed_pages": [
+      137,
+      143
+    ],
+    "detailed_page_prefix": [
+      "350"
+    ],
+    "org_codes": [
+      "5450",
+      "5451",
+      "5452",
+      "5457",
+      "5458"
+    ],
+    "fund_codes": [
+      "0001"
+    ]
+  },
+  {
+    "dept": "special-purpose-accounts",
+    "summary_pdf_pages": [
+      154,
+      164
+    ],
+    "summary_printed_pages": [
+      144,
+      154
+    ],
+    "detailed_page_prefix": [
+      "360",
+      "370",
+      "380",
+      "390"
+    ],
+    "org_codes": [
+      "0960",
+      "1310",
+      "1320",
+      "1490",
+      "1510",
+      "1520",
+      "1540",
+      "1650",
+      "1910",
+      "2110",
+      "3600",
+      "3810",
+      "4500",
+      "9990"
+    ],
+    "fund_codes": [
+      "0001",
+      "0180"
+    ]
+  },
+  {
+    "dept": "gcp-source-of-funds",
+    "summary_pdf_pages": [
+      166,
+      172
+    ],
+    "summary_printed_pages": [
+      156,
+      162
+    ],
+    "detailed_page_prefix": [
+      "430"
+    ],
+    "org_codes": [
+      "0960",
+      "1310",
+      "1320",
+      "1490",
+      "1510",
+      "1650",
+      "1910",
+      "2110",
+      "2210",
+      "2300",
+      "3280",
+      "3310",
+      "3600",
+      "3810",
+      "4280",
+      "5140",
+      "5230",
+      "5450",
+      "8610",
+      "9990"
+    ],
+    "fund_codes": [
+      "0001",
+      "0480"
+    ]
+  },
+  {
+    "dept": "fringe-benefit-offset",
+    "summary_pdf_pages": [
+      165,
+      165
+    ],
+    "summary_printed_pages": [
+      155,
+      155
+    ],
+    "detailed_page_prefix": [
+      "410"
+    ],
+    "org_codes": [],
+    "fund_codes": []
+  },
+  {
+    "dept": "employee-retirement",
+    "summary_pdf_pages": [
+      173,
+      183
+    ],
+    "summary_printed_pages": [
+      163,
+      173
+    ],
+    "detailed_page_prefix": [
+      "440",
+      "450",
+      "460",
+      "470"
+    ],
+    "org_codes": [
+      "0950",
+      "1510",
+      "2110",
+      "2210",
+      "4500",
+      "9990"
+    ],
+    "fund_codes": [
+      "0001"
+    ]
+  },
+  {
+    "dept": "capital-improvements",
+    "summary_pdf_pages": [
+      184,
+      193
+    ],
+    "summary_printed_pages": [
+      174,
+      183
+    ],
+    "detailed_page_prefix": [
+      "480"
+    ],
+    "org_codes": [
+      "1310",
+      "1510",
+      "1910",
+      "2110",
+      "3280",
+      "3600",
+      "5010",
+      "8610",
+      "9990"
+    ],
+    "fund_codes": [
+      "0303",
+      "0306",
+      "0309",
+      "0312",
+      "0315",
+      "0318",
+      "0321",
+      "0330",
+      "0333",
+      "0336",
+      "0339",
+      "0481"
+    ]
+  },
+  {
+    "dept": "city-debt",
+    "summary_pdf_pages": [
+      194,
+      196
+    ],
+    "summary_printed_pages": [
+      184,
+      186
+    ],
+    "detailed_page_prefix": [
+      "490"
+    ],
+    "org_codes": [],
+    "fund_codes": []
+  },
+  {
+    "dept": "contingent-fund",
+    "summary_pdf_pages": [
+      197,
+      199
+    ],
+    "summary_printed_pages": [
+      187,
+      189
+    ],
+    "detailed_page_prefix": [
+      "500"
+    ],
+    "org_codes": [
+      "9990"
+    ],
+    "fund_codes": [
+      "0001"
+    ]
+  },
+  {
+    "dept": "transportation-fund",
+    "summary_pdf_pages": [
+      200,
+      202
+    ],
+    "summary_printed_pages": [
+      190,
+      192
+    ],
+    "detailed_page_prefix": [
+      "510"
+    ],
+    "org_codes": [
+      "6610",
+      "6611",
+      "6612",
+      "9990"
+    ],
+    "fund_codes": [
+      "0450",
+      "0451"
+    ]
+  },
+  {
+    "dept": "grant-and-aid-fund",
+    "summary_pdf_pages": [
+      203,
+      204
+    ],
+    "summary_printed_pages": [
+      193,
+      194
+    ],
+    "detailed_page_prefix": [
+      "520"
+    ],
+    "org_codes": [
+      "9990"
+    ],
+    "fund_codes": [
+      "0150"
+    ]
+  },
+  {
+    "dept": "economic-development-fund",
+    "summary_pdf_pages": [
+      205,
+      206
+    ],
+    "summary_printed_pages": [
+      195,
+      196
+    ],
+    "detailed_page_prefix": [
+      "530"
+    ],
+    "org_codes": [
+      "2110"
+    ],
+    "fund_codes": [
+      "0190"
+    ]
+  },
+  {
+    "dept": "water-works",
+    "summary_pdf_pages": [
+      207,
+      212
+    ],
+    "summary_printed_pages": [
+      197,
+      202
+    ],
+    "detailed_page_prefix": [
+      "540",
+      "550",
+      "560"
+    ],
+    "org_codes": [
+      "6410",
+      "6411",
+      "6412",
+      "6413",
+      "6414",
+      "6415",
+      "6416"
+    ],
+    "fund_codes": [
+      "0410",
+      "0420"
+    ]
+  },
+  {
+    "dept": "sewer-maintenance-fund",
+    "summary_pdf_pages": [
+      213,
+      217
+    ],
+    "summary_printed_pages": [
+      203,
+      207
+    ],
+    "detailed_page_prefix": [
+      "570"
+    ],
+    "org_codes": [
+      "2210",
+      "6830",
+      "6831",
+      "6832",
+      "9990"
+    ],
+    "fund_codes": [
+      "0490",
+      "0491"
+    ]
+  },
+  {
+    "dept": "county-delinquent-tax-fund",
+    "summary_pdf_pages": [
+      218,
+      218
+    ],
+    "summary_printed_pages": [
+      208,
+      208
+    ],
+    "detailed_page_prefix": [
+      "580"
+    ],
+    "org_codes": [
+      "2210"
+    ],
+    "fund_codes": [
+      "0430"
+    ]
+  },
+  {
+    "dept": "settlement-fund",
+    "summary_pdf_pages": [
+      219,
+      220
+    ],
+    "summary_printed_pages": [
+      209,
+      210
+    ],
+    "detailed_page_prefix": [
+      "590"
+    ],
+    "org_codes": [
+      "2110"
+    ],
+    "fund_codes": [
+      "0180"
+    ]
+  }
+]

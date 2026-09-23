@@ -23,4 +23,5 @@ def summary_page_ranges(last_printed_page: int = 214) -> dict[str, tuple[int, in
     """slug → (first, last) printed Summary page: title page up to the next title page."""
     starts = sorted((d["summary_page"], d["slug"]) for d in departments() if d.get("summary_page"))
     ends = [s for s, _ in starts[1:]] + [last_printed_page + 1]
-    return {slug: (start, end - 1) for (start, slug), end in zip(starts, ends)}
+    last = {d["slug"]: d["summary_last_page"] for d in departments() if d.get("summary_last_page")}
+    return {slug: (start, min(end - 1, last.get(slug, end - 1))) for (start, slug), end in zip(starts, ends)}
