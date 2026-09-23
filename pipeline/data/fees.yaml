@@ -13,7 +13,7 @@
   source_text: "In 2027, the solid waste fee will increase from $271.80 per year for residential units to $280.00, a 3.0% increase."
   cite: {doc: summary, pdf_page: 169, printed_page: "159"}
   is_derived: false
-  reviewed_by: null
+  reviewed_by: "Tarik (claude-precheck)"
 
 - fee: extra_cart
   unit: per_year_per_unit
@@ -25,7 +25,7 @@
   source_text: "In 2027 the annual extra garbage cart fee will increase from $81.24 per additional cart to $83.68, a 3.0% increase from 2026."
   cite: {doc: summary, pdf_page: 169, printed_page: "159"}
   is_derived: false
-  reviewed_by: null
+  reviewed_by: "Tarik (claude-precheck)"
 
 - fee: snow_ice
   unit: per_frontage_ft
@@ -37,7 +37,7 @@
   source_text: "The snow and ice fee will increase from $1.19 per foot of property frontage to $1.23 per frontage foot, a 3.4% increase from 2026."
   cite: {doc: summary, pdf_page: 169, printed_page: "159"}
   is_derived: false
-  reviewed_by: null
+  reviewed_by: "Tarik (claude-precheck)"
 
 - fee: street_lighting
   unit: per_frontage_ft
@@ -49,7 +49,7 @@
   source_text: "This fee will increase from $1.12 in 2026 to $1.16 per frontage foot on streets served by the city's streetlights, a 3.6% increase."
   cite: {doc: summary, pdf_page: 169, printed_page: "159"}
   is_derived: false
-  reviewed_by: null
+  reviewed_by: "Tarik (claude-precheck)"
 
 - fee: sewer_stormwater_avg
   unit: avg_household_per_year
@@ -61,4 +61,4 @@
   source_text: "The Sewer Maintenance Fee will increase by $0.06 per hundred cubic feet and the Stormwater Fee will increase by $0.81. These fees will cost an average residential household a combined $247.02 in 2027, an increase of $5.14 from 2026."
   cite: {doc: summary, pdf_page: 213, printed_page: "203"}
   is_derived: true
-  reviewed_by: null
+  reviewed_by: "Tarik (claude-precheck)"

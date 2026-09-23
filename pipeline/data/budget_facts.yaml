@@ -11,7 +11,7 @@
   value: null
   unit: null
   cite: {doc: summary, pdf_page: 14, printed_page: "4"}
-  reviewed_by: null
+  reviewed_by: "Tarik (claude-precheck)"
 
 - id: sales-tax-2027
   topic: sales_tax
@@ -20,7 +20,7 @@
   unit: dollars_rounded_0.1M
   cite: {doc: summary, pdf_page: 166, printed_page: "156"}
   table_pair: {line: "Local Sales Tax", value: 58839110, cite: {doc: summary, pdf_page: 170, printed_page: "160"}, note: "The $58.8 million GCP share matches the table's $58,839,110 rounded to $0.1M. The $218.2M total is stated only in the narrative."}
-  reviewed_by: null
+  reviewed_by: "Tarik (claude-precheck)"
 
 - id: ssr-2027
   topic: state_shared_revenue
@@ -29,7 +29,7 @@
   unit: dollars_rounded_0.1M
   cite: {doc: summary, pdf_page: 167, printed_page: "157"}
   table_pair: {line: "State Shared Revenue (General)", value: 260036000, cite: {doc: summary, pdf_page: 170, printed_page: "160"}, note: "Table figure rounds to the narrative's $260.0 million; +$5.5 million = 260,036,000 − 254,543,000."}
-  reviewed_by: null
+  reviewed_by: "Tarik (claude-precheck)"
 
 - id: erip-2027
   topic: erip
@@ -37,7 +37,7 @@
   value: "29600000"
   unit: dollars_rounded_0.1M
   cite: {doc: summary, pdf_page: 15, printed_page: "5"}
-  reviewed_by: null
+  reviewed_by: "Tarik (claude-precheck)"
 
 - id: cut-from-requests
   topic: gap_closing
@@ -46,7 +46,7 @@
   unit: dollars_rounded_0.1M
   cite: {doc: summary, pdf_page: 15, printed_page: "5"}
   table_pair: {line: "A. General City Purposes — Total Appropriations, change vs 2027 requested", value: -32106645, cite: {doc: summary, pdf_page: 18, printed_page: "8"}, note: "Different scope, not reconciled by the document: the General City Purposes table shows $32.1M between requested ($878,902,850) and proposed ($846,796,205). Show the table figure with its scope; quote the narrative as the document's description (docs/06 §7)."}
-  reviewed_by: null
+  reviewed_by: "Tarik (claude-precheck)"
 
 - id: tsf-withdrawal-2027
   topic: reserves
@@ -65,7 +65,7 @@
   unit: dollars_rounded_0.1M
   cite: {doc: summary, pdf_page: 169, printed_page: "159"}
   table_pair: {line: "Street Lighting Fee", value: 10694000, cite: {doc: summary, pdf_page: 171, printed_page: "161"}, note: "Reconciles: 10,694,000 + 500,000 (capital) = 11,194,000 ≈ $11.2M."}
-  reviewed_by: null
+  reviewed_by: "Tarik (claude-precheck)"
 
 - id: fringe-offset-year-wording
   topic: document_quirk
@@ -84,7 +84,7 @@
   value: "3"
   unit: classes
   cite: {doc: summary, pdf_page: 127, printed_page: "117"}
-  reviewed_by: null
+  reviewed_by: "Tarik (claude-precheck)"
 
 - id: sro-mandate
   topic: sro_mandate
@@ -92,7 +92,7 @@
   value: "25"
   unit: officers
   cite: {doc: summary, pdf_page: 128, printed_page: "118"}
-  reviewed_by: null
+  reviewed_by: "Tarik (claude-precheck)"
 
 - id: legal-deadlines
   topic: deadlines
@@ -100,7 +100,7 @@
   value: null
   unit: null
   cite: {doc: summary, pdf_page: 4, printed_page: "front matter"}
-  reviewed_by: null
+  reviewed_by: "Tarik (claude-precheck)"
 
 - id: public-survey
   topic: survey
@@ -108,4 +108,4 @@
   value: null
   unit: null
   cite: {doc: summary, pdf_page: 16, printed_page: "6"}
-  reviewed_by: null
+  reviewed_by: "Tarik (claude-precheck)"
