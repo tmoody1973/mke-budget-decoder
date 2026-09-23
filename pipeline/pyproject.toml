@@ -8,6 +8,7 @@ dependencies = [
     "pandas",
     "pyarrow",
     "pyyaml",
+    "typesafe-sdk>=0.7.1",
 ]
 
 [dependency-groups]

@@ -53,3 +53,24 @@
 **How we'll know if this was right.** `validate/test_bcu_blocks.py` stays green on the Adopted budget in November without new rules. In P2, department totals built from `decision_unit` rows equal the Summary book's department totals (P1.8 cross-document check).
 
 **What actually happened.**
+
+---
+
+## D12 — A small judgment model checks that our written statements match their pages; code still checks every number
+
+**Decision.** TypeSafe's Jev model (`jev-1.13.0`, pinned) reads each hand-written fact and glossary definition beside the passage it cites and returns a typed verdict: *supports / contradicts / says nothing* for facts, and a probability of *conflict* for glossary terms. Low-confidence verdicts go to a person. Results are stored and committed, so CI checks them without calling the API.
+
+**Why this came up.** The pipeline already proves every **number** in a curated statement appears on its cited page. That's a plain text match. It couldn't tell whether the **sentence around the number** says what we claim. Reading 56 statements against their pages by hand is slow, and it's the kind of check people skim.
+
+**Options.**
+1. *Human review only.* Most trustworthy per item, but it's the step most likely to be rushed or skipped.
+2. *A general chat model writes a critique.* Flexible, but it returns prose that code can't act on, costs more per call, and can argue itself into anything.
+3. *A judgment model returning typed answers with calibrated confidence* (Jev), with code keeping all arithmetic, as TypeSafe's own docs recommend.
+
+**What we chose and why.** Option 3 (Tarik chose Jev; Claude designed the split). Code picks the few sentences around each statement's figures, and Jev judges meaning only. The first run cost about $0.002 for 56 checks and took 13 seconds. It caught a real error: my glossary defined "budget gap" as department requests minus available money, but the budget itself defines it as the cost of **continuing current services** minus expected revenue. After the fix, the conflict probability fell from 0.54 to 0.09.
+
+**What we gave up.** Another vendor and API key in the loop (for the checking step only; nothing user-facing depends on it). Jev's verdict is a judgment, not proof, so a "verified" statement can still be subtly wrong. The 0.8 confidence bar is the cookbook's starting point, not one tuned on budget text.
+
+**How we'll know if this was right.** When Tarik reviews the 6 queued items and spot-checks some of the auto-accepted ones, Jev's auto verdicts should agree with his. If it misses things a person catches, raise the bar or drop the step.
+
+**What actually happened.**

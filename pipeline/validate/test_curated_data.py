@@ -8,17 +8,12 @@ import pytest
 import yaml
 
 from common.config import PIPELINE_DATA, PROCESSED
-from common.summary_pdf import _pdf, lines
+from common.summary_pdf import searchable_text
 
 FIGURE = re.compile(r"\$[\d,]+(?:\.\d+)?(?: million| billion)?|\d+(?:\.\d+)?%|\(\d+\)|\b\d{2,}\b")
 
 
-def page_text(pdf_page: int) -> str:
-    """pdfplumber's text plus our rebuilt words (rotated-glyph tables print letter-spaced
-    in extract_text, e.g. Summary p.116 'S a la rie s')."""
-    raw = _pdf().pages[pdf_page - 1].extract_text() or ""
-    rebuilt = " ".join(ln.text for ln in lines(pdf_page))
-    return re.sub(r"\s+", " ", raw + " " + rebuilt).replace("’", "'")
+page_text = searchable_text
 
 
 def _load(name):

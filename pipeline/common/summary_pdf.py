@@ -116,3 +116,12 @@ def assign_numbers(line: Line, columns: list[Column], left: float = 30, right: f
 
 def find_word(pdf_page: int, text: str, top_min: float = 0, top_max: float = 10_000) -> Optional[dict]:
     return next((w for w in words(pdf_page) if w["text"] == text and top_min <= w["top"] <= top_max), None)
+
+
+def searchable_text(pdf_page: int) -> str:
+    """pdfplumber's text plus our rebuilt words: rotated-glyph tables print letter-spaced in
+    extract_text (Summary p.116 'S a la rie s'). Normalised whitespace and apostrophes."""
+    import re
+    raw = page_text(pdf_page)
+    rebuilt = " ".join(ln.text for ln in lines(pdf_page))
+    return re.sub(r"\s+", " ", raw + " " + rebuilt).replace("’", "'")
