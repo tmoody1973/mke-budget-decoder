@@ -526,6 +526,13 @@ export const parcels = pgTable(
     geoAlder: text('geo_alder'),
     lotArea: numeric('lot_area', { precision: 14, scale: 2 }),
     cornerLot: text('corner_lot'),
+    // '2401 W WISCONSIN AV': what address search matches against (typo-tolerant trigram index)
+    address: text('address').generatedAlwaysAs(
+      sql`trim(coalesce(house_nr_lo::text, '') || coalesce(house_nr_sfx, '') || coalesce(' ' || sdir, '') || coalesce(' ' || street, '') || coalesce(' ' || sttype, ''))`,
+    ),
   },
-  (t) => [index('parcels_street_house_idx').on(t.street, t.houseNrLo)],
+  (t) => [
+    index('parcels_street_house_idx').on(t.street, t.houseNrLo),
+    index('parcels_address_trgm_idx').using('gin', sql`${t.address} gin_trgm_ops`),
+  ],
 )
