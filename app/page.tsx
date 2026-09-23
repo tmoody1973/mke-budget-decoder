@@ -8,7 +8,6 @@ import { ReceiptBand } from '@/components/receipt/receipt-band'
 import { ReceiptFinder } from '@/components/receipt/receipt-finder'
 import { EVENTS } from '@/lib/civic/events'
 import { ARTICLES, TOPICS } from '@/lib/civic/news'
-import { OVERVIEW_SECTIONS } from '@/lib/site-nav'
 import { BUDGET_VERSION, getDb } from '@/lib/db/client'
 import {
   getBudgetFact, getDepartmentTotals, getGcpReconciliation, getHeadline, getRevenueMix, getSectionBudgets,
@@ -87,11 +86,6 @@ export default async function Overview() {
             change it before adopting the budget in November.<Mark n={calendar} />
           </p>
         </div>
-        <nav aria-label="Jump to" className="mt-3">
-          <ul className="flex flex-wrap gap-x-5 gap-y-2 text-sm">
-            {OVERVIEW_SECTIONS.map(([href, label]) => <li key={href}><a href={href} className="font-semibold text-ref underline underline-offset-4">{label}</a></li>)}
-          </ul>
-        </nav>
       </header>
 
       <div className="mt-6 grid gap-10 lg:grid-cols-12 lg:gap-0">

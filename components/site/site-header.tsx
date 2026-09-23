@@ -42,6 +42,15 @@ export function SiteHeader() {
           </button>
         </span>
       </nav>
+      {path === '/' && (
+        <nav aria-label="Sections of this page" className="hidden border-t border-rule md:block">
+          <ul className="mx-auto flex w-full max-w-6xl flex-wrap gap-x-6 gap-y-1 px-4 py-2 text-sm sm:px-6 lg:px-8">
+            {OVERVIEW_SECTIONS.map(([h, l]) => (
+              <li key={h}><a href={h} className="font-semibold text-ref underline underline-offset-4 hover:text-ink">{l}</a></li>
+            ))}
+          </ul>
+        </nav>
+      )}
       <div id="site-menu" hidden={!open} className="border-t border-rule px-4 pb-5 md:hidden">
         <ul className="divide-y divide-rule">
           {PAGES.map(([h, l]) => <li key={h}>{link(h, l, 'block py-3 text-base')}</li>)}
