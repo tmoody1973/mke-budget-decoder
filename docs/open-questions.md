@@ -44,3 +44,17 @@ Stored as printed, flagged on the row; none of these are "fixed" by the parser.
 - **Concept labels: one wrapped heading half survives** (`1. BUDGET FOR COUNTY`). The fragment filter in `extract/concepts.py` catches headings that end in FOR/OF/AND or a hyphen; this one ends in a noun. Harmless to search, but it's not a real program name.
 - **Row ids are not stable across reloads** (D14). Anything outside the database (Boards, share links) must refer to rows by citation, not by id.
 - **pg warns that `sslmode=require` will change meaning in pg v9.** Current behaviour is `verify-full` (strict). Setting `sslmode=verify-full` explicitly in DATABASE_URL keeps it and silences the warning; not changed yet because it's the credentials file.
+
+## 2026-09-23 — City Receipt: what the MPROP data and its documentation do not settle
+
+Snapshot: data.milwaukee.gov resource 0a2c7f31…, 159,949 parcels, taken 2026-09-23 (`data/processed/parcels_meta.json`). Field documentation: `data/raw/MPROP-Field-Documentation.pdf` (the city's file is dated fall 2024).
+
+- **Taxable value = `C_A_TOTAL`, not total minus exempt** (docs/07 §3 corrected). Exempt parcels carry 0 in `C_A_TOTAL` and their value in `C_A_EXM_TOTAL`; no parcel has both.
+- **`DPW_SANITATION` is a collection district (N1, N2, S1, S2, C1, C2, S3), not a served/not-served flag.** Almost every parcel has one. docs/07 assumed it decides whether the solid waste fee applies. Which properties get city garbage service (and pay the fee) is still open; ask DPW. Until then the receipt should show the solid waste line only for class 1 residential with 1–4 units, labeled as an assumption, or ask the user. Pick the conservative wording with Tarik.
+- **No `UNIT` field exists** (docs/07 lists one). Condos (class 5) each have their own taxkey, so a condo address returns several parcels; the address picker handles it.
+- **`OWN_OCPD` is the city's guess:** 'O' when the property address matches the owner's mailing address. Use it only to pick the starting view (owner or renter); the user can switch.
+- **`NR_UNITS` counts rooms for hotels and licensed beds for nursing homes.** Split per unit only for residential building types.
+- **397 parcels still carry a 2025 assessment** (`YR_ASSMT`); the receipt says so for those.
+- **417 manufacturing parcels (class 3) and 394 with no class have `C_A_TOTAL` = 0.** Manufacturing is state-assessed: "can't estimate", per docs/07.
+- **`TAX_RATE_CD` is the county** (Milwaukee, Washington, Waukesha). The city rate is the same in all three; the receipt is city-only.
+- **The owner-occupied count (97,461 of 159,949 parcels) is not the renter share of residents.** Quote ACS (the Census Bureau's American Community Survey) for that, per docs/07 §1.

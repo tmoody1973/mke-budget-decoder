@@ -13,7 +13,8 @@
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:load": "tsx scripts/load.ts && tsx scripts/embed.ts",
-    "db:embed": "tsx scripts/embed.ts"
+    "db:embed": "tsx scripts/embed.ts",
+    "mprop:refresh": "cd pipeline && uv run python -m extract.mprop"
   },
   "dependencies": {
     "@base-ui/react": "^1.8.0",

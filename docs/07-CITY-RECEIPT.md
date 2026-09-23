@@ -62,8 +62,10 @@ Rate components are printed rounded to the cent. Compute the city levy from the 
 ## 3. The math
 
 ```
-taxable_2026_assessment = C_A_TOTAL − C_A_EXM_TOTAL          # funds the 2027 budget
-taxable_2025_assessment = P_A_TOTAL − P_A_EXM_TOTAL          # funded the 2026 budget
+taxable_2026_assessment = C_A_TOTAL                          # funds the 2027 budget
+taxable_2025_assessment = P_A_TOTAL                          # funded the 2026 budget
+# C_A_TOTAL is already taxable: exempt parcels carry 0 there and their value in C_A_EXM_TOTAL;
+# no parcel has both (checked on the 2026-09-23 snapshot, tests/test_parcels.py).
 
 city_levy_est_2027 = taxable_2026_assessment × 7.29 / 1000
 city_levy_est_2026 = taxable_2025_assessment × 7.61 / 1000
