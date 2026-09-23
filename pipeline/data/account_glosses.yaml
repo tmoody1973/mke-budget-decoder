@@ -11,10 +11,10 @@
 - {account: "630108", account_label: "Postal and Mailing Services", gloss: "Postage and mailing costs.", synonyms: [postage, mail, mailing], reviewed_by: null}
 - {account: "630500", account_label: "Tools & Machinery Parts", gloss: "Tools and replacement parts for machinery the department uses.", synonyms: [tools, parts, equipment parts], reviewed_by: null}
 - {account: "631000", account_label: "Construction Supplies", gloss: "Materials used for construction and repair work.", synonyms: [building materials, construction materials, repair materials], reviewed_by: null}
-- {account: "631500", account_label: "Energy", gloss: "Utility and fuel costs such as electricity and natural gas.", synonyms: [electricity, natural gas, utilities, fuel, power], reviewed_by: null}
+- {account: "631500", account_label: "Energy", gloss: "Utility and fuel costs such as electricity and natural gas.", synonyms: [electricity, natural gas, utilities, heating fuel, power], reviewed_by: null}
 - {account: "632000", account_label: "Other Operating Supplies", gloss: "Supplies needed to run the department's services that don't fit another supply account.", synonyms: [supplies, materials], reviewed_by: null}
 - {account: "632500", account_label: "Facility Rental", gloss: "Rent paid for buildings, rooms or space the department uses.", synonyms: [rent, leases, office space], reviewed_by: null}
-- {account: "633000", account_label: "Vehicle Rental", gloss: "Renting vehicles, including charges for using city fleet vehicles.", synonyms: [vehicle rental, fleet charges, cars, trucks], reviewed_by: null}
+- {account: "633000", account_label: "Vehicle Rental", gloss: "Renting vehicles, which may include charges for using city fleet vehicles.", synonyms: [vehicle rental, fleet charges, cars, trucks], reviewed_by: null}
 - {account: "633500", account_label: "Non-Vehicle Equipment Rental", gloss: "Renting equipment other than vehicles, such as machines or copiers.", synonyms: [equipment rental, copier lease], reviewed_by: null}
 - {account: "634000", account_label: "Professional Services", gloss: "Paying outside experts: consultants, contractors, studies and other professional work.", synonyms: [consultants, contractors, outside experts, studies, consulting], reviewed_by: null}
 - {account: "634500", account_label: "Information Technology Services", gloss: "Technology services: software, IT support, data and computer services.", synonyms: [IT, software, technology, computer services, tech], reviewed_by: null}

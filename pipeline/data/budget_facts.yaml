@@ -76,7 +76,7 @@
   unit: dollars_rounded_0.1M
   cite: {doc: summary, pdf_page: 169, printed_page: "159"}
   table_pair: {line: "Fringe Benefit Offset", value: 28000000, cite: {doc: summary, pdf_page: 172, printed_page: "162"}, note: "The table puts $28,000,000 in the 2027 Proposed column (2026 adopted $25,000,000; +$3,000,000). The narrative's first '2026' appears to mean 2027; quote as printed."}
-  reviewed_by: null
+  reviewed_by: "Tarik (claude-precheck)"
 
 - id: police-recruit-classes
   topic: recruit_classes

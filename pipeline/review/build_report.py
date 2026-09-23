@@ -134,7 +134,7 @@ def build() -> Path:
     for d in departments():
         slug = d["slug"]
         parts = [
-            block("Budget summary", ds[ds.dept == slug], ["group", "label"] + STAGES, "summary", pdfs),
+            block("Budget summary", ds[ds.dept == slug], ["group", "label"] + STAGES + ["flags"], "summary", pdfs),
             block("Services", sv[sv.dept == slug], ["description", "operating", "capital", "grant", "ftes"], "summary", pdfs,
                   "'-' in the document is stored as blank (NULL), not 0."),
             block("Key performance measures", kp[kp.dept == slug], ["measure", "col_labels", "values"], "summary", pdfs,

@@ -663,21 +663,21 @@
     "seconds": 0.18
   },
   "glossary:Solid waste fee": {
-    "key": "bd7b588c6dd27d64",
+    "key": "6ff9b7cf259f45fd",
     "kind": "glossary",
     "cite": {
       "doc": "summary",
       "pdf_page": 169,
       "printed_page": "159"
     },
-    "statement": "An annual charge on residential units that pays for garbage collection.",
+    "statement": "An annual charge on residential units that pays for garbage collection and related services such as recycling and special collections.",
     "passage": "Service costs for related solid waste services like recycling, and special collections are also recovered through the fee. In 2027, the solid waste fee will increase from $271.80 per year for residential units to $280.00, a 3.0% increase. An additional charge is made to residences that have more than one garbage cart per household.",
-    "conflict_probability": 0.17,
+    "conflict_probability": 0.06,
     "verdict": "consistent",
     "auto": true,
     "model": "jev-1.13.0",
-    "input_tokens": 470,
-    "seconds": 0.19
+    "input_tokens": 479,
+    "seconds": 0.28
   },
   "glossary:Full-time equivalent (FTE)": {
     "key": "7044234293937e1a",
@@ -763,23 +763,6 @@
     "model": "jev-1.13.0",
     "input_tokens": 1247,
     "seconds": 0.26
-  },
-  "glossary:Fringe benefit offset": {
-    "key": "a6310b0615260d7f",
-    "kind": "glossary",
-    "cite": {
-      "doc": "summary",
-      "pdf_page": 27,
-      "printed_page": "17"
-    },
-    "statement": "An accounting line that removes fringe benefits already counted in department budgets so they are not counted twice in the total.",
-    "passage": "General City Purposes 1. Budgets for General City Purposes Administration, Department of $12,514,159 $23,340,044 $22,942,789 $25,062,669 $2,119,880 Assessor's Office 1,985,846 5,433,598 5,676,889 5,933,850 256,961 City Attorney 3,684,648 8,787,167 9,356,963 9,751,037 394,074 City Development, Department of 3,113,699 7,699,683 8,188,139 8,667,262 479,123 City Treasurer 2,865,014 4,613,661 4,851,182 5,097,630 246,448 Common Council City Clerk 5,377,264 13,445,081 13,313,932 13,387,317 73,385 Community Wellness & Safety, Department of 0 0 1,354,725 2,789,273 1,434,548 Compliance and Engagement, Department of 0 0 1,886,467 2,079,094 192,627 Comptroller 2,699,323 5,739,430 5,859,969 6,609,594 749,625 Election Commission 5,864,488 3,234,740 5,247,509 3,496,354 -1,751,155 Emergency Communications, Department of 4,539,461 23,800,555 27,171,944 25,770,876 -1,401,068 Employee Relations, Department of 2,638,928 5,984,248 6,395,445 6,871,919 476,474 Fire and Police Commission 2,610,952 4,916,395 5,490,902 6,136,786 645,884 Fire Department 135,229,262 151,605,153 165,408,632 172,888,103 7,479,471 Health Department 17,630,131 19,145,279 22,682,951 23,043,869 360,918 Library 17,087,994 31,644,176 33,651,471 35,142,226 1,490,755 Mayor's Office 764,869 1,947,510 2,108,535 2,256,261 147,726 Municipal Court 1,933,672 3,825,655 4,199,399 4,180,654 -18,745 Neighborhood Services, Department of 11,617,737 24,170,090 25,881,545 25,844,087 -37,458 Police Department 269,682,242 330,680,888 310,111,835 343,937,125 33,825,290 Port Milwaukee 7,167,936 7,325,269 7,060,819 7,266,355 205,536 Public Works Department (Total) (147,995,857) (161,140,492) (164,868,703) (172,280,882) 7,412,179 Administrative Services Division 2,474,942 3,807,557 4,068,897 4,152,356 83,459 Infrastructure Services Division 38,632,035 51,206,876 52,436,592 54,403,862 1,967,270 Operations Division 106,888,880 106,126,059 108,363,214 113,724,664 5,361,450 Special Purpose Accounts*** 142,626,808 156,451,173 187,284,347 178,876,969 -8,407,378 Fringe Benefit Offset -156,082,894 -195,390,769 -225,321,709",
-    "conflict_probability": 0.12,
-    "verdict": "consistent",
-    "auto": true,
-    "model": "jev-1.13.0",
-    "input_tokens": 1849,
-    "seconds": 0.14
   },
   "glossary:Operating expenditures": {
     "key": "dff199eb26d99654",
