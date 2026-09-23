@@ -32,3 +32,24 @@
 **How we'll know if this was right.** The P1.8 reconciliation suite: every decision unit's lines add up to its printed totals, in every year column, including on the 30 stretched pages. A wrong-column number would show up there as a mismatch.
 
 **What actually happened.**
+
+---
+
+## D11 — Every Detailed row is labeled "real money", "summary", or "restated", and only real money is ever added up
+
+**Decision.** The parser tags each Detailed-budget row with a `block`: `decision_unit` (real money, counted once), `bcu_summary` (a department's summary sheet that repeats its own offices), or `restated` (a whole section that repeats money from another section). Queries sum only `decision_unit`. The other two are used as checks.
+
+**Why this came up.** The book tells the same money two or three times. Administration's summary sheet (110.1–110.2) restates its ten offices. Section 420 restates the whole $846.8M General City Purposes budget. Sections 450–470 restate lines of 440. A tool that adds up "every salary row for Administration" would roughly double the answer and show it with confidence.
+
+**Options.**
+1. *Drop the summary rows at extraction.* Simple, but it throws away the city's own totals, which are the best way to check the parser.
+2. *Keep everything and trust query authors to filter.* Every future query is one forgotten filter away from a doubled number.
+3. *Keep everything, label every row, check summary = sum of offices in tests, and sum only real money by default.*
+
+**What we chose and why.** Option 3. Tarik's call in the Socratic stop: "use the summary as a validation of the total and never use summary in the front end". Claude added the row label that makes that rule enforceable, since the book doesn't print it. On the real book the check passes for 11 summary sections × 6 kinds of total × 4 year columns. The two exceptions are verified errors in the document (Transportation 510, below).
+
+**What we gave up.** Labeling depends on reading where a summary ends. That took several rules: explicit "BCU/DECISION UNIT" wording, or a line whose numbers equal its categories added up. A new layout next year could fool it. The tests would catch that as a mismatch but can't fix it.
+
+**How we'll know if this was right.** `validate/test_bcu_blocks.py` stays green on the Adopted budget in November without new rules. In P2, department totals built from `decision_unit` rows equal the Summary book's department totals (P1.8 cross-document check).
+
+**What actually happened.**

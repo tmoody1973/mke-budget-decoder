@@ -1,0 +1,31 @@
+# Verified arithmetic inconsistencies INSIDE the official 2027 Proposed budget documents.
+#
+# Ported mechanism from mke-budget-commons/crosswalks/source_inconsistencies.yml:
+# an entry only excuses a failing check while BOTH the printed value and the extracted
+# value still equal the numbers recorded here. If the parser's output changes, the check
+# fails again instead of staying hidden. Every entry was confirmed by hand on the page.
+
+- id: transportation-parking-du-total-omits-lines
+  doc: detailed
+  check: bcu_total_equals_unit_totals
+  section: "510"
+  column: adopted_2026
+  printed: 39131093        # 510.3 line 2 BUDGETARY CONTROL UNIT TOTAL (1BCU=2DU)
+  extracted: 38319651      # 510.8 line 19 Parking DU total 31,376,067 + 510.11 line 14 Streetcar 6,943,584
+  note: >-
+    The Parking decision unit lists DEPOSIT TO RETAINED EARNINGS $811,442 (510.8 line 12)
+    but its printed 2026 total equals the O&M subtotal alone (31,376,067). The BCU total
+    includes the $811,442. In 2025 and 2027-requested the same unit total does include its
+    transfer/deposit lines, so the document is internally inconsistent.
+
+- id: transportation-parking-du-total-omits-transfer
+  doc: detailed
+  check: bcu_total_equals_unit_totals
+  section: "510"
+  column: proposed_2027
+  printed: 50410300        # 510.3 line 2
+  extracted: 44410300      # 36,699,370 (510.8 line 19) + 7,710,930 (510.11 line 14)
+  note: >-
+    The Parking decision unit lists TRANSFER TO CAPITAL FUND $6,000,000 (510.8 line 16)
+    but its printed proposed total (36,699,370 = O&M 33,908,268 + deposit 2,791,102)
+    leaves it out. The BCU total includes it.

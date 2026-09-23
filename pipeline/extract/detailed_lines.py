@@ -278,6 +278,11 @@ def iter_page_rows(page, pdf_page: int, stats: dict) -> Iterator[Row]:
         stats["orphan_words"][pdf_page] = orphans
 
 
+def _is_caps_name(text: str) -> bool:
+    letters = [c for c in text if c.isalpha()]
+    return len(letters) >= 5 and "".join(letters).isupper()
+
+
 def _acct6(account: Optional[str]) -> Optional[str]:
     return account.zfill(6) if account else None
 
@@ -318,6 +323,8 @@ def classify(row: Row, category: Optional[str], in_footnotes: bool = False) -> s
         # Title-case items that merely mention "total" are not totals ("Hoists (8 in total)").
         if d.upper() == d or re.match(r"^(Subtotal|Total|Gross)\b", d):
             return "rollup"
+    if re.search(r"\d\s*BCU\b|BCU\s*=|BCU'S", du):
+        return "rollup"                        # 'SUMMARY (1BCU=3DU)' closes a block (Detailed 220.2)
     if du == "SPECIAL FUNDS" and row.has_values:
         return "rollup"                        # summary-block special funds total prints unlabeled
     if category == "salaries" and not row.account:
@@ -383,8 +390,210 @@ def parse_detailed(pdf_path=DETAILED_PDF) -> tuple[list[Row], dict]:
                     prev.note = f"{prev.note} {row.description_raw}".strip() if prev.note else row.description_raw
                 rows.append(row)
                 # 006300/006800 totals close their category even where headers are omitted.
-                if row.account == "006300":
+                if _acct6(row.account) == "006300" or "OPERATING EXPENDITURES TOTAL" in row.upper:
                     category = "equipment"
-                elif row.account == "006800":
+                elif _acct6(row.account) == "006800" or "EQUIPMENT PURCHASES TOTAL" in row.upper:
                     category = "special"
+    join_wrapped_labels(rows)
+    assign_hierarchy(rows)
     return rows, stats
+
+
+# --------------------------------------------------------------------------------------- #
+# Second pass: wrapped labels, then hierarchy + block. The block is what stops double
+# counting (Socratic stop 1, 2026-09-22): the BCU summary sheet restates its decision units,
+# so it is used as a CHECK (summary == sum of decision units) and never summed by queries.
+# --------------------------------------------------------------------------------------- #
+# Whole sections that restate money counted in another section (verified on the page):
+#   320 DPW summary → 330/340/350 · 400 SPA total → 360–390 · 420 GCP total → all GCP depts
+#   450/460 → itemize lines 440.1:20 and 440.2:2 · 470 → restates 440.2:5 · 560 Water Works recap
+RESTATED_SECTIONS = {"320", "400", "420", "450", "460", "470", "560"}
+SUMMARY_HEADER_RE = re.compile(r"SUMMARY|BCU'S|BCU\s*=\s*([2-9]|\d\d)\s*DU")
+BCU_TAG_RE = re.compile(r"^\(?\d\s*BCU\s*=")
+CATEGORY_ROLLUP_RE = re.compile(r"SALARIES|FRINGE|OPERATING EXPENDITURES|EQUIPMENT|SPECIAL FUNDS|"
+                                r"BEFORE ADJUSTMENTS|SUBTOTAL|POSITIONS|FTE")
+WRAP_TAIL_RE = re.compile(r"\b(FOR|BY|TO|OF|AND|THE)\s*$|-\s*$", re.I)
+
+
+def section_of(row: Row) -> str:
+    return row.printed_page.split(".")[0]
+
+
+def join_wrapped_labels(rows: list[Row]) -> None:
+    """A total whose label wraps prints its number only on the second line
+    ('TOTAL BUDGET FOR PROVISION FOR' / 'EMPLOYEE RETIREMENT 273,417,384', Detailed 440.2).
+    Prefix the first line's text onto the valued line and re-type it; the first line stays
+    as a valueless heading, flagged."""
+    for prev, cur in zip(rows, rows[1:]):
+        if (prev.printed_page != cur.printed_page or cur.line_no != prev.line_no + 1
+                or prev.has_values or prev.account or not cur.has_values or cur.account
+                or cur.pay_range or prev.row_type == "note" and not re.search(r"total", prev.description_raw, re.I)):
+            continue
+        p = prev.description_raw
+        if re.search(r"\btotal\b", p, re.I) or WRAP_TAIL_RE.search(p) or BCU_TAG_RE.match(cur.description_raw):
+            cur.description_raw = f"{p} {cur.description_raw}"
+            cur.flags.append(f"label_joined_from_line_{prev.line_no}")
+            prev.flags.append(f"label_wraps_into_line_{cur.line_no}")
+            prev.row_type = "heading"
+            cur.row_type = classify(cur, cur.category)
+
+
+MONEY_COLS = ("actual_2025", "adopted_2026", "requested_2027", "proposed_2027")
+ANCHOR_RE = re.compile(r"NET SALARIES & WAGES TOTAL|ESTIMATED EMPLOYEE FRINGE BENEFITS|"
+                       r"OPERATING EXPENDITURES TOTAL|EQUIPMENT PURCHASES TOTAL|^SPECIAL FUNDS( TOTAL)?$")
+
+
+EXPLICIT_UNIT_TOTAL_RE = re.compile(r"BCU|DECISION UNIT|UNIT TOTAL|DIVISION TOTAL|SECTION TOTAL|OFFICE .*TOTAL")
+
+
+def is_category_anchor(row: Row) -> bool:
+    return row.row_type == "rollup" and bool(ANCHOR_RE.search(row.upper))
+
+
+def is_unit_total(row: Row) -> bool:
+    return "unit_total" in row.flags
+
+
+def _closes_unit(row: Row, acc: dict) -> bool:
+    """A unit's grand total is the line whose every money column equals the sum of the
+    unit's printed category anchors (006000+006100+006300+006800+special). Wording alone
+    can't tell 'LIBRARY-PATRON EXPERIENCE & STRATEGY' (a total) from 'TRANSFER TO CAPITAL
+    FUND' (an item); the arithmetic can."""
+    if not row.has_values or row.account or row.pay_range or is_category_anchor(row):
+        return False
+    if not (_is_caps_name(row.description) or "BCU" in row.upper):
+        return False
+    if EXPLICIT_UNIT_TOTAL_RE.search(row.upper):
+        return True
+    if "EXPENSE TOTAL" in row.upper:
+        return False     # 'OPERATING & MAINTENANCE EXPENSE TOTAL' is mid-unit (Detailed 510.8)
+    return all((row.values.get(c) or 0) == acc[c] for c in MONEY_COLS) and any(acc.values())
+
+
+def assign_hierarchy(rows: list[Row]) -> None:
+    """hierarchy_path = [dept as printed, unit title]; block per the table in docs/decisions D11."""
+    i = 0
+    while i < len(rows):
+        sec = section_of(rows[i])
+        j = i
+        while j < len(rows) and section_of(rows[j]) == sec:
+            j += 1
+        _assign_section(rows[i:j], restated=sec in RESTATED_SECTIONS)
+        i = j
+
+
+def _assign_section(rows: list[Row], restated: bool) -> None:
+    opening = []
+    for r in rows:
+        if r.upper in SECTION_HEADERS:
+            break
+        if r.row_type == "heading":
+            opening.append(r.description_raw)
+    has_summary = any(SUMMARY_HEADER_RE.search(t.upper()) for t in opening)
+    block = "restated" if restated else ("bcu_summary" if has_summary else "decision_unit")
+    title_parts: list[str] = []
+    title = "BCU SUMMARY" if block == "bcu_summary" else " ".join(opening[:2]).strip()
+    collecting = block != "bcu_summary"
+    acc = dict.fromkeys(MONEY_COLS, 0)
+    for r in rows:
+        if collecting and r.row_type == "heading" and r.upper not in SECTION_HEADERS \
+                and not any(f.startswith("label_wraps") for f in r.flags):
+            title_parts.append(r.description.rstrip(" -"))
+        elif r.upper in SECTION_HEADERS or r.has_values:
+            if collecting and title_parts:
+                title = " – ".join(title_parts)
+            collecting = False
+        r.block = block
+        r.hierarchy_path = [r.dept_printed, title]
+        if is_category_anchor(r):
+            for c in MONEY_COLS:
+                acc[c] += r.values.get(c) or 0
+            continue
+        if _closes_unit(r, acc):
+            r.row_type = "rollup"
+            r.flags.append("unit_total")
+            acc = dict.fromkeys(MONEY_COLS, 0)
+            if block == "bcu_summary":
+                block = "decision_unit"
+            title_parts, collecting = [], True
+
+
+def is_subtotal(row: Row) -> bool:
+    return row.row_type in ("rollup", "count")
+
+
+# --------------------------------------------------------------------------------------- #
+# Output
+# --------------------------------------------------------------------------------------- #
+def _cite(r: Row) -> dict:
+    return {"doc": "detailed", "pdf_page": r.pdf_page, "printed_page": r.printed_page, "line_no": r.line_no}
+
+
+def _units(v) -> Optional[str]:
+    return None if v is None else str(v)   # Decimal kept exact as text; loader casts to numeric(10,2)
+
+
+def line_item_records(rows: list[Row]) -> list[dict]:
+    out = []
+    for r in rows:
+        v = r.values
+        out.append({
+            "dept_printed": r.dept_printed, "section": section_of(r),
+            "row_type": r.row_type, "block": r.block, "category": r.category,
+            "hierarchy_path": r.hierarchy_path,
+            "fund": r.fund, "org": r.org, "sbcl": r.sbcl, "account": r.account,
+            "description": r.description, "description_raw": r.description_raw,
+            "pay_range": r.pay_range, "footnote_codes": r.footnote_codes,
+            "actual_2025": _money(v.get("actual_2025")),
+            "adopted_2026_units": _units(v.get("adopted_2026_units")), "adopted_2026": v.get("adopted_2026"),
+            "requested_2027_units": _units(v.get("requested_2027_units")), "requested_2027": v.get("requested_2027"),
+            "proposed_2027_units": _units(v.get("proposed_2027_units")), "proposed_2027": v.get("proposed_2027"),
+            "is_subtotal": r.row_type in ("rollup", "count"),
+            "is_unit_total": is_unit_total(r),
+            "is_position": r.row_type == "position",
+            "is_deduction": r.row_type == "deduction",
+            "footnote_flag": r.footnote_flag, "note": r.note, "flags": r.flags,
+            "pdf_page": r.pdf_page, "printed_page": r.printed_page, "line_no": r.line_no,
+            "cite": _cite(r),
+        })
+    return out
+
+
+def _money(v):
+    """actual_2025 is sometimes a printed count (flagged); only whole dollars go in the money column."""
+    return v if isinstance(v, int) or v is None else None
+
+
+def position_records(rows: list[Row]) -> list[dict]:
+    return [{
+        "dept_printed": r.dept_printed, "section": section_of(r), "block": r.block,
+        "hierarchy_path": r.hierarchy_path, "title": r.description, "footnote_codes": r.footnote_codes,
+        "pay_range": r.pay_range,
+        "adopted_2026_units": _units(r.values.get("adopted_2026_units")), "adopted_2026": r.values.get("adopted_2026"),
+        "requested_2027_units": _units(r.values.get("requested_2027_units")), "requested_2027": r.values.get("requested_2027"),
+        "proposed_2027_units": _units(r.values.get("proposed_2027_units")), "proposed_2027": r.values.get("proposed_2027"),
+        "pdf_page": r.pdf_page, "printed_page": r.printed_page, "line_no": r.line_no, "cite": _cite(r),
+    } for r in rows if r.row_type == "position"]
+
+
+def main() -> dict:
+    import json
+
+    import pandas as pd
+
+    from common.config import PROCESSED
+    rows, stats = parse_detailed()
+    PROCESSED.mkdir(parents=True, exist_ok=True)
+    money = {c: "Int64" for c in ("actual_2025", "adopted_2026", "requested_2027", "proposed_2027")}
+    li = pd.DataFrame(line_item_records(rows)).astype(money)   # nullable int: blank stays NULL
+    pl = pd.DataFrame(position_records(rows)).astype({k: v for k, v in money.items() if k != "actual_2025"})
+    li.to_parquet(PROCESSED / "line_items.parquet", index=False)
+    pl.to_parquet(PROCESSED / "position_lines.parquet", index=False)
+    report = {"rows": len(rows), "positions": sum(r.row_type == "position" for r in rows),
+              "skipped_pages": stats["skipped_pages"], "stretched_pages": stats["stretched_pages"]}
+    (PROCESSED / "detailed_extract_report.json").write_text(json.dumps(report, indent=2))
+    return report
+
+
+if __name__ == "__main__":
+    print(main())
