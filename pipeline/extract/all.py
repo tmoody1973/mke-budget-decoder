@@ -1,5 +1,5 @@
 """Rebuild every processed dataset from the two PDFs: `uv run python -m extract.all`."""
-from extract import dept_tables, detailed_lines, narrative_chunks, revenues, summary_tables
+from extract import concepts, dept_tables, detailed_lines, narrative_chunks, revenues, summary_tables
 
 
 def main() -> None:
@@ -7,6 +7,7 @@ def main() -> None:
     print("summary_tables:", summary_tables.main())
     print("dept_tables:", dept_tables.main())
     print("revenues:", revenues.main())
+    print("concepts:", concepts.main())
     print("narrative_chunks:", narrative_chunks.main())
 
 

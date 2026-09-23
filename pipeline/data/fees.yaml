@@ -1,0 +1,64 @@
+# City fees, 2026 → 2027 (docs/05). Hand-curated; every value was matched against the page text
+# on 2026-09-22 (Summary p.159 and p.203, quoted in `source_text`). reviewed_by null until a human
+# checks it. revenue_2027 is the exact figure from the Source of Funds table (Summary p.161) where
+# the table has the line; the narrative's rounded estimate is kept in `narrative_revenue`.
+
+- fee: solid_waste
+  unit: per_year_per_unit
+  value_2026: "271.80"
+  value_2027: "280.00"
+  pct_change_printed: "3.0"
+  revenue_2027: 52080000          # Summary p.161 'Solid Waste Fee'
+  narrative_revenue: "$54.0 million combined with the extra cart fee"
+  source_text: "In 2027, the solid waste fee will increase from $271.80 per year for residential units to $280.00, a 3.0% increase."
+  cite: {doc: summary, pdf_page: 169, printed_page: "159"}
+  is_derived: false
+  reviewed_by: null
+
+- fee: extra_cart
+  unit: per_year_per_unit
+  value_2026: "81.24"
+  value_2027: "83.68"
+  pct_change_printed: "3.0"
+  revenue_2027: 1966000           # Summary p.161 'Extra Garbage Cart Fee'
+  narrative_revenue: "$54.0 million combined with the solid waste fee"
+  source_text: "In 2027 the annual extra garbage cart fee will increase from $81.24 per additional cart to $83.68, a 3.0% increase from 2026."
+  cite: {doc: summary, pdf_page: 169, printed_page: "159"}
+  is_derived: false
+  reviewed_by: null
+
+- fee: snow_ice
+  unit: per_frontage_ft
+  value_2026: "1.19"
+  value_2027: "1.23"
+  pct_change_printed: "3.4"
+  revenue_2027: 12054000          # Summary p.161 'Snow and Ice Control Fee'
+  narrative_revenue: "$12.1 million"
+  source_text: "The snow and ice fee will increase from $1.19 per foot of property frontage to $1.23 per frontage foot, a 3.4% increase from 2026."
+  cite: {doc: summary, pdf_page: 169, printed_page: "159"}
+  is_derived: false
+  reviewed_by: null
+
+- fee: street_lighting
+  unit: per_frontage_ft
+  value_2026: "1.12"
+  value_2027: "1.16"
+  pct_change_printed: "3.6"
+  revenue_2027: 10694000          # Summary p.161 'Street Lighting Fee'
+  narrative_revenue: "$11.2 million, with $500,000 of that revenue being used for capital expenditures"
+  source_text: "This fee will increase from $1.12 in 2026 to $1.16 per frontage foot on streets served by the city's streetlights, a 3.6% increase."
+  cite: {doc: summary, pdf_page: 169, printed_page: "159"}
+  is_derived: false
+  reviewed_by: null
+
+- fee: sewer_stormwater_avg
+  unit: avg_household_per_year
+  value_2026: "241.88"            # DERIVED: 247.02 − 5.14; the document does not print the 2026 figure
+  value_2027: "247.02"
+  pct_change_printed: null
+  revenue_2027: null
+  narrative_revenue: null
+  source_text: "The Sewer Maintenance Fee will increase by $0.06 per hundred cubic feet and the Stormwater Fee will increase by $0.81. These fees will cost an average residential household a combined $247.02 in 2027, an increase of $5.14 from 2026."
+  cite: {doc: summary, pdf_page: 213, printed_page: "203"}
+  is_derived: true
+  reviewed_by: null

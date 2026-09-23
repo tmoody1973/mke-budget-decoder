@@ -23,3 +23,11 @@ Stored as printed, flagged on the row; none of these are "fixed" by the parser.
 - **Footnote prose contains column-aligned numbers** (Detailed 300.19–300.20: "Position authority for 1 Police Detective", "(0.5 FTE)"): 8 rows; numbers kept in the text, not as values, flag `prose_numbers_not_values`.
 - **Administration BCU header vs its total disagree**: 110.1 says "(SUMMARY 1 BCU=8 DU)", 110.2 closes "TOTAL (1 BCU=10 DU)". Which count is right is a question for the city; the parser doesn't rely on either.
 - **docs/02 §3 row-type list is incomplete**: valued rows with no account code (equipment items, special-fund items, capital lines) get `row_type = 'item'`, a type the plan's list didn't have.
+
+## 2026-09-22 — P1.5–P1.7
+
+- **Position-title glosses not written.** docs/06 plans a Haiku-class batch job for ~1,200 titles. That needs an API key and costs money, so the concept index has `gloss = null` for position titles. Decide in P1.10/P3 whether to run it (and budget it).
+- **Account glosses are drafts** (`pipeline/data/account_glosses.yaml`, 18 operating accounts): written from the account names only, all `reviewed_by: null`.
+- **Sub-heading detection is heuristic.** 51 → ~40 prose sub-headings after rules; a few false positives remain (e.g. Port "Administration & Financial Services – Supports", a heading plus the start of its sentence). Metadata only (`heading` field); no numbers affected. Review in the P1.9 report.
+- **reason_category is conservative.** 203 of 298 reasoned rows plus all reason-less rows are `other`; "Position eliminated" is never classed as vacant because the text doesn't say so.
+- **Narrative quirk kept as printed:** Summary p.159 says the fringe benefit offset is "anticipated to be $28.0 million in 2026, a $3.0 million increase from 2026"; the table (p.162) puts it in 2027 Proposed. Recorded in budget_facts.yaml.

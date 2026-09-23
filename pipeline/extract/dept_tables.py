@@ -379,5 +379,8 @@ def _write(name: str, rows: list[dict]) -> int:
 
 
 def main() -> dict:
+    from common.reason_category import reason_category
     r = extract_all()
+    for row in r["position_changes"]:
+        row["reason_category"] = None if row["is_total"] else reason_category(row["reason"])
     return {k: _write(k, v) for k, v in r.items() if k != "unknown_tables"} | {"unknown_tables": len(r["unknown_tables"])}
