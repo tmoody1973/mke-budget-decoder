@@ -1,0 +1,21 @@
+[project]
+name = "mke-budget-pipeline"
+version = "0.1.0"
+description = "Extract the 2027 Proposed Milwaukee budget PDFs into cited, reconciled datasets"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "pdfplumber",
+    "pandas",
+    "pyarrow",
+    "pyyaml",
+]
+
+[dependency-groups]
+dev = ["pytest"]
+
+[tool.uv]
+package = false
+
+[tool.pytest.ini_options]
+testpaths = ["tests", "validate"]
+addopts = "-q"
