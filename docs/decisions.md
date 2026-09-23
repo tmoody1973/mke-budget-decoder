@@ -135,3 +135,23 @@
 **How we'll know if this was right.** The two worked examples in docs/07 §4 pass to the cent; a test proves no owner name or mailing address reaches any response; and P2 ships a working address receipt before the Council's budget hearings end.
 
 **What actually happened.**
+
+## D16 — The site looks like an almanac table: the "Blue Book Table" design
+
+**Decision.** The app's look is modeled on the Wisconsin Blue Book's statistical tables. White paper, navy ink and one blue used only for sources and links. Figures in ruled columns, in Libre Franklin (an open version of Franklin Gothic, the face American almanacs used). Every rate carries a numbered source, and every assumption a lettered note. No cards, shadows or rounded boxes. The full rules are in `DESIGN.md`.
+
+**Why this came up.** The project had no design at all, only the Next.js starter page. The first screen people see (the City Receipt) needed one. Civic budget tools tend to look like one of two things: a generic dashboard, or a government form. Tarik ruled out anything that feels like a fintech ad, a government form, a campaign or a toy.
+
+**Options.**
+1. *Milwaukee sign-painter's window* (dealt at random by the design tool): lettered like a corner-store price board. It's distinctive and local, but hand lettering can tip into nostalgic or cute.
+2. *Blue Book Table*: exact, footnoted and trusted. The risk is that it's the closest option to the "government form" feel.
+3. *Nixie-tube counter*: glowing digits on a dark panel. Very clear numbers, but it reads as a gadget, not civic life.
+4. *The category standard*: an open-budget dashboard. Safe, but it looks like every other one.
+
+**What we chose and why.** Option 2 (Tarik, on the design decision page). It matches the product's core promise: every number has a source. To keep it from becoming a government form, it's built with roomy rows, plain words and one table doing all the work (Claude).
+
+**What we gave up.** A more memorable, Milwaukee-specific look (options 1 and 3). Almanac tables also get dense fast on a phone, so labels had to be shortened to stay at two lines or fewer. Two shortened labels: "Sewer + stormwater" and "Snow & ice and lighting (40 ft)".
+
+**How we'll know if this was right.** A resident on a phone finds their estimate and taps through to a source without instructions. Nobody testing it calls it "a government form".
+
+**What actually happened.**

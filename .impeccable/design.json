@@ -1,0 +1,134 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-09-23T00:00:00Z",
+  "title": "Design System: MKE Budget Decoder",
+  "extensions": {
+    "colorMeta": {
+      "ink": { "role": "primary", "displayName": "Almanac Navy Ink", "canonical": "oklch(0.29 0.06 262)", "approxHex": "#1B2A4A" },
+      "ref": { "role": "secondary", "displayName": "Reference Blue", "canonical": "oklch(0.52 0.12 255)", "approxHex": "#3C6FB0" },
+      "paper": { "role": "neutral", "displayName": "Offset Paper", "canonical": "oklch(1 0 0)", "approxHex": "#FFFFFF" },
+      "ink-soft": { "role": "neutral", "displayName": "Soft Ink", "canonical": "oklch(0.42 0.045 262)" },
+      "rule": { "role": "neutral", "displayName": "Rule Gray", "canonical": "oklch(0.9 0.012 262)", "approxHex": "#D9DEE7" },
+      "mark": { "role": "neutral", "displayName": "Highlight Wash", "canonical": "oklch(0.95 0.035 255)" }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "Page title only; no kicker above it." },
+      "figure": { "displayName": "Figure", "purpose": "The single headline amount of a result, with a soft-ink unit." },
+      "headline": { "displayName": "Headline", "purpose": "Section heads inside a result." },
+      "body-lead": { "displayName": "Body Lead", "purpose": "Intro paragraph (max 60ch) and the address field's text." },
+      "body": { "displayName": "Body", "purpose": "Control labels, change sentence, status and error lines." },
+      "table": { "displayName": "Table", "purpose": "Row labels in ruled tables." },
+      "amount": { "displayName": "Amount", "purpose": "Figure cells; always larger or heavier than the label." },
+      "small": { "displayName": "Small", "purpose": "Hints, assessed-value lines, sources and notes." },
+      "label": { "displayName": "Label", "purpose": "Uppercase table column heads and Sources/Notes heads; never a kicker." }
+    },
+    "rules": [
+      { "name": "rule-hairline", "value": "1px solid var(--rule)", "purpose": "Between table rows and suggestion items." },
+      { "name": "rule-heavy", "value": "2px solid var(--ink)", "purpose": "Table heads, totals, footer, field underlines, control borders." }
+    ],
+    "shadows": [],
+    "focus": [
+      { "name": "focus-ring", "value": "outline: 2px solid var(--ref); outline-offset: 2px", "purpose": "Global :focus-visible, declared inside @layer base so underline fields can override it with focus-visible:outline-none and show only a reference-blue underline." }
+    ],
+    "motion": [
+      { "name": "mark-fade", "value": "1.6s cubic-bezier(0.16, 1, 0.3, 1) both; background-color var(--mark) -> transparent", "purpose": "The only motion: a targeted footnote, note or row (.fn-target:target, .row-target:target). Under prefers-reduced-motion the wash is static." }
+    ],
+    "tapTargets": [
+      { "name": "mark-hit-area", "value": "::before inset -7px vertical, -10px horizontal", "purpose": "Invisible 24px hit area around a glyph-sized footnote mark (WCAG 2.2 target size)." },
+      { "name": "mark-hit-area-paired", "value": "source: -10px left / -3px right; note: margin-left 3px, -3px left / -10px right", "purpose": "Adjacent source and note marks split the hit areas at the gap instead of overlapping." }
+    ],
+    "browserSurfaces": [
+      { "name": "selection", "value": "background var(--mark); color var(--ink)" },
+      { "name": "caret", "value": "caret-color var(--ref)" },
+      { "name": "link-underline", "value": "text-underline-offset 0.2em; thickness 1px" },
+      { "name": "tabular", "value": ".tabular { font-variant-numeric: tabular-nums lining-nums }" }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "640px", "purpose": "Wider gutters and top padding, larger title, Change column appears." }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Square ink block; hovers to reference blue.",
+      "html": "<button class=\"ds-btn-primary\">Show the estimate</button>",
+      "css": ".ds-btn-primary { font-family: var(--font-franklin), sans-serif; font-weight: 600; font-size: 1rem; color: var(--paper); background: var(--ink); border: 2px solid var(--ink); border-radius: 0; padding: 12px 20px; cursor: pointer; } .ds-btn-primary:hover { background: var(--ref); border-color: var(--ref); } .ds-btn-primary:focus-visible { outline: 2px solid var(--ref); outline-offset: 2px; }"
+    },
+    {
+      "name": "Own / Rent Segmented Control",
+      "kind": "custom",
+      "refersTo": "segmented-option",
+      "description": "Two equal options in a 2px ink frame; selected is ink-filled. Nothing preselected.",
+      "html": "<div class=\"ds-seg\"><label class=\"ds-seg-opt\"><input type=\"radio\" name=\"v\"> Own this</label><label class=\"ds-seg-opt ds-seg-on\"><input type=\"radio\" name=\"v\" checked> Rent here</label></div>",
+      "css": ".ds-seg { display: grid; grid-template-columns: 1fr 1fr; border: 2px solid var(--ink); font-family: var(--font-franklin), sans-serif; } .ds-seg-opt { padding: 12px 0; text-align: center; font-weight: 600; color: var(--ink); cursor: pointer; } .ds-seg-opt input { position: absolute; opacity: 0; width: 1px; height: 1px; } .ds-seg-on { background: var(--ink); color: var(--paper); } .ds-seg-opt:has(input:focus-visible) { outline: 2px solid var(--ref); }"
+    },
+    {
+      "name": "Underline Field",
+      "kind": "input",
+      "refersTo": "input-underline",
+      "description": "No box: a 2px ink underline that turns reference blue on focus, with no outline.",
+      "html": "<label class=\"ds-field-label\">Milwaukee street address<input class=\"ds-field\" placeholder=\"e.g. 2401 W Wisconsin Ave\"></label>",
+      "css": ".ds-field-label { display: block; font-family: var(--font-franklin), sans-serif; font-weight: 600; color: var(--ink); } .ds-field { display: block; width: 100%; margin-top: 8px; border: 0; border-bottom: 2px solid var(--ink); background: transparent; padding: 12px 0; font: inherit; font-weight: 400; font-size: 1.25rem; color: var(--ink); caret-color: var(--ref); border-radius: 0; } .ds-field::placeholder { color: var(--ink-soft); opacity: .8; } .ds-field:focus { border-bottom-color: var(--ref); outline: none; }"
+    },
+    {
+      "name": "Ruled Table",
+      "kind": "custom",
+      "refersTo": "table-row",
+      "description": "Heavy head and total rules, hairline rows, right-aligned tabular amounts larger than labels, footnote marks on labels.",
+      "html": "<table class=\"ds-table\"><thead><tr><th>Charge</th><th class=\"n\">2026<br>adopted</th><th class=\"n\">2027<br>proposed</th></tr></thead><tbody><tr><th>City property tax<sup class=\"ds-fn\"><a href=\"#\">1</a></sup><sup class=\"ds-note\"><a href=\"#\">b</a></sup></th><td class=\"n soft\">$799.05</td><td class=\"n strong\">$781.13</td></tr><tr><th>Solid waste fee<sup class=\"ds-fn\"><a href=\"#\">2</a></sup></th><td class=\"n soft\">$271.80</td><td class=\"n strong\">$280.00</td></tr></tbody><tfoot><tr><th>Total</th><td class=\"n strong\">$1,070.85</td><td class=\"n total\">$1,061.13</td></tr></tfoot></table>",
+      "css": ".ds-table { width: 100%; border-collapse: collapse; font-family: var(--font-franklin), sans-serif; font-size: .95rem; color: var(--ink); font-variant-numeric: tabular-nums lining-nums; } .ds-table thead tr { border-top: 2px solid var(--ink); border-bottom: 2px solid var(--ink); } .ds-table thead th { font-size: .75rem; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; text-align: left; padding: 8px 8px 8px 0; } .ds-table tbody tr { border-bottom: 1px solid var(--rule); } .ds-table tbody th { font-weight: 400; text-align: left; padding: 12px 8px 12px 0; } .ds-table td { padding: 12px 0 12px 16px; font-size: 1.05rem; } .ds-table .n { text-align: right; } .ds-table .soft { color: var(--ink-soft); } .ds-table .strong { font-weight: 600; } .ds-table tfoot tr { border-top: 2px solid var(--ink); border-bottom: 2px solid var(--ink); } .ds-table tfoot th { font-weight: 600; text-align: left; padding: 12px 8px 12px 0; } .ds-table .total { font-size: 1.125rem; font-weight: 700; } .ds-fn, .ds-note { font-size: .7em; margin-left: 2px; } .ds-fn a { color: var(--ref); font-weight: 600; text-decoration: none; } .ds-note a { color: var(--ink-soft); font-style: italic; text-decoration: none; } .ds-fn a:hover, .ds-note a:hover { text-decoration: underline; }"
+    },
+    {
+      "name": "Headline Figure",
+      "kind": "custom",
+      "refersTo": "figure",
+      "description": "The one large tabular amount, a soft-ink unit, and the change stated in words.",
+      "html": "<p class=\"ds-fig-cap\">What the city charges this property, 2027 estimate</p><p class=\"ds-fig\">$1,061.13<span>a year</span></p><p class=\"ds-fig-chg\"><b>Down $9.72</b> from $1,070.85 in 2026.</p>",
+      "css": ".ds-fig-cap { font-family: var(--font-franklin), sans-serif; font-size: .875rem; color: var(--ink-soft); margin: 0; } .ds-fig { font-family: var(--font-franklin), sans-serif; font-variant-numeric: tabular-nums lining-nums; font-size: 3rem; font-weight: 700; letter-spacing: -0.02em; color: var(--ink); margin: 4px 0 0; } .ds-fig span { margin-left: 8px; font-size: 1.125rem; font-weight: 500; letter-spacing: normal; color: var(--ink-soft); } .ds-fig-chg { font-family: var(--font-franklin), sans-serif; font-variant-numeric: tabular-nums lining-nums; color: var(--ink); margin: 8px 0 0; }"
+    },
+    {
+      "name": "Sources and Notes",
+      "kind": "custom",
+      "refersTo": "footnote-mark",
+      "description": "Numbered sources and lettered notes in reading order, each with a Used for back-link; targeted entries fade from the mark wash.",
+      "html": "<footer class=\"ds-foot\"><h3>Sources</h3><ol><li class=\"ds-hit\"><span class=\"num\">1.</span> City of Milwaukee 2027 Proposed Plan and Executive Budget Summary, page 7 (PDF page 17). <span class=\"used\">Used for <a href=\"#\">City property tax</a>.</span></li></ol><h3>Notes</h3><ul><li><span class=\"let\">b.</span> The proposed 2027 rate applied to the 2026 assessment. <span class=\"used\">Used for <a href=\"#\">City property tax</a>.</span></li></ul></footer>",
+      "css": ".ds-foot { border-top: 2px solid var(--ink); padding-top: 16px; font-family: var(--font-franklin), sans-serif; font-size: .875rem; line-height: 1.625; color: var(--ink); } .ds-foot h3 { font-size: .75rem; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; margin: 24px 0 8px; } .ds-foot ol, .ds-foot ul { list-style: none; padding: 0; margin: 0; } .ds-foot .num { font-weight: 600; color: var(--ref); font-variant-numeric: tabular-nums lining-nums; } .ds-foot ul li { color: var(--ink-soft); } .ds-foot .let { font-weight: 600; font-style: italic; color: var(--ink); } .ds-foot .used { color: var(--ink-soft); } .ds-foot .used a { color: var(--ref); text-decoration: underline; text-underline-offset: .2em; } @keyframes ds-mark-fade { from { background-color: var(--mark); } to { background-color: transparent; } } .ds-hit { animation: ds-mark-fade 1.6s cubic-bezier(0.16, 1, 0.3, 1) both; } @media (prefers-reduced-motion: reduce) { .ds-hit { animation: none; background-color: var(--mark); } }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Blue Book Table",
+    "overview": "A Wisconsin Blue Book statistical table set for a phone: exact figures in ruled columns on white paper, navy ink, and one reference blue that only means 'this points somewhere.' Roomy rows, plain words, one table doing the work a card-grid dashboard would spread out. Authority comes from ruling, alignment and citation, not color, depth or decoration.",
+    "keyCharacteristics": [
+      "White paper, navy ink, one reference blue, pale rule gray, one highlight wash",
+      "Hairline row rules between heavy 2px head and total rules",
+      "Tabular lining figures, right-aligned, amounts larger than labels",
+      "Numbered sources and lettered notes in reading order with Used for back-links",
+      "Flat: no cards, shadows or pills",
+      "One motion: the footnote highlight fade"
+    ],
+    "rules": [
+      { "name": "The One Ink Rule", "body": "Text and structural rules share the same navy; hierarchy comes from weight, size and rule thickness.", "section": "colors" },
+      { "name": "The Reference Blue Rule", "body": "Blue is only for marks, links, caret and focus.", "section": "colors" },
+      { "name": "The Tabular Figures Rule", "body": "Every figure uses tabular lining numerals and figure columns are right-aligned.", "section": "typography" },
+      { "name": "The Amount Outranks Label Rule", "body": "An amount is set larger or heavier than its label.", "section": "typography" },
+      { "name": "The Ruled Not Raised Rule", "body": "Separate with rules, never shadows, cards or tinted panels.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do separate content with 1px rule hairlines and 2px ink head/total/footer rules.",
+      "Do set every figure tabular, right-aligned, larger or heavier than its label.",
+      "Do cite every figure row with a numbered source mark and letter each assumption, listed in reading order with Used for back-links.",
+      "Do give every mark an invisible 24px tap area, split at the gap for paired marks.",
+      "Do keep the focus ring in @layer base so underline fields show only the underline.",
+      "Do use only mark-fade for motion, with a static reduced-motion fallback."
+    ],
+    "donts": [
+      "Don't use cards, shadows, tinted panels or rounded pills.",
+      "Don't put a kicker or eyebrow above a title.",
+      "Don't use reference blue for anything that is not a link, mark, caret or focus.",
+      "Don't add a second accent color, including red/green for up and down.",
+      "Don't add motion beyond the highlight fade."
+    ]
+  }
+}

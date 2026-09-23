@@ -144,7 +144,7 @@ export function ReceiptFinder() {
       <div aria-live="polite" aria-busy={loading}>
         {loading && !stale && <p className="mt-8 text-ink-soft">Working out the receipt…</p>}
         {stale && 'receipt' in stale && (
-          <div className="opacity-50 transition-opacity"><span className="sr-only">Updating the receipt…</span>
+          <div className="opacity-50"><span className="sr-only">Updating the receipt…</span>
             <Outcome receipt={stale.receipt} parcel={stale.parcel} entered={entered} /></div>
         )}
         {!loading && result && 'error' in result && <p className="mt-8 font-semibold text-ink">{result.error}</p>}

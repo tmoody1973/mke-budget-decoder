@@ -224,7 +224,7 @@ export function ReceiptTable({ receipt, parcel, entered = null }: { receipt: Est
         <h3 className="mt-6 text-xs font-semibold uppercase tracking-[0.06em]">Sources</h3>
         <ol className="mt-2 space-y-1">
           {src.list.map((c, i) => (
-            <li key={i} id={`fn-${i + 1}`} className="fn-target -mx-1 rounded-sm px-1">
+            <li key={i} id={`fn-${i + 1}`} className="fn-target -mx-1 px-1">
               <span className="tabular mr-1 font-semibold text-ref">{i + 1}.</span>
               City of Milwaukee 2027 {DOCS[c.doc]}, {c.printed_page === 'front matter' ? 'budget calendar' : `page ${c.printed_page}`} (PDF page {c.pdf_page}).
               <Back to={usedBy(i + 1)} />
@@ -234,7 +234,7 @@ export function ReceiptTable({ receipt, parcel, entered = null }: { receipt: Est
         <h3 className="mt-6 text-xs font-semibold uppercase tracking-[0.06em]">Notes</h3>
         <ul className="mt-2 space-y-1">
           {notes.map(({ l, text, cite }) => (
-            <li key={l} id={`note-${l}`} className="fn-target -mx-1 rounded-sm px-1 text-ink-soft">
+            <li key={l} id={`note-${l}`} className="fn-target -mx-1 px-1 text-ink-soft">
               <span className="mr-1 font-semibold italic text-ink">{l}.</span>{text}{cite && <Mark n={src.index(cite)} />}
               <Back to={noteRows(l)} />
             </li>
