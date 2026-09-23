@@ -1,7 +1,7 @@
 // Overview dashboard: Front-Page Broadsheet layout (.impeccable/surfaces/app-page-tsx.md, D15 order).
 import { AskedVsProposed, BiggestChanges, RevenueMix, SectionBudgets } from '@/components/genui/budget-tables'
 import { BoxScore, BudgetTreemap, LevyVsRate, Movers, ShowTable } from '@/components/genui/charts'
-import { Mark, SourcesList, sourceRegistry } from '@/components/genui/sources'
+import { Mark, NoteMark, SourcesList, sourceRegistry } from '@/components/genui/sources'
 import { ReceiptFinder } from '@/components/receipt/receipt-finder'
 import { BUDGET_VERSION, getDb } from '@/lib/db/client'
 import {
@@ -20,9 +20,6 @@ const JUMPS = [
 
 const PanelTitle = ({ id, children }: { id: string; children: React.ReactNode }) => (
   <h2 id={id} className="scroll-mt-6 border-t-2 border-ink pt-3 text-xl font-bold tracking-[-0.01em] text-ink">{children}</h2>
-)
-const NoteMark = ({ l }: { l: string }) => (
-  <sup className="ml-0.5 text-[0.7em] italic"><a href={`#note-${l}`} className="text-ink-soft no-underline" aria-label={`Note ${l}`}>{l}</a></sup>
 )
 
 export default async function Overview() {
@@ -81,7 +78,7 @@ export default async function Overview() {
     <main className="mx-auto w-full max-w-6xl flex-1 px-4 pb-24 pt-6 sm:px-6 sm:pt-8 lg:px-8">
       <header>
         <div>
-          <h1 className="text-[2.1rem] font-extrabold leading-[1.06] tracking-[-0.02em] text-ink sm:text-5xl">
+          <h1 className="text-[2.1rem] font-extrabold leading-[1.08] tracking-[-0.02em] text-ink sm:text-5xl">
             Milwaukee’s proposed 2027 budget, traced to every page
           </h1>
           <p id="intro" className="row-target tabular -mx-1 mt-3 max-w-[78ch] px-1 text-lg leading-relaxed text-ink">
@@ -148,6 +145,30 @@ export default async function Overview() {
             change. School, county, sewerage district and technical college taxes on the same bill are set separately.
           </p>
           <div className="mt-6"><LevyVsRate d={{ levy2026: h.levy.adopted2026, levy2027: h.levy.proposed2027, rate2026: h.rate.r2026, rate2027: h.rate.r2027 }} /></div>
+          <ShowTable>
+            <table className="tabular mt-4 w-full border-collapse text-[0.95rem]">
+              <caption className="sr-only">City property tax levy and tax rate, 2026 adopted and 2027 proposed</caption>
+              <thead>
+                <tr className="border-y-2 border-ink text-left text-xs font-semibold uppercase tracking-normal sm:tracking-[0.06em]">
+                  <th scope="col" className="py-2 pr-2 font-semibold">City-wide</th>
+                  <th scope="col" className="py-2 pl-2 text-right font-semibold sm:pl-4">2026 adopted</th>
+                  <th scope="col" className="py-2 pl-2 text-right font-semibold sm:pl-4">2027 proposed</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr className="border-b border-rule">
+                  <th scope="row" className="py-3 pr-2 text-left font-normal">Property tax levy<Mark n={levyMark} /></th>
+                  <td className="py-3 pl-2 text-right sm:pl-4">{bigDollars(h.levy.adopted2026)}</td>
+                  <td className="py-3 pl-2 text-right font-semibold sm:pl-4">{bigDollars(h.levy.proposed2027)}</td>
+                </tr>
+                <tr className="border-b border-rule">
+                  <th scope="row" className="py-3 pr-2 text-left font-normal">Tax rate per $1,000<Mark n={levyMark} /></th>
+                  <td className="py-3 pl-2 text-right sm:pl-4">${h.rate.r2026}</td>
+                  <td className="py-3 pl-2 text-right font-semibold sm:pl-4">${h.rate.r2027}</td>
+                </tr>
+              </tbody>
+            </table>
+          </ShowTable>
         </div>
         <div className="lg:col-span-7 lg:border-l lg:border-rule lg:pl-8">
           <h3 className="border-t-2 border-ink pt-3 text-xl font-bold text-ink">Look up your city receipt</h3>
