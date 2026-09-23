@@ -26,6 +26,9 @@ const budgetGuide = new Agent({
     providerOptions: { anthropic: { cacheControl: { type: 'ephemeral' } } },
   },
   model: 'anthropic/claude-sonnet-5',
+  // Per-question ceiling (D20 guardrails): at most 5 rounds of lookups plus the final answer, and
+  // about 1,200 words out per model call, so no single question can run up the bill.
+  defaultOptions: { maxSteps: 6, modelSettings: { maxOutputTokens: 1600 } },
   tools: { getBudgetOverview, getDepartments, getDepartmentBreakdown, searchBudgetText, getBudgetFacts, lookupGlossary, getHearingCalendar, calculate },
 })
 
