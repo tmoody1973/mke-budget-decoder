@@ -20,7 +20,7 @@ const SUGGESTIONS = [
 ]
 
 /** One answer card: its own source numbering (the drawer looks inside `data-src-scope`). */
-function Card({ title, sources, children }: { title: string; sources: Sources; children: React.ReactNode }) {
+export function Card({ title, sources, children }: { title: string; sources: Sources; children: React.ReactNode }) {
   return (
     <figure data-src-scope className="my-3 border-t-2 border-ink bg-paper pt-2 text-ink">
       <figcaption className="text-sm font-semibold">{title}</figcaption>
@@ -30,10 +30,10 @@ function Card({ title, sources, children }: { title: string; sources: Sources; c
   )
 }
 
-const Pending = ({ what }: { what: string }) => <p className="my-2 text-sm text-ink-soft">Looking up {what} in the budget…</p>
-const Failed = () => <p className="my-2 text-sm text-ink-soft">That lookup did not return budget figures.</p>
+export const Pending = ({ what }: { what: string }) => <p className="my-2 text-sm text-ink-soft">Looking up {what} in the budget…</p>
+export const Failed = () => <p className="my-2 text-sm text-ink-soft">That lookup did not return budget figures.</p>
 
-function parse<T>(result: string): T | null {
+export function parse<T>(result: string): T | null {
   try { return JSON.parse(result) as T } catch { return null }
 }
 
