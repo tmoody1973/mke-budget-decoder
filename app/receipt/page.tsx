@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 
+import { ReceiptBand } from '@/components/receipt/receipt-band'
 import { ReceiptFinder } from '@/components/receipt/receipt-finder'
 
 export const metadata: Metadata = {
@@ -17,8 +18,8 @@ export default function ReceiptPage() {
         What the city would charge your home under the Mayor’s proposed 2027 budget, compared with 2026: property tax,
         garbage, snow, street lights and sewer. Every rate links to the budget page it comes from.
       </p>
-      <div className="mt-10">
-        <ReceiptFinder />
+      <div className="mt-10 -mx-4 sm:mx-0">
+        <ReceiptBand><ReceiptFinder /></ReceiptBand>
       </div>
     </main>
   )

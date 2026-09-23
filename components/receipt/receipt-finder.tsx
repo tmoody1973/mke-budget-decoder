@@ -7,11 +7,16 @@ import type { AddressMatch } from '@/lib/db/parcels'
 import type { Receipt } from '@/lib/receipt'
 
 import { ReceiptTable, type Entered, type ParcelInfo } from './receipt-table'
+import { ShareImage } from './share-image'
 
 type View = 'owner' | 'renter'
 type Target = { kind: 'parcel'; taxkey: string; address: string }
   | { kind: 'manual'; address: string; assessed2026: number; assessed2025?: number; buildingUnits: number }
 type Result = { receipt: Receipt; parcel: ParcelInfo } | { error: string }
+
+// The /api/receipt body; the share image posts the same one, so the picture matches the screen.
+const requestBody = (target: Target, view: View) => target.kind === 'parcel' ? { taxkey: target.taxkey, view }
+  : { assessed2026: target.assessed2026, assessed2025: target.assessed2025, buildingUnits: target.buildingUnits, view }
 
 const post = async <T,>(url: string, body: unknown, signal?: AbortSignal): Promise<T> => {
   const res = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body), signal })
@@ -57,12 +62,12 @@ export function ReceiptFinder() {
   const stale = loading && answer && answer.targetKey === targetKey ? answer.result : null
   const entered: Entered = target?.kind === 'manual' ? { assessed2026: target.assessed2026, assessed2025: target.assessed2025 } : null
 
+  const body = target && view ? requestBody(target, view) : null
+
   useEffect(() => {
     if (!target || !view || !key) return
     let live = true
-    const body = target.kind === 'parcel' ? { taxkey: target.taxkey, view }
-      : { assessed2026: target.assessed2026, assessed2025: target.assessed2025, buildingUnits: target.buildingUnits, view }
-    post<Result>('/api/receipt', body)
+    post<Result>('/api/receipt', requestBody(target, view))
       .catch(() => ({ error: 'The receipt is unavailable right now. Try again.' }))
       .then((r) => { if (live) setAnswer({ key, targetKey: JSON.stringify(target), result: r }) })
     return () => { live = false }
@@ -149,6 +154,7 @@ export function ReceiptFinder() {
         )}
         {!loading && result && 'error' in result && <p className="mt-8 font-semibold text-ink">{result.error}</p>}
         {!loading && result && 'receipt' in result && <Outcome receipt={result.receipt} parcel={result.parcel} entered={entered} />}
+        {!loading && result && 'receipt' in result && result.receipt.kind === 'estimate' && body && <ShareImage body={body} />}
       </div>
     </div>
   )

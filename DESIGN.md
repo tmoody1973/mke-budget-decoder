@@ -177,6 +177,11 @@ A near-monochrome navy-on-white almanac palette with a single blue reserved for 
 - **Rule Gray** (`rule`, about #D9DEE7): 1px hairlines between table rows and between suggestion list items. Also the shadcn `--border` token.
 - **Highlight Wash** (`mark`): the footnote/row highlight, the active suggestion row, and `::selection`. A pale tint of the reference blue, never a fill for resting content.
 
+### City Receipt (the one exception)
+- **Receipt Marigold** (`band`, about #FDBE45): the frame around the City Receipt lookup, on the Overview and on `/receipt`, and the background of the shareable receipt image. Nowhere else. It marks the one place on the site that is about *your* money (Tarik, 2026-09-23).
+- **Receipt Paper** (`receipt`, about #FDFAF1): the warm sheet inside the marigold frame, with torn sawtooth edges top and bottom. All receipt content (text, marks, links, controls) sits on this paper, never directly on marigold, so contrast stays as on white paper.
+- The shareable image (`app/api/receipt/image`) is a 1080x1350 thermal-receipt picture in IBM Plex Mono with hex twins of these tokens. It never shows an address or assessed value.
+
 ### Named Rules
 **The One Ink Rule.** Text and structural rules share the same navy. Hierarchy comes from weight, size and rule thickness, not from extra colors.
 
@@ -316,5 +321,5 @@ Square corners throughout (0px). Buttons, the segmented control, the suggestion 
 - **Don't** use reference blue for anything that is not a link, mark, disclosure, caret or focus state (the Fund Blue edge ring excepted).
 - **Don't** reuse Fund Blue for any meaning but "no city property tax rate"; decreases and 2026 comparisons are soft ink.
 - **Don't** draw chart labels inside SVG text or box a chart panel.
-- **Don't** add a second accent color, including red or green for up and down; change is stated in words and a signed figure.
+- **Don't** add a second accent color, including red or green for up and down; change is stated in words and a signed figure. The City Receipt's marigold frame is the single sanctioned exception; don't spread it to other panels.
 - **Don't** add motion beyond the highlight fade.

@@ -174,3 +174,22 @@
 **How we'll know if this was right.** Reporters cite the site's page references; no outlet objects to how its story is represented; no label has to be withdrawn.
 
 **What actually happened.**
+
+## D18 — The City Receipt gets its own color and a shareable receipt picture
+
+**Decision.** The receipt lookup sits in a marigold frame on a sheet of receipt paper, and a finished estimate can be saved or shared as a 1080×1350 picture drawn like a store receipt, with the app's link at the bottom. The picture leaves out the address and the assessed value.
+
+**Why this came up.** Tarik: the receipt section should "pop with some color", and the result should be something people post on Instagram, LinkedIn and X. The site's design rules allowed only one accent color, and a shared picture of a home's tax figures could tell strangers where someone lives and what the house is worth.
+
+**Options.**
+1. *Keep the navy-on-white look; add a plain "download" of the table.* Consistent, but nobody posts a table.
+2. *Marigold frame plus a receipt-style picture without the address.* Stands out in a feed and on the page; breaks the one-accent rule in one named place.
+3. *Same, with the full address printed.* Feels most like a real receipt; publishes a home's location and value to anyone who sees the post.
+
+**What we chose and why.** Option 2 (Tarik chose "no address" and one 4:5 size; Claude chose marigold and the frame-around-paper layout). The picture is redrawn on the server from the same request as the on-screen receipt, so it can't show a number the screen doesn't, and nobody can make a fake one by editing a link.
+
+**What we gave up.** Design purity: there are now two accent colors. The picture carries no clickable source marks, only a line of page numbers. Without an address, a posted receipt can't be checked by a stranger.
+
+**How we'll know if this was right.** People share the picture (visible as visits from social links), nobody asks us to take one down for privacy, and nobody mistakes it for a real tax bill.
+
+**What actually happened.**
