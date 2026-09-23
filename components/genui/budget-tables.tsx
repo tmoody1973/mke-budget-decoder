@@ -163,7 +163,7 @@ function ChangeGroup({ title, list }: { title: string; list: (DeptRow & { change
   return (
     <table className={table}>
       <caption className="pb-2 text-left text-base font-semibold text-ink">{title}</caption>
-      <Head cols={['Department', '2026 adopted to<br>2027 proposed', 'Percent']} />
+      <Head cols={['Department', 'Change from<br>2026', 'Percent']} />
       <tbody>
         {list.map((r) => (
           <tr key={r.slug} className="border-b border-rule">

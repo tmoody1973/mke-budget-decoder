@@ -1,7 +1,7 @@
 'use client'
-// Chat on /ask (P3.0 spike, render mode "tool-render"): each data tool call draws one of our cited
+// How the chat draws answers (render mode "tool-render"): each data tool call draws one of our cited
 // components from the tool's own result, so every figure on screen traces to lib/db, not the model.
-import { CopilotChat, CopilotKit, useConfigureSuggestions, useRenderTool } from '@copilotkit/react-core/v2'
+import { useConfigureSuggestions, useRenderTool } from '@copilotkit/react-core/v2'
 import { z } from 'zod'
 
 import { DeptSnapshot } from '@/components/genui/budget-tables'
@@ -37,7 +37,7 @@ function parse<T>(result: string): T | null {
   try { return JSON.parse(result) as T } catch { return null }
 }
 
-function Renderers() {
+export function Renderers() {
   useConfigureSuggestions({ suggestions: SUGGESTIONS, available: 'before-first-message' })
 
   useRenderTool({
@@ -78,15 +78,4 @@ function Renderers() {
 
   useRenderTool({ name: 'calculate', parameters: z.object({}).passthrough(), render: () => null }, [])
   return null
-}
-
-export function AskChat() {
-  return (
-    <CopilotKit runtimeUrl="/api/copilotkit" agent="budgetGuide" useSingleEndpoint={false}>
-      <Renderers />
-      <div className="h-[calc(100dvh-10rem)] min-h-[28rem]">
-        <CopilotChat labels={{ chatInputPlaceholder: 'Ask about the proposed 2027 budget' }} />
-      </div>
-    </CopilotKit>
-  )
 }

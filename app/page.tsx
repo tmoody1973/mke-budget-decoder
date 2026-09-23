@@ -63,7 +63,7 @@ export default async function Overview() {
   const levyUp = h.levy.proposed2027 > h.levy.adopted2026
   // News topics sit before "Have your say", so their marks are numbered first.
   const topics = TOPICS.map((t) => ({
-    id: t.id, title: t.title,
+    id: t.id, title: t.title, question: t.question,
     figures: topicFigures[t.id].map((f) => ({ ...f, n: src.mark(f.cite, { id: f.id, label: f.label.split(',')[0].toLowerCase() }) })),
     pages: t.pages.map((p) => ({ n: src.mark(p.cite, { id: `topic-${t.id}`, label: `${t.title.toLowerCase()} coverage` }), label: p.label, printed: p.cite.printed_page })),
     articles: ARTICLES.filter((a) => a.topics.includes(t.id)).sort((a, b) => b.date.localeCompare(a.date) || a.outlet.localeCompare(b.outlet)),
