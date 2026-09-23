@@ -47,12 +47,12 @@ def test_detailed_gcp_total_equals_g2():
 
 def test_gcp_revenue_categories_sum_to_total():
     rev = pd.read_parquet(PROCESSED / "revenues.parquet")
-    s = rev[(rev.source == "summary") & rev.is_total].set_index("line").proposed_2027
+    s = rev[(rev.source == "summary") & (rev.fund == "general") & rev.is_total].set_index("line").proposed_2027
     cats = ["Total Taxes", "Total Licenses and Permits", "Total Intergovernmental Revenue",
             "Total Charges for Services", "Total Fines and Forfeitures", "Total Miscellaneous Revenue",
             "Total Fringe Benefits"]
     assert sum(s[c] for c in cats) == s["Total General Fund Revenue"]
-    lines = rev[(rev.source == "summary") & ~rev.is_total].set_index("line").proposed_2027
+    lines = rev[(rev.source == "summary") & (rev.fund == "general") & ~rev.is_total].set_index("line").proposed_2027
     reserves_levy = (lines["Tax Stabilization Fund Withdrawal (Sustainable)"]
                      + lines["Tax Stabilization Fund Withdrawal (Revenue Anticipation)"] + lines["Property Tax Levy"])
     assert s["Total General Fund Revenue"] + reserves_levy == s["Total Sources of Funds for General City Purposes"] == 846_796_205

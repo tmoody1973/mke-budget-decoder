@@ -51,7 +51,7 @@ def test_derived_sewer_base_is_arithmetic():
 
 def test_fee_revenue_matches_source_of_funds_table():
     rev = pd.read_parquet(PROCESSED / "revenues.parquet")
-    by_line = dict(zip(rev[rev.source == "summary"].line, rev[rev.source == "summary"].proposed_2027))
+    by_line = dict(zip(rev[(rev.source == "summary") & (rev.fund == "general")].line, rev[(rev.source == "summary") & (rev.fund == "general")].proposed_2027))
     names = {"solid_waste": "Solid Waste Fee", "extra_cart": "Extra Garbage Cart Fee",
              "snow_ice": "Snow and Ice Control Fee", "street_lighting": "Street Lighting Fee"}
     for f in FEES:
@@ -61,7 +61,7 @@ def test_fee_revenue_matches_source_of_funds_table():
 
 def test_table_pairs_match_extracted_tables():
     rev = pd.read_parquet(PROCESSED / "revenues.parquet")
-    rev_lines = dict(zip(rev[rev.source == "summary"].line, rev[rev.source == "summary"].proposed_2027))
+    rev_lines = dict(zip(rev[(rev.source == "summary") & (rev.fund == "general")].line, rev[(rev.source == "summary") & (rev.fund == "general")].proposed_2027))
     comp = pd.read_parquet(PROCESSED / "section_comparisons.parquet")
     for f in FACTS:
         pair = f.get("table_pair")

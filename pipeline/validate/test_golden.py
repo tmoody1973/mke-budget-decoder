@@ -33,7 +33,7 @@ def pos(d, label):
 
 def rev(d, line):
     r = d["revenues"]
-    return r[(r.source == "summary") & (r.line == line)].iloc[0]
+    return r[(r.source == "summary") & (r.fund == "general") & (r.line == line)].iloc[0]
 
 
 def test_g1_all_funds(d):

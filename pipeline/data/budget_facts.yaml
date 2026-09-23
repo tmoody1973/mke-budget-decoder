@@ -70,6 +70,7 @@
   topic: document_quirk
   statement: "The Source of Funds narrative says the fringe benefit offset is 'anticipated to be $28.0 million in 2026' [sic], 'a $3.0 million increase from 2026'."
   lead_with: table          # docs/06 §7: the table figure leads; the narrative is an attributed quote
+  also_cite: [{doc: summary, pdf_page: 27, printed_page: "17", note: "'Fringe Benefits' funding source 25,000,000 (2026 adopted) -> 28,000,000 (2027 proposed)"}]
   value: "28000000"
   unit: dollars_rounded_0.1M
   cite: {doc: summary, pdf_page: 169, printed_page: "159"}

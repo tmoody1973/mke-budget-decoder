@@ -102,7 +102,7 @@ def assign_numbers(line: Line, columns: list[Column], left: float = 30, right: f
     Returns the raw printed text per column; callers parse. Unplaced numbers raise."""
     out: dict[str, str] = {}
     for w in line.words:
-        if not is_number_token(w["text"].replace("$", "")):
+        if not is_number_token(w["text"].replace("$", "").strip("[]")):   # '[4,998,805]' (p.187)
             continue
         hits = [c for c in columns if w["x0"] <= c.x1 + right and w["x1"] >= c.x0 - left]
         if not hits:

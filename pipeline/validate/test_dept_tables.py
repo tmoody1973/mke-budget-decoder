@@ -3,6 +3,7 @@ Verified document errors are excused only at their exact values (source_inconsis
 from collections import defaultdict
 from decimal import Decimal
 
+import pandas as pd
 import pytest
 
 from common.departments import departments
@@ -22,7 +23,9 @@ def tables():
 
 
 def _d(v):
-    return Decimal(str(v)) if v not in (None, "") else Decimal(0)
+    if v is None or v == "" or (isinstance(v, float) and v != v):     # blank, or NaN from a DataFrame
+        return Decimal(0)
+    return Decimal(str(v))
 
 
 def _segments(rows):
@@ -115,3 +118,55 @@ def test_capital_amounts_parsed(tables):
 def test_position_reasons_unwrapped(tables):
     admin = [r for r in tables["position_changes"] if r["dept"] == "administration"]
     assert admin[1]["reason"] == "Moved from ITMD to the Office of the Commissioner and changed titles"
+
+
+def _is_subtotal(label: str) -> bool:
+    l = label.strip().lower()
+    return l.startswith("subtotal") or (l.endswith("total") and not l.startswith("total"))   # 'O&M Total'
+
+
+@pytest.mark.parametrize("stage", STAGES)
+def test_every_budget_summary_block_sums_to_its_total(tables, stage):
+    """Each block of every four-stage table (departments AND funds, expenditures and revenues
+    separately) adds up to its printed Total. This is the check that would have caught the
+    blank wrapped rows on Summary p.163 (review finding B1/B2, 2026-09-23). A Total followed by
+    more rows in the same group carries forward ('Total Operating' + 'Capital Projects' =
+    'Total Budget', Summary p.190)."""
+    ds = pd.DataFrame(tables["dept_summary"])
+    ds["page"] = ds.cite.map(lambda c: c["pdf_page"])
+    checked = 0
+    for (dept, page), g in ds.groupby(["dept", "page"], sort=False):
+        items, group, carry = [], None, None
+        for r in g.itertuples():
+            if r.group == "personnel":
+                continue
+            if r.group != group:
+                # sub-groups (Firemen's / Employees' funds, p.163) share one Total; only a carried
+                # Total is dropped when the group changes (expenditure Total never feeds revenues)
+                carry, group = None, r.group
+            label = r.label.strip()
+            if label.lower().startswith("total"):
+                parts = [x for x in items if not _is_subtotal(x.label)]
+                if parts:
+                    got = sum(_d(getattr(x, stage)) for x in parts) + (_d(getattr(carry, stage)) if carry else 0)
+                    assert got == _d(getattr(r, stage)), f"{dept} p.{page - 10} '{label}' {stage}: rows {got} vs printed {getattr(r, stage)}"
+                    checked += 1
+                items, carry = [], r
+            else:
+                items.append(r)
+    assert checked >= 55          # ~62 blocks per stage across departments and funds
+
+
+@pytest.mark.parametrize("change,base", [("change_vs_adopted", "adopted_2026"), ("change_vs_requested", "requested_2027")])
+def test_change_columns_equal_computed_change(tables, change, base):
+    """Every printed change column = proposed - base, in every four-stage table. Exceptions are
+    the document's own printing errors, excused only at their exact printed and computed values."""
+    for r in tables["dept_summary"]:
+        if change not in r or (r["proposed_2027"] is None and r[base] is None):
+            continue
+        want = _d(r["proposed_2027"]) - _d(r[base])
+        printed = r[change]
+        if (printed is None and want == 0) or (printed is not None and _d(printed) == want):
+            continue
+        assert documented("change_column", f"{r['dept']}:{r['metric']}", change, str(printed), str(int(want))), (
+            f"{r['dept']} p.{r['cite']['printed_page']} '{r['label']}' {change}: printed {printed}, computed {want}")

@@ -31,3 +31,9 @@ Stored as printed, flagged on the row; none of these are "fixed" by the parser.
 - **Sub-heading detection is heuristic.** 51 → ~40 prose sub-headings after rules; a few false positives remain (e.g. Port "Administration & Financial Services – Supports", a heading plus the start of its sentence). Metadata only (`heading` field); no numbers affected. Review in the P1.9 report.
 - **reason_category is conservative.** 203 of 298 reasoned rows plus all reason-less rows are `other`; "Position eliminated" is never classed as vacant because the text doesn't say so.
 - **Narrative quirk kept as printed:** Summary p.159 says the fringe benefit offset is "anticipated to be $28.0 million in 2026, a $3.0 million increase from 2026"; the table (p.162) puts it in 2027 Proposed. Recorded in budget_facts.yaml.
+
+## 2026-09-23 — from the independent bbox cross-check review
+
+- **docs/02 §2 says KPI year labels are "2024 Actual | 2025 Projected | 2026 Planned".** That's Police's labeling; Administration, Fire, City Attorney and others print 2025 / 2026 / 2027 (some as "Indicators"). The pipeline keeps labels as printed, which is right. The spec should say "varies by department".
+- **Brackets in the Contingent Fund's 2025 actual** (`[4,998,805]`, Summary p.187): the page doesn't say what brackets mean. Stored with a `printed_bracketed` flag. Ask the Budget office before the app displays it (possibly: spent by transfer to other accounts).
+- **Fire Support Services 2025 fringe** (Detailed 240.10 line 24) prints the unit's 2025 operating total. Suspected copy error; logged as `suspected` in source_inconsistencies.yaml, not displayed.

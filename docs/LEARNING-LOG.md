@@ -23,3 +23,11 @@
 **What happened.** Tarik read all six against the PDF. None was a factual error, but four were problems with the *checker*, not the wording. Every sentence in a passage appeared twice (the page's raw text and our rebuilt text were joined together). Sideways table text came through letter by letter. Two glossary terms cited pages that only *use* the term. And an irrelevant passage could still come back "consistent", which is a false pass. After the fixes, the stricter checker also caught a bad citation (special revenue fund), a definition that wasn't in the document at all, and a sentence I'd added about a table that the cited narrative page can't support.
 
 **What we now believe.** A model's "consistent" is only as good as the passage it was shown. The evidence step has to prove the evidence is there (the term, the figures) before a model is asked anything; otherwise the check can pass things it never looked at. Human review of the first batch is what found this.
+
+## 2026-09-23 — 483 green tests, two blank rows
+
+**What we expected.** With every golden number, every unit total, and both books cross-checked, a blank row seemed impossible.
+
+**What happened.** An independent review, reading the PDFs with a different tool, found two Retirement revenue rows stored blank, bogus group labels, an FTE count stored as capital dollars, a page footer stored as a data row, and Fire's KPIs merged. Every test passed because every test read the page through the same parser and only compared totals the parser had also read. The wrapped-label layout, with numbers printed *between* the two halves of a label, fooled the parser and the tests together.
+
+**What we now believe.** Tests that share the parser's eyes share its blind spots. Two cheap additions closed the gap: every table block must add up to its own printed Total, and a second extractor must re-find every row on its page. Also, I told Tarik earlier that Summary p.17 didn't show the $25M → $28M fringe figures. It does; my search had stopped at the first match. The review caught that too.

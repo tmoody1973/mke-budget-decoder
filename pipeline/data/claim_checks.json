@@ -336,12 +336,8 @@
     },
     "statement": "What a department really spent in a past year, as opposed to what was budgeted.",
     "passage": "To be a department where every member works with our community to help build sustainable healthy neighborhoods, free of crime, and maintained by positive relationships. BUDGET SUMMARY Change 2025 2026 2027 2027 2027 Proposed Actual Adopted Requested Proposed Versus Expenditures Budget Budget Budget 2026 Adopted 2027 Requested Personnel FTEs - Operations & Maintenance 2,443.76 2,324.95 2,352.95 2,349.45 24.50 -3.50 FTEs - Other 117.87 81.50 103.50 102.50 21.00 -1.00 Total Positions Authorized 2,668 2,526 2,586 2,585 59 -1 Expenditures Salaries and Wages $215,495,540 $190,364,638 $214,768,305 $214,743,752 $24,379,114 $-24,553 Fringe Benefits 80,987,282 91,375,026 103,088,787 103,077,001 11,701,975 -11,786 Operating Expenditures 22,449,229 25,055,571 24,880,000 24,631,372 -424,199 -248,628 Equipment 11,263,728 2,889,000 2,620,000 1,070,000 -1,819,000 -1,550,000 Special Funds 485,109 427,600 465,000 415,000 -12,600 -50,000 Total $330,680,888 $310,111,835 $345,822,092 $343,937,125 $33,825,290 $-1,884,967 Revenues Intergovernmental $1,134,738 $1,036,000 $1,300,000 $1,300,000 $264,000 $0 Charges for Services 7,324,512 7,198,000 8,024,000 8,224,000 1,026,000 200,000 Total $8,459,250 $8,234,000 $9,324,000 $9,524,000 $1,290,000 $200,000 SUMMARY OF SERVICES DELIVERED BY THIS DEPARTMENT As the City of Milwaukee's lead law enforcement agency, the Milwaukee Police Department (MPD) is primarily responsible for mitigating crime and disorder in the city. MPD remains steadfast in its commitment to constitutional policing, and employing community-oriented, problem-oriented and intelligence-led initiatives.",
-    "conflict_probability": 0.23,
-    "verdict": "consistent",
-    "auto": false,
-    "model": "jev-1.13.0",
-    "input_tokens": 1251,
-    "seconds": 0.17
+    "verdict": "definition_ours",
+    "auto": false
   },
   "glossary:General City Purposes": {
     "key": "b9b8f6b0edea029f",

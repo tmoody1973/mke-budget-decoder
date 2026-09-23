@@ -37,7 +37,7 @@ def _slug(text: str) -> str:
 def _num(text: Optional[str]) -> Optional[Decimal]:
     if text is None or text.strip() in DASH:
         return None
-    return parse_decimal(text)
+    return parse_decimal(text.strip().strip("[]"))     # '[4,998,805]' (Summary p.187), flagged by caller
 
 
 def _dollars(text: Optional[str]) -> Optional[int]:
@@ -48,7 +48,26 @@ def _dollars(text: Optional[str]) -> Optional[int]:
 # --------------------------------------------------------------------------------------- #
 # Budget summary (no borders)
 # --------------------------------------------------------------------------------------- #
+BLOCK_TITLES = {"SUMMARY OF EXPENDITURES": "expenditures", "SOURCE OF FUNDS": "source of funds"}
+STAGE_KEYS = ("actual_2025", "adopted_2026", "requested_2027", "proposed_2027")
+WRAP_SAME_ROW = 6.5     # pt: a wrapped label half sits within ~5pt of its numbers; group headings ~10pt
+CONNECTOR_END = re.compile(r"(-|–|\bfor|\bof|\band|\bthe|\bto)$", re.I)
+
+
+def _is_year_header(ln) -> bool:
+    toks = [x["text"] for x in ln.words]
+    return any(t in ("Proposed", "Change", "Versus") for t in toks) or (
+        toks and all(re.fullmatch(r"20\d\d", t) for t in toks if re.search(r"\d", t)) and not ln.label(max_x=180))
+
+
 def budget_summary(slug: str, pdf_page: int) -> list[dict]:
+    """Borderless four-stage table ('BUDGET SUMMARY', 'SUMMARY OF EXPENDITURES', 'SOURCE OF FUNDS').
+
+    Rows are the lines that carry stage values. A row whose label wraps prints its numbers on a
+    line of their own between the label halves (Summary p.163: 'Charges for Service Deferred' /
+    numbers / 'Compensation'), so label-only lines within WRAP_SAME_ROW of a numbers line — or
+    ending in a connector like '-' — join that row. Other label-only lines are group headings.
+    Values printed in [brackets] are kept and flagged (Summary p.187, meaning not stated)."""
     page_lines = lines(pdf_page)
     try:
         hdr = next(ln for ln in page_lines if "Actual" in ln.text and "Proposed" in ln.text and "Versus" in ln.text)
@@ -65,31 +84,71 @@ def budget_summary(slug: str, pdf_page: int) -> list[dict]:
         cols += [Column("change_vs_adopted", change[0]["x0"], change[0]["x1"]),
                  Column("change_vs_requested", change[1]["x0"], change[1]["x1"])]
     stop = next((ln.top for ln in page_lines if ln.top > sub.top and "SUMMARY OF SERVICES" in ln.text), 10_000)
-    out, group = [], None
+    title_above = [BLOCK_TITLES[ln.text.strip()] for ln in page_lines if ln.top < hdr.top and ln.text.strip() in BLOCK_TITLES]
+
+    # pass 1: classify lines
+    entries = []
     for ln in page_lines:
-        if not (sub.top < ln.top < stop):
+        if not (sub.top < ln.top < stop) or "PROPOSED PLAN AND EXECUTIVE" in ln.text:
+            continue                                   # footer line ('190 2027 PROPOSED PLAN…', p.190)
+        if ln.text.strip() in BLOCK_TITLES:
+            entries.append({"top": ln.top, "title": BLOCK_TITLES[ln.text.strip()]})
             continue
         numeric = sum(1 for x in ln.words if re.search(r"\d", x["text"]))
         if len(ln.words) >= 8 and numeric < 2:
-            break                                   # prose below the table (Summary p.163)
-        if "Budget Budget" in ln.text or ("Actual" in ln.text and "Versus" in ln.text):
-            continue                                    # a repeated header (second table on the page)
+            break                                      # prose below the table (Summary p.163)
+        if "Budget Budget" in ln.text or _is_year_header(ln):
+            continue                                   # repeated header rows of a second block
         label = ln.label(max_x=cols[0].x0 - 5)
         vals = assign_numbers(ln, cols, left=35, right=16)
-        if vals and not label:
-            continue                                    # a stray year/header row ('2027'), not data
-        if not vals:
-            group = label.lower()                      # Personnel / Expenditures / Revenues
+        stage = any(k in vals for k in STAGE_KEYS)
+        if label or vals:
+            entries.append({"top": ln.top, "label": label, "vals": vals, "stage": stage})
+
+    # pass 2: attach wrapped label halves (and stray change-column values) to their numbers line
+    rows = [e for e in entries if e.get("stage")]
+    for e in entries:
+        if "title" in e or e["stage"]:
             continue
-        if group == "revenues":
+        below = [r for r in rows if r["top"] > e["top"]]
+        near = min(rows, key=lambda r: abs(r["top"] - e["top"]), default=None)
+        target = None
+        if e["label"] and CONNECTOR_END.search(e["label"]) and below:
+            target = below[0]                          # 'Employer's Pension Contribution -' + next line
+        elif near is not None and abs(near["top"] - e["top"]) <= WRAP_SAME_ROW:
+            target = near
+        if target is None:
+            e["group"] = e["label"].lower() if e["label"] else None
+            continue
+        target.setdefault("parts", []).append((e["top"], e["label"]))
+        for k, v in e["vals"].items():
+            target["vals"].setdefault(k, v)
+        e["merged"] = True
+
+    out, group = [], (title_above[-1] if title_above else None)
+    for e in sorted(entries, key=lambda e: e["top"]):
+        if "title" in e:
+            group = e["title"]
+            continue
+        if e.get("merged"):
+            continue
+        if not e["stage"]:
+            if e.get("group"):
+                group = e["group"]
+            continue
+        parts = sorted(e.get("parts", []) + [(e["top"], e["label"])])
+        label = " ".join(p for _, p in parts if p).strip()
+        revenue_side = group in ("revenues", "source of funds") or (group or "").endswith("revenues")
+        if revenue_side:
             metric = "rev_total" if label == "Total" else "rev_" + _slug(label)
         elif label == "Total":
             metric = "total_expenditures"
         else:
             metric = SUMMARY_METRICS.get(label, _slug(label))
+        flags = [f"printed_bracketed:{k}" for k, t in e["vals"].items() if str(t).startswith("[")]
         out.append({"dept": slug, "metric": metric, "label": label, "group": group,
-                    **{c.key: (str(v) if (v := _num(vals.get(c.key))) is not None else None) for c in cols},
-                    "cite": cite(pdf_page)})
+                    **{c.key: (str(v) if (v := _num(e["vals"].get(c.key))) is not None else None) for c in cols},
+                    "flags": flags, "label_wrapped": bool(e.get("parts")), "cite": cite(pdf_page)})
     return out
 
 
@@ -111,22 +170,46 @@ def bordered_tables(pdf_page: int) -> list[list[list[str]]]:
     return [[[_cell_text(pdf_page, c) for c in row.cells] for row in t.rows] for t in tables]
 
 
+SERVICE_COLS = {"operating": "operating", "capital": "capital", "grant": "grant", "fte": "ftes"}
+
+
 def _services(slug, pdf_page, rows) -> list[dict]:
+    """Columns mapped by header name, not position: some tables print only Operating and FTEs
+    (Summary p.171), and a positional read put the FTE count under capital."""
+    head = [h.lower() for h in rows[0]]
+    idx = {key: next((i for i, h in enumerate(head) if word in h), None) for word, key in SERVICE_COLS.items()}
+    cell = lambda r, key: r[idx[key]] if idx[key] is not None and idx[key] < len(r) else ""
     out = []
     for r in rows[1:]:
-        desc, op, cap, grant, ftes = (r + [""] * 5)[:5]
-        if not desc and not any((op, cap, grant, ftes)):
+        desc = r[0] if r else ""
+        if not desc and not any(cell(r, k) for k in idx):
             continue
-        out.append({"dept": slug, "description": desc, "operating": _dollars(op), "capital": _dollars(cap),
-                    "grant": _dollars(grant), "ftes": (str(v) if (v := _num(ftes)) is not None else None),
+        out.append({"dept": slug, "description": desc, "operating": _dollars(cell(r, "operating")),
+                    "capital": _dollars(cell(r, "capital")), "grant": _dollars(cell(r, "grant")),
+                    "ftes": (str(v) if (v := _num(cell(r, "ftes"))) is not None else None),
                     "is_total": desc.strip().lower() in ("total", "totals"), "cite": cite(pdf_page)})
     return out
 
 
 def _kpis(slug, pdf_page, rows) -> list[dict]:
+    """One row per measure, labels as printed. A parent measure with '•' sub-measures packed in one
+    cell (Fire, Summary p.92) is split when every value cell holds exactly one value per bullet;
+    the parent goes to `group`. If the counts don't line up, the row is kept as printed and flagged."""
     labels = rows[0][1:]
-    return [{"dept": slug, "measure": r[0], "col_labels": labels, "values": r[1:], "footnote": None,
-             "cite": cite(pdf_page)} for r in rows[1:] if r and r[0]]
+    out = []
+    for r in rows[1:]:
+        if not r or not r[0]:
+            continue
+        parent, *subs = [x.strip() for x in r[0].split("•")]
+        cells = [c.split() for c in r[1:]]
+        if subs and all(len(c) == len(subs) for c in cells):
+            for i, sub in enumerate(subs):
+                out.append({"dept": slug, "measure": sub, "group": parent, "col_labels": labels,
+                            "values": [c[i] for c in cells], "footnote": None, "flags": [], "cite": cite(pdf_page)})
+            continue
+        out.append({"dept": slug, "measure": r[0], "group": None, "col_labels": labels, "values": r[1:],
+                    "footnote": None, "flags": ["bulleted_values_not_split"] if subs else [], "cite": cite(pdf_page)})
+    return out
 
 
 def _position_changes(slug, pdf_page, rows) -> list[dict]:
@@ -296,14 +379,15 @@ def capital_projects(slug: str, pages: list[int]) -> list[dict]:
                 cur = None
                 continue
             if t.startswith("•"):
-                cur = {"dept": slug, "text": t.lstrip("• ").strip(), "bullet": True, "cite": cite(pdf_page)}
+                cur = {"dept": slug, "text": t.lstrip("• ").strip(), "bullet": True, "cite": cite(pdf_page),
+                       "pdf_pages": [pdf_page]}
                 out.append(cur)
-            elif cur is not None and cur["bullet"]:
+            elif cur is not None and (cur["bullet"] or not cur["text"].rstrip().endswith(".")):
                 cur["text"] += " " + t.strip()
-            elif cur is not None and not cur["text"].rstrip().endswith("."):
-                cur["text"] += " " + t.strip()
+                if pdf_page not in cur["pdf_pages"]:
+                    cur["pdf_pages"].append(pdf_page)     # item continues across a page break (Summary p.205-206)
             else:   # a sentence, not a bullet ("…includes $3.0 million for MFD Facilities Maintenance")
-                cur = {"dept": slug, "text": t.strip(), "bullet": False, "cite": cite(pdf_page)}
+                cur = {"dept": slug, "text": t.strip(), "bullet": False, "cite": cite(pdf_page), "pdf_pages": [pdf_page]}
                 out.append(cur)
     SENTENCE_AMOUNT_RE = re.compile(r"\$(?P<n>[\d.,]+)\s*(?P<unit>million|billion)?", re.I)
     for c in out:
@@ -311,7 +395,13 @@ def capital_projects(slug: str, pages: list[int]) -> list[dict]:
         m = paren or SENTENCE_AMOUNT_RE.search(c["text"])
         # "Police Vehicles ($2.0 million) – …" / "Advanced Planning Fund ($200,000): …" print a name
         # before a parenthesised amount. A bare "$3.0 million" inside a sentence has no name → None.
-        c["name"] = c["text"][:paren.start()].strip(" •:–-") if paren and paren.start() < 120 else None
+        colon = re.match(r"^([A-Z][^:.]{2,70}):\s", c["text"])
+        if paren and paren.start() < 120:
+            c["name"] = c["text"][:paren.start()].strip(" •:–-")
+        elif colon:
+            c["name"] = colon.group(1).strip()           # 'Pump Facilities: The Sewer Maintenance Fund…' (p.205)
+        else:
+            c["name"] = None
         c["amount"], c["amount_from_millions"] = _amount(m) if m else (None, False)
         c["amount_text"] = m.group(0) if m else None
         c["description"] = c.pop("text")
@@ -360,7 +450,22 @@ def extract_department(slug: str, first: int, last: int) -> dict[str, list]:
             if got:
                 last_kind = "position_changes_unbordered"
     result["capital_projects"] = capital_projects(slug, pages)
+    result["position_changes"] = _sections_from_headings(result["position_changes"])
     return result
+
+
+def _sections_from_headings(rows: list[dict]) -> list[dict]:
+    """A row with a title but no numbers and no reason is a section heading printed inside the
+    table ('Transportation Infrastructure', DPW-ISD Summary p.134-136): drop it as a row and carry
+    it as `section` on the rows beneath, across page breaks."""
+    out, section = [], None
+    for r in rows:
+        empty = all(r.get(k) is None for k in ("positions", "om_ftes", "non_om_ftes"))
+        if empty and not r.get("reason") and not r["is_total"] and r["title"]:
+            section = r["title"]
+            continue
+        out.append({**r, "section": None if r["is_total"] else section})
+    return out
 
 
 def extract_all() -> dict[str, list]:

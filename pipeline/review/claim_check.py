@@ -109,6 +109,7 @@ def items() -> list[dict]:
         page = _page(g["cite"]["doc"], g["cite"]["pdf_page"])
         names = [g["cite_text"], *g.get("aliases", [])]
         out.append({"id": f"glossary:{g['term']}", "kind": "glossary", "term": g["term"], "names": names,
+                    "definition_source": g.get("definition_source"),
                     "statement": g["plain_definition"],
                     "passage": passage(page, g["cite_text"] + " " + g["plain_definition"], names),
                     "cite": g["cite"]})
@@ -168,6 +169,12 @@ def main() -> dict:
     with TypeSafeClient(model=MODEL, timeout=120.0) as client:
         for it in items():
             k = key(it)
+            if it.get("definition_source") == "ours":
+                # the document never defines the term; there is no page to check it against
+                # (review finding 2026-09-23): a person approves the wording, no model call
+                results[it["id"]] = {"key": k, "kind": it["kind"], "cite": it["cite"], "statement": it["statement"],
+                                     "passage": it["passage"], "verdict": "definition_ours", "auto": False}
+                continue
             prev = old.get(it["id"])
             if prev and prev.get("key") == k:          # cache: same statement, passage, model
                 results[it["id"]] = prev

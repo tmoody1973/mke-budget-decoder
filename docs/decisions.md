@@ -74,3 +74,24 @@
 **How we'll know if this was right.** When Tarik reviews the 6 queued items and spot-checks some of the auto-accepted ones, Jev's auto verdicts should agree with his. If it misses things a person catches, raise the bar or drop the step.
 
 **What actually happened.**
+
+---
+
+## D13 — A second, independent PDF reader re-finds every extracted row in CI
+
+**Decision.** `validate/bbox_crosscheck.py` (ported from the 2026-09-23 external review) reads the PDFs a second way, with poppler's `pdftotext -bbox` word positions instead of the pipeline's pdfplumber, and must re-find every extracted row's values on its cited page. 31 known checker limitations are allowlisted, each with a reason. The test fails on any new unmatched row **and** on any allowlisted row that starts matching.
+
+**Why this came up.** The review found two rows stored blank (Retirement, Summary p.163) while all 483 tests passed. Every test compared the pipeline's output with itself or with the city's printed totals, and all of them read the page through the same parser. A parser's blind spot is invisible to tests built on that parser.
+
+**Options.**
+1. *Only add the missing sum check.* It would have caught this bug, but only bugs that break a total.
+2. *Human spot-check only.* Good, but slow, and it covers a sample.
+3. *A second extractor on every row*, plus the sum check.
+
+**What we chose and why.** Options 1 and 3 together (the review proposed the cross-check; Tarik brought it in; Claude ported it and added the block-sum test). Both were red-proofed: putting the original bug back makes the block-sum test fail by exactly the two missing rows ($505,390), and changing one stored value by $1 makes the cross-check name that row.
+
+**What we gave up.** The two readers disagree on 31 rows for layout reasons, and those need an allowlist someone has to keep honest. The cross-check adds poppler to CI and about 6 seconds.
+
+**How we'll know if this was right.** In November, the Adopted budget load should produce either zero new cross-check failures or failures that are real extraction bugs, not new layout noise.
+
+**What actually happened.**
