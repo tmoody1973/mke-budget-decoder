@@ -1,0 +1,67 @@
+{
+  "title": "Choose the dashboard layout",
+  "question": "Same Blue Book look (navy ink, one blue, ruled, no cards). Pick how the dashboard is arranged on a laptop; it stacks on a phone either way.",
+  "options": [
+    {
+      "id": "flow",
+      "label": "Money Flow",
+      "kicker": "THE ROLL",
+      "lineage": "Sankey flow diagrams of public budgets",
+      "thesis": "Show where the money comes from and where it goes in one picture: property tax and other funding flowing into each budget section.",
+      "palette": ["#FFFFFF", "#1B2A4A", "#3C6FB0", "#D9DEE7"],
+      "materials": ["ruled panels", "flow bands", "tabular figures"],
+      "viewport": "Headline numbers strip across the top; a full-width flow chart (levy and other funding → 12 sections); under it, departments requested-vs-proposed and biggest changes side by side; receipt lookup in the right column.",
+      "risk": "Flow charts are striking but take a moment to read; needs clear labels and a table toggle.",
+      "comp": ".impeccable/mocks/decision/flow.webp",
+      "wireframe": { "cols": 12, "rows": 10, "regions": [
+        { "label": "headline numbers", "x": 0, "y": 0, "w": 12, "h": 1 },
+        { "label": "money flow: funding → sections", "x": 0, "y": 1, "w": 12, "h": 4, "accent": true },
+        { "label": "departments: asked vs proposed", "x": 0, "y": 5, "w": 7, "h": 3 },
+        { "label": "biggest changes", "x": 7, "y": 5, "w": 5, "h": 3 },
+        { "label": "your city receipt", "x": 0, "y": 8, "w": 7, "h": 2 },
+        { "label": "levy vs rate", "x": 7, "y": 8, "w": 5, "h": 2 }
+      ] }
+    },
+    {
+      "id": "broadsheet",
+      "label": "Front-Page Broadsheet",
+      "lineage": "newspaper front pages and sports-page box scores",
+      "thesis": "Lay it out like a front page: one big lead chart, a box score of the key numbers beside it, and departments as a standings table.",
+      "palette": ["#FFFFFF", "#1B2A4A", "#3C6FB0", "#D9DEE7"],
+      "materials": ["column rules", "treemap", "standings table"],
+      "viewport": "Title and one-line summary; lead treemap of the budget by section (two-thirds width) with a box score column (all funds, general city, levy, rate) beside it; below, revenue bars, departments standings, and biggest movers in three columns.",
+      "risk": "Dense on a laptop if every column is full; needs generous rules and whitespace.",
+      "comp": ".impeccable/mocks/decision/broadsheet.webp",
+      "wireframe": { "cols": 12, "rows": 10, "regions": [
+        { "label": "title + summary", "x": 0, "y": 0, "w": 12, "h": 1 },
+        { "label": "lead chart: budget treemap", "x": 0, "y": 1, "w": 8, "h": 4, "accent": true },
+        { "label": "box score", "x": 8, "y": 1, "w": 4, "h": 4 },
+        { "label": "revenue bars", "x": 0, "y": 5, "w": 4, "h": 3 },
+        { "label": "departments standings", "x": 4, "y": 5, "w": 4, "h": 3 },
+        { "label": "biggest movers", "x": 8, "y": 5, "w": 4, "h": 3 },
+        { "label": "your city receipt", "x": 0, "y": 8, "w": 12, "h": 2 }
+      ] }
+    },
+    {
+      "id": "receipt-first",
+      "label": "Your Receipt First",
+      "lineage": "personal finance statements",
+      "thesis": "Lead with the resident's own question: type an address and the dashboard below shows your share of each part of the budget.",
+      "palette": ["#FFFFFF", "#1B2A4A", "#3C6FB0", "#D9DEE7"],
+      "materials": ["address field", "personal split bars", "ruled panels"],
+      "viewport": "Big address lookup across the top with the levy-vs-rate explainer; below, a two-column grid: where your city tax goes (personalised after lookup, citywide before), where the money comes from, departments, biggest changes.",
+      "risk": "Journalists and visitors who don't want to type an address see a quieter first screen.",
+      "comp": ".impeccable/mocks/decision/receipt-first.webp",
+      "wireframe": { "cols": 12, "rows": 10, "regions": [
+        { "label": "address lookup + levy vs rate", "x": 0, "y": 0, "w": 12, "h": 3, "accent": true },
+        { "label": "where your city tax goes", "x": 0, "y": 3, "w": 6, "h": 3 },
+        { "label": "where the money comes from", "x": 6, "y": 3, "w": 6, "h": 3 },
+        { "label": "departments: asked vs proposed", "x": 0, "y": 6, "w": 6, "h": 4 },
+        { "label": "biggest changes", "x": 6, "y": 6, "w": 6, "h": 4 }
+      ] }
+    }
+  ],
+  "reroll": true,
+  "buildPath": { "value": "code", "toggle": true },
+  "steer": true
+}
