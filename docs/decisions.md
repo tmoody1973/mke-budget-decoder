@@ -116,3 +116,22 @@
 **How we'll know if this was right.** When the Adopted budget arrives in November it loads as a second version beside Proposed without touching Proposed's rows, and `lib/db/load.test.ts` passes for both.
 
 **What actually happened.**
+
+## D15 — The first screen answers the visitor's question, and the address-based tax receipt ships in P2
+
+**Decision.** The Overview page reads top to bottom: a one-line framing with cited totals; question buttons drawn from news highlights and the question bank (each opens the Explore view that answers it; in P3 the same buttons become chat prompts); a City Receipt box where a resident types an address; a small dashboard of charts, each with a table version and citation chips; the department list; and a footer with how to use it, how it was built, and related stories. The address lookup against MPROP (the city's Master Property File, one row per parcel with its assessed value) moves from v1.1 into P2.
+
+**Why this came up.** Most visitors arrive on a phone from a news story, holding one question, usually "does this affect me?" The honest answer to "are my taxes going up?" depends on each home's assessed value: the city levy rises about 2% while the rate falls from $7.61 to $7.29. A page that opens with methodology or a list of stories makes them scroll past the answer.
+
+**Options.**
+1. *Assessed-value box now, address lookup in v1.1 (the PRD's plan).* Small; ships before the October hearings; but residents must know their assessed value.
+2. *Address lookup in P2.* Residents just type where they live; renters get a receipt too (docs/07). Costs MPROP handling for ~160,000 parcels, renter/condo/multi-unit cases, frontage defaults, and the privacy and rate-limit rules in docs/07 §8.
+3. *No receipt in P2.* Fastest; leaves the most common question unanswered.
+
+**What we chose and why.** Option 2 (Tarik). The receipt is the feature residents will actually use, and Budget Compass already proved the MPROP lookup works. Page order (Tarik and Claude, worked through Socratically): answer first, trust material second.
+
+**What we gave up.** P2 grows by the receipt work, so the Explore release is more likely to land after the start of the October hearings, which is when the tool matters most. Budget Compass's lookup code is not ported as-is: it builds its database query by pasting the typed address into SQL text (an injection risk), so only its address-parsing approach carries over.
+
+**How we'll know if this was right.** The two worked examples in docs/07 §4 pass to the cent; a test proves no owner name or mailing address reaches any response; and P2 ships a working address receipt before the Council's budget hearings end.
+
+**What actually happened.**
