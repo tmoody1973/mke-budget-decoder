@@ -54,6 +54,7 @@
   value: "39800000"
   unit: dollars_rounded_0.1M
   cite: {doc: summary, pdf_page: 169, printed_page: "159"}
+  context: "This is the 'sustainable' withdrawal; with a separate $1.5 million withdrawal in anticipation of revenue, the total is $41.3 million (p.8, p.162)."
   table_pair: {line: "Tax Stabilization Fund Withdrawal (Sustainable) + (Revenue Anticipation)", value: 41301000, cite: {doc: summary, pdf_page: 172, printed_page: "162"}, note: "Reconciles: the narrative's $39.8M is the 'Sustainable' line ($39,776,000); a separate 'Revenue Anticipation' line adds $1,525,000; together $41,301,000 = golden G7 (Summary p.8)."}
   reviewed_by: null
 
@@ -68,7 +69,7 @@
 
 - id: fringe-offset-year-wording
   topic: document_quirk
-  statement: "The Source of Funds narrative says the fringe benefit offset is 'anticipated to be $28.0 million in 2026' [sic], 'a $3.0 million increase from 2026'."
+  statement: "The Source of Funds narrative says the fringe benefit reimbursement from other city funds (the Fringe Benefit Offset line in the revenue table) is 'anticipated to be $28.0 million in 2026' [sic], 'a $3.0 million increase from 2026'."
   lead_with: table          # docs/06 §7: the table figure leads; the narrative is an attributed quote
   also_cite: [{doc: summary, pdf_page: 27, printed_page: "17", note: "'Fringe Benefits' funding source 25,000,000 (2026 adopted) -> 28,000,000 (2027 proposed)"}]
   value: "28000000"

@@ -192,7 +192,8 @@ async function load(db: Db) {
       narrativeRevenue: (f.narrative_revenue as string) ?? null, reviewedBy: (f.reviewed_by as string) ?? null, cite: f.cite as s.Cite })))
     await insertAll(tx, s.budgetFacts, yaml('budget_facts.yaml').map((f) => ({ ...v, id: String(f.id), topic: String(f.topic),
       statement: String(f.statement), value: dec(f.value), unit: (f.unit as string) ?? null, reviewedBy: (f.reviewed_by as string) ?? null,
-      leadWith: (f.lead_with as string) ?? null, tablePair: f.table_pair ?? null, alsoCite: f.also_cite ?? null, cite: f.cite as s.Cite })))
+      leadWith: (f.lead_with as string) ?? null, context: (f.context as string) ?? null, tablePair: f.table_pair ?? null,
+      alsoCite: f.also_cite ?? null, cite: f.cite as s.Cite })))
 
     await insertAll(tx, s.concepts, concepts.map((c) => ({ ...v, kind: c.kind as 'account', label: String(c.label),
       code: (c.code as string) ?? null, deptIds: arr(c.dept_ids).map((d) => dept[d]).filter(Boolean),

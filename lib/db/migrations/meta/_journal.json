@@ -22,6 +22,13 @@
       "when": 1790170086325,
       "tag": "0002_abandoned_the_hunter",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1790171733275,
+      "tag": "0003_mighty_sally_floyd",
+      "breakpoints": true
     }
   ]
 }

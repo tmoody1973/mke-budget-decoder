@@ -396,6 +396,7 @@ export const budgetFacts = pgTable('budget_facts', {
   unit: text('unit'),
   reviewedBy: text('reviewed_by'), // null until a human reviews it
   leadWith: text('lead_with'), // 'table' = show the table figure first (docs/06 §7)
+  context: text('context'), // our sentence shown beside the quote, e.g. how two figures reconcile
   tablePair: jsonb('table_pair'),
   alsoCite: jsonb('also_cite'),
   cite: cite(),

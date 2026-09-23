@@ -139,7 +139,7 @@ for i in inc:
         where = f"printed {', '.join(ids)}"
         go = ", ".join(str(pid[x]) for x in ids if x in pid)
         who = i['section']
-    w(f"| [ ] | {who} ({i['column']}) | {doc} | **{go}** ({where}) | printed **{fmt(i['printed'])}**, rows add to **{fmt(i['extracted'])}** | {i['note']} |")
+    w(f"| [ ] | {who} ({i['column']}) | {doc} | **{go}** ({where}) | {'suspected, not arithmetic; see note' if i['check'] == 'suspected' else f"printed **{fmt(i['printed'])}**, rows add to **{fmt(i['extracted'])}**"} | {i['note']} |")
 
 queue = [(k, v) for k, v in claims.items() if not v.get('auto')]
 w(f"""
