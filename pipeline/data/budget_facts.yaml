@@ -56,7 +56,7 @@
   cite: {doc: summary, pdf_page: 169, printed_page: "159"}
   context: "This is the 'sustainable' withdrawal; with a separate $1.5 million withdrawal in anticipation of revenue, the total is $41.3 million (p.8, p.162)."
   table_pair: {line: "Tax Stabilization Fund Withdrawal (Sustainable) + (Revenue Anticipation)", value: 41301000, cite: {doc: summary, pdf_page: 172, printed_page: "162"}, note: "Reconciles: the narrative's $39.8M is the 'Sustainable' line ($39,776,000); a separate 'Revenue Anticipation' line adds $1,525,000; together $41,301,000 = golden G7 (Summary p.8)."}
-  reviewed_by: null
+  reviewed_by: "Tarik (claude-precheck)"
 
 - id: street-lighting-revenue
   topic: fees
@@ -117,4 +117,4 @@
   unit: dollars
   cite: {doc: detailed, pdf_page: 379, printed_page: "500.1", line_no: 23}
   also_cite: [{doc: summary, pdf_page: 197, printed_page: "187", note: "same figure, same brackets, in the Summary of Expenditures table"}]
-  reviewed_by: null
+  reviewed_by: "Tarik (claude-precheck)"
