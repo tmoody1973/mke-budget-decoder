@@ -390,9 +390,11 @@ def parse_detailed(pdf_path=DETAILED_PDF) -> tuple[list[Row], dict]:
                     prev.note = f"{prev.note} {row.description_raw}".strip() if prev.note else row.description_raw
                 rows.append(row)
                 # 006300/006800 totals close their category even where headers are omitted.
-                if _acct6(row.account) == "006300" or "OPERATING EXPENDITURES TOTAL" in row.upper:
+                # Only a printed TOTAL closes a category. Special-fund items reuse account 006300
+                # (Detailed 110.14 line 17), so the code alone must not switch categories.
+                if row.row_type == "rollup" and "OPERATING EXPENDITURES TOTAL" in row.upper:
                     category = "equipment"
-                elif _acct6(row.account) == "006800" or "EQUIPMENT PURCHASES TOTAL" in row.upper:
+                elif row.row_type == "rollup" and "EQUIPMENT PURCHASES TOTAL" in row.upper:
                     category = "special"
     join_wrapped_labels(rows)
     assign_hierarchy(rows)

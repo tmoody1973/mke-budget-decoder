@@ -243,7 +243,11 @@ def unbordered_position_changes(slug: str, pdf_page: int, prev_geo: Optional[dic
     group, out = None, []
     for top, title in titles:
         near = min(anchors, key=lambda a: abs(a["top"] - top))
-        if abs(near["top"] - top) <= 8:
+        # a row with an empty title cell takes wrapped title lines up to 20pt away
+        # (Summary p.55: 'Housing Rehab Specialist 4' / 'Real Estate Development Specialist')
+        reach = 20 if not near["title"] or near.get("title_from_wrap") else 8
+        if abs(near["top"] - top) <= reach:
+            near["title_from_wrap"] = near.get("title_from_wrap", not near["title"])
             near["title"] = f"{near['title']} {title}".strip() if near["top"] < top else f"{title} {near['title']}".strip()
         else:
             near.setdefault("groups", []).append((top, title))
