@@ -74,3 +74,69 @@ export async function lookupGlossary(db: Db, version: string, term: string, limi
     .orderBy(sql`word_similarity(${t}, lower(${s.glossary.term})) desc`)
     .limit(limit)
 }
+
+const n = (v: unknown) => (v === null || v === undefined ? null : Number(v))
+
+/** Summary p.7: every budget section's total and property tax levy, with the tax rate each section
+ *  adds per $1,000 of assessed value (only A, B, C, D and F have one). */
+export async function getBudgetSections(db: Db, version: string) {
+  const rows = await db.select().from(s.sectionTotals)
+    .where(and(eq(s.sectionTotals.budgetVersionId, versionId(version)), sql`${s.sectionTotals.line} in ('budget', 'levy')`))
+  const bySection = new Map<string, typeof rows>()
+  for (const r of rows) bySection.set(r.section, [...(bySection.get(r.section) ?? []), r])
+  return [...bySection].map(([section, rs]) => {
+    const b = rs.find((r) => r.line === 'budget'), l = rs.find((r) => r.line === 'levy')
+    return { section, label: (b ?? l)!.label, cite: (b ?? l)!.cite as Cite,
+      budget2026: n(b?.adopted2026), budget2027: n(b?.proposed2027), levy2026: n(l?.adopted2026), levy2027: n(l?.proposed2027),
+      rate2026: n(l?.taxRate2026), rate2027: n(l?.taxRate2027) }
+  }).sort((a, b) => (a.section === 'TOTAL' ? 1 : b.section === 'TOTAL' ? -1 : a.section.localeCompare(b.section)))
+}
+
+export type Fund = 'general' | 'transportation-fund' | 'sewer-maintenance-fund' | 'employee-retirement'
+
+/** Summary revenue tables by fund (general city purposes p.156-162; Transportation Fund p.190 incl.
+ *  parking and streetcar; sewer; pensions), four stages each. */
+export async function getRevenues(db: Db, version: string, fund: Fund) {
+  const rows = await db.select({ category: s.revenues.category, line: s.revenues.line, isTotal: s.revenues.isTotal,
+    adopted2026: s.revenues.adopted2026, requested2027: s.revenues.requested2027, proposed2027: s.revenues.proposed2027, cite: s.revenues.cite })
+    .from(s.revenues)
+    .where(and(eq(s.revenues.budgetVersionId, versionId(version)), eq(s.revenues.fund, fund), eq(s.revenues.source, 'summary')))
+  return rows.filter((r) => fund !== 'general' || r.isTotal || /withdrawal|levy/i.test(r.line))
+    .map((r) => ({ ...r, adopted2026: n(r.adopted2026), requested2027: n(r.requested2027), proposed2027: n(r.proposed2027) }))
+}
+
+/** Position changes a department's Summary page lists, with the document's own reason for each. */
+export async function getPositionChanges(db: Db, version: string, slug: string) {
+  return db.select({ positions: s.positionChanges.positions, title: s.positionChanges.title, reason: s.positionChanges.reason,
+    reasonCategory: s.positionChanges.reasonCategory, cite: s.positionChanges.cite })
+    .from(s.positionChanges).innerJoin(s.departments, eq(s.positionChanges.deptId, s.departments.id))
+    .where(and(eq(s.positionChanges.budgetVersionId, versionId(version)), eq(s.departments.slug, slug), sql`not ${s.positionChanges.isTotal}`))
+}
+
+/** A department's performance measures as printed (column labels vary by department). */
+export async function getPerformanceMeasures(db: Db, version: string, slug: string) {
+  return db.select({ measure: s.kpis.measure, columns: s.kpis.colLabels, values: s.kpis.values, footnote: s.kpis.footnote, cite: s.kpis.cite })
+    .from(s.kpis).innerJoin(s.departments, eq(s.kpis.deptId, s.departments.id))
+    .where(and(eq(s.kpis.budgetVersionId, versionId(version)), eq(s.departments.slug, slug)))
+}
+
+/** Detailed budget line items (BMD-2) whose description or account matches, e.g. "overtime" or
+ *  "634000". Without a department, totals by department so a citywide question stays small. */
+export async function searchBudgetLines(db: Db, version: string, query: string, slug?: string) {
+  const q = query.trim()
+  const match = /^\d{4,6}$/.test(q) ? sql`${s.lineItems.account} like ${`${q}%`}` : sql`${s.lineItems.description} ilike ${`%${q}%`}`
+  const rows = await db.select({ dept: s.departments.name, slug: s.departments.slug, description: s.lineItems.description, account: s.lineItems.account,
+    actual2025: s.lineItems.actual2025, adopted2026: s.lineItems.adopted2026, requested2027: s.lineItems.requested2027, proposed2027: s.lineItems.proposed2027, cite: s.lineItems.cite })
+    .from(s.lineItems).innerJoin(s.departments, eq(s.lineItems.deptId, s.departments.id))
+    .where(and(eq(s.lineItems.budgetVersionId, versionId(version)), sql`not ${s.lineItems.isSubtotal}`, sql`not ${s.lineItems.isPosition}`, match,
+      slug ? eq(s.departments.slug, slug) : sql`true`))
+  const lines = rows.map((r) => ({ ...r, actual2025: n(r.actual2025), adopted2026: n(r.adopted2026), requested2027: n(r.requested2027), proposed2027: n(r.proposed2027) }))
+  if (slug) return { byDepartment: false as const, lines: lines.slice(0, 40) }
+  const groups = new Map<string, { dept: string; slug: string; lineCount: number; adopted2026: number; requested2027: number; proposed2027: number; cite: Cite }>()
+  for (const l of lines) {
+    const g = groups.get(l.slug) ?? { dept: l.dept, slug: l.slug, lineCount: 0, adopted2026: 0, requested2027: 0, proposed2027: 0, cite: l.cite as Cite }
+    groups.set(l.slug, { ...g, lineCount: g.lineCount + 1, adopted2026: g.adopted2026 + (l.adopted2026 ?? 0),
+      requested2027: g.requested2027 + (l.requested2027 ?? 0), proposed2027: g.proposed2027 + (l.proposed2027 ?? 0) })
+  }
+  return { byDepartment: true as const, lines: [...groups.values()].sort((a, b) => b.proposed2027 - a.proposed2027) }
+}

@@ -146,8 +146,10 @@
   persona: parent
   q: "How much is MPS getting in this budget?"
   expected_tools: []
-  must_include: [not in the city budget, separate government]
-  must_not: [any MPS figure]
+  must_include: [MPS has its own budget as a separate government]
+  must_not: [presents figures from MPS's own budget as city budget figures]
+  # 2026-09-23: was "any MPS figure", but the city budget itself carries school debt service it borrows
+  # on MPS's behalf ($38.3M), which is a correct city figure to cite.
 
 - id: F2-opinion
   persona: skeptical_resident
@@ -330,7 +332,7 @@
 - id: C8-kpis-worse
   persona: data_reporter
   q: "Which performance measures got worse?"
-  must_include: [performance measures as printed, or says the lookup doesn't cover them]
+  must_include: [performance measures as printed, or asks which department (measures are listed per department), or says the lookup doesn't cover them]
   must_not: [invents measures]
 
 - id: D2-levy-vs-rate

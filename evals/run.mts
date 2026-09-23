@@ -8,7 +8,7 @@ import { config } from 'dotenv'
 import { parse } from 'yaml'
 
 config({ path: '.env.local' })
-const { mastra } = await import('../lib/agent/index.ts')
+const { mastra } = await import('@/lib/agent')
 
 type Case = { id: string; q: string; expected_figures?: string[]; must_include?: string[]; must_not?: string[] }
 const JUDGE = 'claude-haiku-4-5-20251001'
@@ -17,21 +17,21 @@ const PRICE = { in: 2, write: 2.5, read: 0.2, out: 10 } // Claude Sonnet 5, $ pe
 const only = process.argv.slice(2)
 const cases = (parse(readFileSync('evals/golden.yaml', 'utf8')) as Case[]).filter((c) => !only.length || only.some((p) => c.id.startsWith(p)))
 
-/** Ways a figure can appear: as written, without $ and commas, and "19.2 million" as a whole number. */
+/** Ways a figure can appear: as written, without $ and commas, as whole cents ($1,458.00 -> 145800),
+ *  or, for "$143.7 million" / "$2.26 billion", any number in the text or data that rounds to it. */
 function variants(fig: string): string[] {
   const out = new Set([fig.toLowerCase(), fig.replace(/[$,]/g, '').toLowerCase()])
-  const m = fig.match(/^\$?([\d.]+) (million|billion)$/i)
-  if (m) {
-    const n = Number(m[1]) * (m[2].toLowerCase() === 'million' ? 1e6 : 1e9)
-    const digits = m[1].split('.')[1]?.length ?? 0
-    out.add(`${m[1]}m`); out.add(`${m[1]} million`.toLowerCase())
-    for (let d = 0; d <= digits + 1; d++) out.add(String(Math.round(n / 10 ** (6 - d)) ))
-    out.add(String(Math.round(n / 1e5) * 1e5).slice(0, String(Math.round(n)).length - 5)) // leading digits of the full number
-  }
+  if (/\.\d{2}$/.test(fig)) out.add(fig.replace(/[$,.]/g, ''))
   if (fig.endsWith('%')) { out.add(`${parseFloat(fig).toFixed(1)}%`); out.add(`${fig.slice(0, -1)} percent`) }
   return [...out]
 }
-const hasFigure = (hay: string, fig: string) => variants(fig).some((v) => hay.includes(v))
+function roundsTo(hay: string, fig: string): boolean {
+  const m = fig.match(/^\$?([\d.]+) (million|billion)$/i)
+  if (!m) return false
+  const scale = m[2].toLowerCase() === 'billion' ? 1e9 : 1e6, places = m[1].split('.')[1]?.length ?? 0
+  return (hay.replace(/,/g, '').match(/\d{5,}/g) ?? []).some((d) => (Number(d) / scale).toFixed(places) === Number(m[1]).toFixed(places))
+}
+const hasFigure = (hay: string, fig: string) => roundsTo(hay, fig) || variants(fig).some((v) => hay.includes(v))
 
 async function judge(c: Case, text: string, tools: string): Promise<{ include: { item: string; met: boolean }[]; not: { item: string; violated: boolean }[]; note: string }> {
   if (!c.must_include?.length && !c.must_not?.length) return { include: [], not: [], note: '' }
