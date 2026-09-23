@@ -29,6 +29,13 @@
       "when": 1790171733275,
       "tag": "0003_mighty_sally_floyd",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1790179999267,
+      "tag": "0004_fixed_bishop",
+      "breakpoints": true
     }
   ]
 }

@@ -494,3 +494,38 @@ export const mpropParcels = pgTable('mprop_parcels', {
   cornerLot: text('corner_lot'),
   loadedAt: timestamp('loaded_at', { withTimezone: true }).notNull().defaultNow(),
 })
+
+// City Receipt (docs/07, D15): one row per MPROP parcel, from a dated snapshot, not a budget version.
+// Owner names and mailing addresses are never loaded (pipeline/extract/mprop.py doesn't read them).
+// Taxable assessment = cATotal (exempt parcels carry 0 there; see docs/open-questions.md).
+export const parcels = pgTable(
+  'parcels',
+  {
+    taxkey: text('taxkey').primaryKey(),
+    snapshotDate: date('snapshot_date').notNull(),
+    yrAssmt: text('yr_assmt'),
+    taxRateCd: text('tax_rate_cd'),
+    houseNrLo: integer('house_nr_lo'),
+    houseNrHi: integer('house_nr_hi'),
+    houseNrSfx: text('house_nr_sfx'),
+    sdir: text('sdir'),
+    street: text('street'),
+    sttype: text('sttype'),
+    cAClass: text('c_a_class'),
+    cATotal: bigint('c_a_total', { mode: 'number' }),
+    cAExmType: text('c_a_exm_type'),
+    cAExmTotal: bigint('c_a_exm_total', { mode: 'number' }),
+    pATotal: bigint('p_a_total', { mode: 'number' }),
+    pAExmTotal: bigint('p_a_exm_total', { mode: 'number' }),
+    nrUnits: integer('nr_units'),
+    ownOcpd: text('own_ocpd'),
+    landUse: text('land_use'),
+    landUseGp: text('land_use_gp'),
+    bldgType: text('bldg_type'),
+    dpwSanitation: text('dpw_sanitation'),
+    geoAlder: text('geo_alder'),
+    lotArea: numeric('lot_area', { precision: 14, scale: 2 }),
+    cornerLot: text('corner_lot'),
+  },
+  (t) => [index('parcels_street_house_idx').on(t.street, t.houseNrLo)],
+)
