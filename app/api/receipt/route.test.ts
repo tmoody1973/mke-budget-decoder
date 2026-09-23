@@ -15,6 +15,12 @@ describe.skipIf(!url)('POST /api/receipt and /api/address', () => {
     expect(receipt.total).toEqual({ c2026: 203676, c2027: 208062 })
   })
 
+  it('a condo unit in a large building gets no city garbage line', async () => {
+    const { POST } = await import('./route')
+    const { receipt } = await (await POST(post({ view: 'owner', assessed2026: 245_000, buildingUnits: 313 }, '203.0.113.2'))).json()
+    expect(receipt.lines.some((l: { key: string }) => l.key === 'solid_waste')).toBe(false)
+  })
+
   it('a real parcel by taxkey returns a receipt and no owner data', async () => {
     const { POST } = await import('./route')
     const body = await (await POST(post({ view: 'owner', taxkey: '4000708100' }))).json()

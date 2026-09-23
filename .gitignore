@@ -54,3 +54,8 @@ __pycache__/
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+
+# impeccable working files (screenshots, decision page)
+/.impeccable/review/
+/.impeccable/mocks/
+/.impeccable/config.local.json

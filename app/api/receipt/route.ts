@@ -42,8 +42,12 @@ export async function POST(req: Request) {
       if (assessed2026 === null) return bad('Send a taxkey, or assessed2026 as whole dollars.')
       const assessed2025 = b.assessed2025 === undefined ? assessed2026 : intIn(b.assessed2025, 1, 1_000_000_000)
       const units = b.units === undefined ? 1 : intIn(b.units, 1, 999)
-      if (assessed2025 === null || units === null) return bad('assessed2025 and units must be whole numbers.')
-      input = { assessed2026, assessed2025, units, cityGarbage: units <= 4, view, frontageFt, extraCarts }
+      // a condo unit in a big building: the building's size decides city garbage service (1-4 units)
+      const buildingUnits = b.buildingUnits === undefined ? units : intIn(b.buildingUnits, 1, 5000)
+      if (assessed2025 === null || units === null || buildingUnits === null) {
+        return bad('assessed2025, units and buildingUnits must be whole numbers.')
+      }
+      input = { assessed2026, assessed2025, units, cityGarbage: buildingUnits <= 4, view, frontageFt, extraCarts }
     }
     return Response.json({ receipt: computeReceipt(input, await rates), parcel, budget: BUDGET_VERSION })
   } catch {

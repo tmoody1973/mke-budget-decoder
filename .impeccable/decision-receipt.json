@@ -1,0 +1,153 @@
+{
+  "title": "Choose the visual world for MKE Budget Decoder",
+  "question": "The roll assigned the Milwaukee sign-painter's window. Keep it, take an alternate, or re-roll.",
+  "options": [
+    {
+      "id": "assigned",
+      "label": "Sign-Painter's Window",
+      "kicker": "THE ROLL",
+      "lineage": "Milwaukee corner-store window lettering, price boards, and Cream City brick ghost signs",
+      "thesis": "Your city charges, lettered like a corner-store price board: the number is the sign.",
+      "palette": ["#E6D6A6", "#16130F", "#B8862B", "#F7F3E8", "#2F5D50"],
+      "materials": ["enamel lettering on glass", "Cream City brick", "gold-leaf edge"],
+      "viewport": "Address typed into a lettered shop window; your 2027 total stands as the big price sign, 2026 small beside it, the line items a price board with a page tag on each.",
+      "risk": "Hand lettering turns nostalgic or cute if overused; it must be reserved for numbers and headings, with a plain face for everything you read.",
+      "raised": [
+        { "from": "challenger-cracktro", "raise": "No boxes or cards: rank is carried by letter size alone, like a window where the price is the biggest thing." },
+        { "from": "challenger-cape", "raise": "One signature control: the Own / Rent switch re-letters the whole board in place, one pull, reversible." },
+        { "from": "challenger-storm", "raise": "Type is the material: no icons, illustrations, or gradients carry character; the lettering does." },
+        { "from": "challenger-sleeve", "raise": "One committed ground: the brick-cream field floods the screen instead of a white page with a colored card." },
+        { "from": "challenger-console", "raise": "Selection steps forward: tapping a line lifts it to full size with its citation while the rest recede." }
+      ],
+      "comp": ".impeccable/mocks/decision/assigned.webp",
+      "wireframe": { "cols": 6, "rows": 12, "regions": [
+        { "label": "address window", "x": 0, "y": 0, "w": 6, "h": 2 },
+        { "label": "price sign: 2027 total", "x": 0, "y": 2, "w": 6, "h": 3, "accent": true },
+        { "label": "own / rent switch", "x": 0, "y": 5, "w": 6, "h": 1 },
+        { "label": "price board + page tags", "x": 0, "y": 6, "w": 6, "h": 5 },
+        { "label": "proposed, not adopted", "x": 0, "y": 11, "w": 6, "h": 1 }
+      ] }
+    },
+    {
+      "id": "model-pick",
+      "label": "Blue Book Table",
+      "kicker": "IMPECCABLE’S PICK",
+      "lineage": "the Wisconsin Blue Book's statistical tables",
+      "thesis": "The receipt as an almanac table: exact, dense, footnoted, trusted.",
+      "palette": ["#FFFFFF", "#1B2A4A", "#3C6FB0", "#D9DEE7"],
+      "materials": ["offset print", "ruled tables", "footnote marks"],
+      "viewport": "Address field over a two-column 2026 / 2027 table with a bold total row and numbered footnotes for every rate.",
+      "risk": "Closest to the government-form feel you ruled out, and the familiar civic-data look most runs in this category land on.",
+      "comp": ".impeccable/mocks/decision/model-pick.webp",
+      "wireframe": { "cols": 6, "rows": 12, "regions": [
+        { "label": "address", "x": 0, "y": 0, "w": 6, "h": 2 },
+        { "label": "2026 | 2027 table", "x": 0, "y": 2, "w": 6, "h": 6, "accent": true },
+        { "label": "total row", "x": 0, "y": 8, "w": 6, "h": 1 },
+        { "label": "footnotes", "x": 0, "y": 9, "w": 6, "h": 3 }
+      ] }
+    },
+    {
+      "id": "challenger-nixie",
+      "label": "Nixie Counter",
+      "verdict": "competitive",
+      "lineage": "laboratory nixie-tube counters",
+      "thesis": "Every charge arrives as lit digits; the 2026 to 2027 change is a visible roll of numerals.",
+      "palette": ["#0E0F11", "#FF7A1A", "#6B7076", "#C9CDD2"],
+      "materials": ["glass tube glow", "blackened steel panel"],
+      "viewport": "Your 2027 total in a bank of glowing digits; each line item a smaller bank with an engraved label and page tag.",
+      "case": "Wins on clarity, since the numbers are the interface and the change is literally visible; loses on audience, since a dark lab instrument doesn't read as Milwaukee civic life.",
+      "risk": "Dark glow can read as gadget or fintech; contrast and motion need care for AA.",
+      "comp": ".impeccable/mocks/decision/challenger-nixie.webp",
+      "hero": "https://impeccable.style/worlds/cards/signals-instruments-nixie-laboratory-counter-hero.webp",
+      "wireframe": { "cols": 6, "rows": 12, "regions": [
+        { "label": "address", "x": 0, "y": 0, "w": 6, "h": 2 },
+        { "label": "digit bank: total", "x": 0, "y": 2, "w": 6, "h": 3, "accent": true },
+        { "label": "line banks", "x": 0, "y": 5, "w": 6, "h": 6 },
+        { "label": "note", "x": 0, "y": 11, "w": 6, "h": 1 }
+      ] }
+    },
+    {
+      "id": "challenger-cracktro",
+      "label": "Cracktro Queue",
+      "verdict": "declined",
+      "lineage": "demo-scene title screens",
+      "thesis": "Rank as depth on a black void, nothing boxed.",
+      "palette": ["#050505", "#EDE6D6", "#FFB000"],
+      "materials": ["bitmap type", "drifting dust fields"],
+      "viewport": "One ivory line of bitmap text over drifting dust.",
+      "case": "Loses both: nobody in Milwaukee reads their city bill as a demo screen, and bitmap type hurts reading.",
+      "risk": "Novelty over trust.",
+      "kept": "No boxes or rules; rank carried by scale alone.",
+      "hero": "https://impeccable.style/worlds/cards/operate-c-cracktro-scroller-queue-hero.webp"
+    },
+    {
+      "id": "challenger-cape",
+      "label": "Drawcord Cape",
+      "verdict": "declined",
+      "lineage": "transforming silk garments",
+      "thesis": "One pull turns a flat plane into shaped volume.",
+      "palette": ["#111111", "#C9A227", "#4A4A4A"],
+      "materials": ["matte silk", "gold cord"],
+      "viewport": "A black semicircle gathered by one gold cord.",
+      "case": "Loses both: fashion couture has no link to a tax receipt.",
+      "risk": "Luxury tone, the opposite of civic.",
+      "kept": "One signature control that reshapes the whole surface.",
+      "hero": "https://impeccable.style/worlds/cards/textiles-weave-drape-fashion-drawcord-transforming-cape-hero.webp"
+    },
+    {
+      "id": "challenger-storm",
+      "label": "Alphabet Storm",
+      "verdict": "declined",
+      "lineage": "surreal typographic worlds",
+      "thesis": "Letters behave as weather.",
+      "palette": ["#FFFFFF", "#0A0A0A", "#B8BEC6"],
+      "materials": ["monumental grotesk", "letter particles"],
+      "viewport": "Words forming and breaking as weather fronts.",
+      "case": "Loses both: moving letters fight exact numbers.",
+      "risk": "Unreadable under motion.",
+      "kept": "Type as the only material.",
+      "hero": "https://impeccable.style/worlds/cards/dream-surreal-impossible-worlds-alphabet-storm-hero.webp"
+    },
+    {
+      "id": "challenger-sleeve",
+      "label": "Yé-yé Sleeve",
+      "verdict": "declined",
+      "lineage": "1960s French pop record sleeves",
+      "thesis": "One flat saturated ground and a small ranked set.",
+      "palette": ["#F2802B", "#FFFFFF", "#1E9C9C"],
+      "materials": ["flat print", "rounded logotype"],
+      "viewport": "Tangerine ground, four ranked titles in a corner.",
+      "case": "Loses both: pop-record energy reads as marketing.",
+      "risk": "Playful where trust is needed.",
+      "kept": "Commit to one ground that floods the frame.",
+      "hero": "https://impeccable.style/worlds/cards/posters-covers-sleeves-yeye-pop-sleeve-hero.webp"
+    },
+    {
+      "id": "challenger-console",
+      "label": "Console Atmosphere",
+      "verdict": "declined",
+      "lineage": "game-console system menus",
+      "thesis": "Objects float in fog; selection swells forward.",
+      "palette": ["#0B1020", "#DCE3F0", "#F2B24C"],
+      "materials": ["WebGL fog", "particle light"],
+      "viewport": "Glowing cubes in a dark void.",
+      "case": "Loses both: heavy 3D on a phone and no civic resonance.",
+      "risk": "Slow and inaccessible on mobile.",
+      "kept": "The selected item steps forward; the rest recede.",
+      "hero": "https://impeccable.style/worlds/cards/digital-design-canon-console-dashboard-atmosphere-hero.webp"
+    }
+  ],
+  "reroll": { "registers": ["safer", "bolder"] },
+  "buildPath": { "value": "code", "toggle": true },
+  "canon": true,
+  "canonCard": {
+    "label": "The category standard",
+    "thesis": "An open-budget dashboard, executed impeccably.",
+    "palette": ["#FFFFFF", "#111827", "#2563EB"],
+    "materials": ["clean card grid", "system sans"],
+    "viewport": "Search bar, summary cards, then a table.",
+    "risk": "Looks like every open-budget site.",
+    "comp": ".impeccable/mocks/decision/canon.webp"
+  },
+  "steer": true
+}

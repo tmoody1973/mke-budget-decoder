@@ -58,6 +58,11 @@ describe('defaults and labels', () => {
       frontageFt: 40, view: 'renter' }, RATES)
     expect(line(r, 'property_tax').c2027).toBe(27338)
   })
+  it('vacant land (no dwelling units) gets no household sewer charge', () => {
+    const r = computeReceipt({ assessed2026: 7_800, assessed2025: 7_800, units: 0, cityGarbage: false,
+      frontageFt: 40, view: 'owner' }, RATES)
+    expect(r.kind === 'estimate' && r.lines.map((l) => l.key)).toEqual(['property_tax', 'snow_ice', 'street_lighting'])
+  })
   it('extra carts are charged per cart', () => {
     const r = computeReceipt({ assessed2026: 200_000, assessed2025: 188_000, units: 1, cityGarbage: true,
       frontageFt: 40, extraCarts: 2, view: 'owner' }, RATES)

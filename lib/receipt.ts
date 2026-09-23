@@ -79,8 +79,9 @@ export function computeReceipt(input: ReceiptInput, rates: ReceiptRates): Receip
     lines.push({ key: 'frontage', label: `Snow & ice and street lighting (${frontage} ft)`, cite: f.snow_ice.cite,
       c2026: s.c2026 + l.c2026, c2027: s.c2027 + l.c2027 })
   }
-  lines.push({ key: 'sewer_stormwater', label: 'Sewer + stormwater (average household)', cite: f.sewer_stormwater_avg.cite,
-    ...fee('sewer_stormwater_avg', units) })
+  // Sewer is an average-household charge per dwelling unit (docs/07 §3); vacant land has none.
+  if (input.units > 0) lines.push({ key: 'sewer_stormwater', label: 'Sewer + stormwater (average household)',
+    cite: f.sewer_stormwater_avg.cite, ...fee('sewer_stormwater_avg', input.units) })
 
   const split = rates.components.map((c) => ({
     key: `split_${c.section}`, section: c.section, label: c.label, cite: c.cite,
