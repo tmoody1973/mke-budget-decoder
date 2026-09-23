@@ -126,7 +126,7 @@ export function AskedVsProposed({ rows, specialPurpose, fringeOffset, gcp }: {
   return (
     <table className={table}>
       <caption className="sr-only">Department budgets: 2027 requested, 2027 proposed, and the difference; then the lines that take the departments to general city purposes</caption>
-      <Head cols={['Department', '2027<br>requested', '2027<br>proposed', '<span class="sm:hidden">Diff.</span><span class="hidden sm:inline">Difference</span>']} />
+      <Head cols={['Department', '2027<br>requested', '2027<br>proposed', '<span class="sm:hidden">vs. ask</span><span class="hidden sm:inline">Proposed<br>− requested</span>']} />
       <tbody>
         {rows.map((r) => (
           <tr key={r.slug} id={r.id} className="row-target border-b border-rule align-top">

@@ -14,7 +14,6 @@ import { bigDollars, pct } from '@/lib/format'
 export const dynamic = 'force-dynamic'
 
 const CALENDAR: Cite = { doc: 'summary', pdf_page: 4, printed_page: 'front matter' }
-const LEVY_SECTIONS = new Set(['A', 'B', 'C', 'D', 'F']) // Summary p.7: sections with a property tax rate above $0
 const JUMPS = [
   ['#revenue', 'Where it comes from'], ['#departments', 'Departments'], ['#changes', 'Biggest changes'], ['#taxes', 'Your property taxes'],
 ]
@@ -71,37 +70,38 @@ export default async function Overview() {
   const levyMark = src.mark(h.levy.cite, { id: 'taxes-lead', label: 'the property tax levy and rate' })
   const levyUp = h.levy.proposed2027 > h.levy.adopted2026
 
-  const blocks = sectionRows.map((r) => ({ key: r.section, letter: r.section, label: r.name, value: r.proposed2027, levy: LEVY_SECTIONS.has(r.section) }))
+  const blocks = sectionRows.map((r) => ({ key: r.section, letter: r.section, label: r.name, value: r.proposed2027, levy: r.taxRate2027 > 0 }))
+  const ups = withChange.filter((d) => d.change > 0).length, downs = withChange.filter((d) => d.change < 0).length
   const notes = [
     { l: 'a', text: 'The budget has no sections lettered E or L.' },
     { l: 'b', text: 'Special purpose accounts are citywide spending lines, such as worker’s compensation, that sit outside any department. The fringe benefit offset removes employee benefit costs that are budgeted twice, in special purpose accounts and again in department budgets, so the city does not levy for them twice.' },
   ]
 
   return (
-    <main className="mx-auto w-full max-w-6xl flex-1 px-4 pb-24 pt-8 sm:px-6 sm:pt-12 lg:px-8">
-      <header className="grid gap-6 lg:grid-cols-12 lg:items-end">
-        <div className="lg:col-span-8">
+    <main className="mx-auto w-full max-w-6xl flex-1 px-4 pb-24 pt-6 sm:px-6 sm:pt-8 lg:px-8">
+      <header>
+        <div>
           <h1 className="text-[2.1rem] font-extrabold leading-[1.06] tracking-[-0.02em] text-ink sm:text-5xl">
             Milwaukee’s proposed 2027 budget, traced to every page
           </h1>
-          <p id="intro" className="row-target tabular -mx-1 mt-4 max-w-[62ch] px-1 text-lg leading-relaxed text-ink">
+          <p id="intro" className="row-target tabular -mx-1 mt-3 max-w-[78ch] px-1 text-lg leading-relaxed text-ink">
             The Mayor proposes {bigDollars(h.allFunds.proposed2027)} across all city funds, including{' '}
             {bigDollars(h.gcp.proposed2027)} for general city purposes.<Mark n={intro} /> It is a proposal: the Common Council can
             change it before adopting the budget in November.<Mark n={calendar} />
           </p>
         </div>
-        <nav aria-label="Jump to" className="lg:col-span-4 lg:pb-1">
+        <nav aria-label="Jump to" className="mt-3">
           <ul className="flex flex-wrap gap-x-5 gap-y-2 text-sm">
             {JUMPS.map(([href, label]) => <li key={href}><a href={href} className="font-semibold text-ref underline underline-offset-4">{label}</a></li>)}
           </ul>
         </nav>
       </header>
 
-      <div className="mt-10 grid gap-10 lg:grid-cols-12 lg:gap-0">
+      <div className="mt-6 grid gap-10 lg:grid-cols-12 lg:gap-0">
         <section aria-labelledby="spending" className="lg:col-span-8 lg:pr-8">
           <PanelTitle id="spending">Where the {bigDollars(h.allFunds.proposed2027)} would go</PanelTitle>
           <p className="mt-1 text-sm text-ink-soft">Each block is a budget section, sized by its 2027 proposed amount.<Mark n={sections[0].n} /></p>
-          <div className="mt-4"><BudgetTreemap blocks={blocks} total={h.allFunds.proposed2027} /></div>
+          <div className="mt-3"><BudgetTreemap blocks={blocks} total={h.allFunds.proposed2027} n={sections[0].n} /></div>
           <ShowTable><SectionBudgets rows={sections} noteMark="a" /></ShowTable>
         </section>
         <aside aria-label="Headline numbers" className="-order-1 lg:order-none lg:col-span-4 lg:border-l lg:border-rule lg:pl-8">
@@ -128,7 +128,10 @@ export default async function Overview() {
           </section>
           <section aria-labelledby="changes" className="mt-12">
             <PanelTitle id="changes">What the Mayor proposes to change most</PanelTitle>
-            <p className="mt-2 text-sm leading-relaxed text-ink">The five largest proposed increases and decreases, by department.</p>
+            <p className="mt-2 text-sm leading-relaxed text-ink">
+            The {Math.min(5, ups)} largest proposed increases and the {Math.min(5, downs) === downs ? `${downs} proposed decreases` : `${Math.min(5, downs)} largest decreases`},
+            by department, 2026 adopted to 2027 proposed.
+          </p>
             <div className="mt-4"><Movers movers={movers} /></div>
             <ShowTable><BiggestChanges rows={depts} /></ShowTable>
           </section>

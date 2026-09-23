@@ -25,43 +25,47 @@ export function ShowTable({ children, label = 'Show as table' }: { children: Rea
 
 export type Block = {
   key: string; letter: string; label: string; value: number
-  levy: boolean // paid for partly by property tax (Summary p.7 tax rate > 0)
+  levy: boolean // has a city property tax rate (Summary p.7, from section_totals)
 }
 
 type Layout = { w: number; h: number; className: string }
 const LAYOUTS: Layout[] = [
-  { w: 1600, h: 1000, className: 'hidden aspect-[16/10] sm:block' }, // laptop and desktop
+  { w: 2250, h: 1000, className: 'hidden aspect-[9/4] sm:block' }, // laptop and desktop (fits 1280x800 with legend)
   { w: 1000, h: 1150, className: 'aspect-[1000/1150] sm:hidden' }, // phone
 ]
+const pctOf = (v: number, of: number) => `${(v / of) * 100}%`
 
 function Tiles({ blocks, total, layout }: { blocks: Block[]; total: number; layout: Layout }) {
   const root = hierarchy<{ children?: Block[] } & Partial<Block>>({ children: blocks })
     .sum((d) => d.value ?? 0).sort((a, b) => (b.value ?? 0) - (a.value ?? 0))
   return (
-    <div aria-hidden className={`relative w-full ${layout.className}`}>
-      <Treemap root={root} size={[layout.w, layout.h]} tile={treemapSquarify} paddingInner={8} round>
+    <div className={`relative w-full ${layout.className}`}>
+      <Treemap root={root} size={[layout.w, layout.h]} tile={treemapSquarify} paddingInner={8}>
         {(tree) => tree.leaves().map((n) => {
           const d = n.data as Block
-          const w = n.x1 - n.x0, h = n.y1 - n.y0
-          const full = w >= 300 && h >= 150, mid = w >= 170 && h >= 110, tiny = w >= 36 && h >= 30
+          const x0 = Math.max(0, n.x0), y0 = Math.max(0, n.y0), x1 = Math.min(layout.w, n.x1), y1 = Math.min(layout.h, n.y1)
           const share = ((d.value / total) * 100).toFixed(1)
+          const text = `${d.letter}. ${d.label}: ${bigDollars(d.value)}, ${share}% of all funds, ${d.levy ? 'has' : 'no'} city property tax rate`
+          const below = y1 < layout.h * 0.72, right = x0 > layout.w * 0.55
           return (
-            <div key={d.key} title={`${d.letter}. ${d.label}: ${bigDollars(d.value)} (${share}% of all funds)`}
-              className={`absolute overflow-hidden p-2 sm:p-3 ${d.levy ? 'bg-ink text-paper' : 'bg-fund text-ink'}`}
-              style={{ left: `${(n.x0 / layout.w) * 100}%`, top: `${(n.y0 / layout.h) * 100}%`,
-                width: `${(w / layout.w) * 100}%`, height: `${(h / layout.h) * 100}%` }}>
-              {full ? (
-                <>
-                  <p className="text-sm font-semibold leading-snug sm:text-base">{d.letter}. {d.label}</p>
-                  <p className="tabular mt-1 text-xl font-bold sm:text-3xl">{bigDollars(d.value)}</p>
-                  <p className="tabular text-xs opacity-80 sm:text-sm">{share}% of all funds</p>
-                </>
-              ) : mid ? (
-                <>
-                  <p className="text-xs font-semibold leading-tight sm:text-sm">{d.letter}. {d.label}</p>
-                  <p className="tabular text-sm font-bold sm:text-base">{millions(d.value)}M</p>
-                </>
-              ) : tiny ? <p className="text-xs font-bold">{d.letter}</p> : null}
+            <div key={d.key}>
+              <div role="img" tabIndex={0} aria-label={text}
+                className={`tile peer absolute overflow-hidden outline-offset-[-3px] ${d.levy ? 'bg-ink text-paper' : 'bg-fund text-ink ring-1 ring-inset ring-ref'}`}
+                style={{ left: pctOf(x0, layout.w), top: pctOf(y0, layout.h), width: pctOf(x1 - x0, layout.w), height: pctOf(y1 - y0, layout.h) }}>
+                <div className="p-1.5 sm:p-3">{/* padding lives inside, so thin tiles keep their exact size */}
+                  <p aria-hidden className="tile-letter text-xs font-bold">{d.letter}</p>
+                  <p aria-hidden className="tile-name text-sm font-semibold leading-snug">{d.letter}. {d.label}</p>
+                  <p aria-hidden className="tile-amt tabular text-sm font-bold">${millions(d.value)}M</p>
+                  <p aria-hidden className="tile-share tabular text-sm opacity-85">{share}% of all funds</p>
+                </div>
+              </div>
+              <div aria-hidden className="pointer-events-none absolute z-10 hidden w-56 border border-ink bg-paper p-3 text-sm text-ink peer-hover:block peer-focus-visible:block"
+                style={{ ...(below ? { top: `calc(${pctOf(y1, layout.h)} + 6px)` } : { bottom: `calc(${pctOf(layout.h - y0, layout.h)} + 6px)` }),
+                  ...(right ? { right: pctOf(layout.w - x1, layout.w) } : { left: pctOf(x0, layout.w) }) }}>
+                <p className="font-semibold">{d.letter}. {d.label}</p>
+                <p className="tabular mt-1">{bigDollars(d.value)} · {share}% of all funds</p>
+                <p className="mt-1 text-ink-soft">{d.levy ? 'Has a city property tax rate' : 'No city property tax rate'}</p>
+              </div>
             </div>
           )
         })}
@@ -70,21 +74,25 @@ function Tiles({ blocks, total, layout }: { blocks: Block[]; total: number; layo
   )
 }
 
-/** Where the money goes: every budget section sized by its 2027 proposed amount, all funds. */
-export function BudgetTreemap({ blocks, total }: { blocks: Block[]; total: number }) {
+/** Where the money goes: every budget section sized by its 2027 proposed amount, all funds.
+ *  `n` is the source mark for the section figures and tax rates (Summary p.7). */
+export function BudgetTreemap({ blocks, total, n }: { blocks: Block[]; total: number; n: number }) {
   const shown = blocks.filter((b) => b.value > 0)
   const zero = blocks.filter((b) => b.value <= 0)
+  const keyed = shown.filter((b) => b.value / total < 0.2) // any tile but the largest can be too narrow for its name
   return (
     <figure>
       {LAYOUTS.map((l) => <Tiles key={l.w} blocks={shown} total={total} layout={l} />)}
-      <figcaption className="mt-3 flex flex-wrap gap-x-6 gap-y-2 text-sm text-ink">
-        <span className="flex items-center gap-2"><span aria-hidden className="size-3 bg-ink" />Paid for partly by property tax</span>
-        <span className="flex items-center gap-2"><span aria-hidden className="size-3 bg-fund" />Paid for by its own revenue, no property tax</span>
-        {zero.length > 0 && <span className="text-ink-soft">{zero.map((z) => `${z.letter}. ${z.label}`).join(', ')}: $0 in 2027, not shown.</span>}
+      <figcaption className="mt-3 text-sm text-ink">
+        <span className="legend flex flex-wrap gap-x-6 gap-y-2">
+          <span className="flex items-center gap-2"><span aria-hidden className="size-3 bg-ink" />Has a city property tax rate<Mark n={n} /></span>
+          <span className="flex items-center gap-2"><span aria-hidden className="size-3 bg-fund ring-1 ring-inset ring-ref" />No city property tax rate; paid from its own revenue</span>
+        </span>
+        <span className="tabular mt-2 block text-ink-soft">
+          Key: {keyed.map((b) => `${b.letter}. ${b.label} ${bigDollars(b.value)}`).join(' · ')}.
+          {zero.length > 0 && <> {zero.map((z) => `${z.letter}. ${z.label}`).join(', ')}: $0 in 2027, not shown.</>}
+        </span>
       </figcaption>
-      <ul className="sr-only">
-        {shown.map((b) => <li key={b.key}>{b.letter}. {b.label}: {bigDollars(b.value)}, {((b.value / total) * 100).toFixed(1)} percent of all funds, {b.levy ? 'paid for partly by property tax' : 'no property tax'}.</li>)}
-      </ul>
     </figure>
   )
 }
@@ -125,11 +133,11 @@ export function Movers({ movers }: { movers: Mover[] }) {
         {movers.map((m) => {
           const left = Math.min(x(0), x(m.change)), width = Math.abs(x(m.change) - x(0))
           return (
-            <li key={m.id} className="grid grid-cols-[minmax(0,7.5rem)_1fr] items-center gap-3 border-b border-rule py-2">
-              <span className="truncate text-sm text-ink" title={m.fullName}>{m.name}</span>
+            <li key={m.id} className="grid grid-cols-[minmax(0,7.5rem)_1fr] items-center gap-3 border-b border-rule py-2 lg:grid-cols-[minmax(0,10rem)_1fr]">
+              <span className="text-sm leading-tight text-ink">{m.name}</span>
               <span className="relative block h-7">
                 <span className="absolute inset-y-0 left-1/2 w-px bg-ink" />
-                <span className={`absolute inset-y-1.5 ${m.change > 0 ? 'bg-ink' : 'bg-fund'}`} style={{ left: `${left}%`, width: `${width}%` }} />
+                <span className={`absolute inset-y-1.5 ${m.change > 0 ? 'bg-ink' : 'bg-ink-soft'}`} style={{ left: `${left}%`, width: `${width}%` }} />
                 <span className={`tabular absolute top-1/2 -translate-y-1/2 text-xs font-semibold text-ink ${m.change > 0 ? 'pl-1' : 'pr-1'}`}
                   style={m.change > 0 ? { left: `${left + width}%` } : { right: `${100 - left}%` }}>
                   {signedMillions(m.change)}
@@ -153,7 +161,7 @@ function PairBars({ title, a, b, fmt }: { title: string; a: number; b: number; f
   return (
     <div>
       <p className="text-sm font-semibold text-ink">{title} <span className="tabular font-normal text-ink-soft">({pct(a, b)})</span></p>
-      {[['2026', a, 'bg-fund'], ['2027', b, 'bg-ink']].map(([yr, v, c]) => (
+      {[['2026', a, 'bg-ink-soft'], ['2027', b, 'bg-ink']].map(([yr, v, c]) => (
         <div key={yr as string} className="mt-2 grid grid-cols-[3rem_1fr] items-center gap-2">
           <span className="tabular text-xs text-ink-soft">{yr}</span>
           <span className="flex items-center gap-2">
