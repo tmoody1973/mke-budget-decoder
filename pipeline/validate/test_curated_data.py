@@ -9,6 +9,7 @@ import yaml
 
 from common.config import PIPELINE_DATA, PROCESSED
 from common.summary_pdf import searchable_text
+from review.claim_check import _page
 
 FIGURE = re.compile(r"\$[\d,]+(?:\.\d+)?(?: million| billion)?|\d+(?:\.\d+)?%|\(\d+\)|\b\d{2,}\b")
 
@@ -26,7 +27,7 @@ FEES = _load("fees.yaml")
 
 @pytest.mark.parametrize("fact", FACTS, ids=[f["id"] for f in FACTS])
 def test_fact_figures_appear_on_cited_page(fact):
-    text = page_text(fact["cite"]["pdf_page"])
+    text = page_text(fact["cite"]["pdf_page"]) if fact["cite"]["doc"] == "summary" else _page("detailed", fact["cite"]["pdf_page"])
     quoted = re.findall(r"(?<![A-Za-z])'([^']+)'(?![A-Za-z])", fact["statement"])
     for q in quoted:
         assert q.replace("’", "'") in text, f"quote not on page: {q!r}"

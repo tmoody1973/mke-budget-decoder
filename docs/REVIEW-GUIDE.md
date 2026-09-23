@@ -148,19 +148,25 @@ The tests found 18 places where the city's printed total doesn't equal the rows 
 | [ ] | 240:240.10 (actual_2025) | Detailed PDF | **126, 127** (printed 240.10, 240.11) | suspected, not arithmetic; see note | Detailed 240.10 line 24: Fire Support Services 'Estimated Employee Fringe Benefits' 2025 prints 4,459,530, identical to the unit's 2025 OPERATING EXPENDITURES TOTAL on 240.11 line 19; 2026 is 2,362,034. Probably a copy error in the document. Memo line; ask the Budget office before showing it. |
 | [ ] | water-works (adopted_2026) | Summary PDF | **208, 207, 17, 19, 208, 17, 19** (printed p.198, 197, 7, 9, 198, 7, 9) | suspected, not arithmetic; see note | The 180,048 sits in the 2026 Operating expenditure authorization: Summary p.198 (PDF 208) prints Operating 167,801,036, but the p.197 expenditure Total is 167,620,988, which (with the 49,290,000 capital budget) agrees with p.7 and p.9. So p.198 prints 2026 Total Revenues / Authorizations 217,091,036 (change +11,818,654), as does the Detailed book's Water Works recap of authorizations; Summary p.7 and p.9 (PDF 17, 19) print 216,910,988 (change +11,998,702). Difference 180,048. 2027 requested and proposed agree everywhere. Keep each table as printed; flag the difference wherever both 2026 figures can appear. Found in the 2026-09-23 pre-check. |
 | [ ] | capital-improvements (proposed_2027) | Summary PDF | **184, 190** (printed p.174, 180) | suspected, not arithmetic; see note | Summary p.174 (PDF 184) narrative: 'totals $316,607,345 million' ('million' after a full dollar figure). The table value 316,607,345 (p.180) is right. Never quote this sentence as written. Found in the 2026-09-23 pre-check. |
-| [ ] | contingent-fund (actual_2025) | Summary PDF | **197** (printed p.187) | suspected, not arithmetic; see note | Summary p.187 (PDF 197) prints the 2025 actual Total as [4,998,805], in brackets. Stored as 4,998,805 with the row flag printed_bracketed:actual_2025. The page does not say what the brackets mean; do not display the 2025 figure until the Budget office confirms. Found in the 2026-09-23 round-2 review. |
+| [ ] | contingent-fund (actual_2025) | Summary PDF | **197** (printed p.187) | suspected, not arithmetic; see note | Summary p.187 (PDF 197) and Detailed 500.1 line 8 (PDF 379) print the 2025 actual as [4,998,805], in brackets. Stored as 4,998,805 with the row flag printed_bracketed:actual_2025. Neither book defines the brackets; Detailed 500.1 lines 23-24 note: Expenditure experience represents transfers and expenditures authorized by resolution. Display as printed, with that note (budget fact contingent-fund-2025-bracketed); do not interpret the brackets. Found in the 2026-09-23 round-2 review. |
 
 ---
 
 ## Part C — Two judgment calls only you can make (≈10 minutes)
 
-A small AI model (TypeSafe Jev) compared each written fact and glossary definition with its page. It wasn't sure about these 2, which is correct — they need a human decision.
+A small AI model (TypeSafe Jev) compared each written fact and glossary definition with its page. It wasn't sure about these 3, which is correct — they need a human decision.
 
 ### [ ] fact:fringe-offset-year-wording
 - **Go to:** Summary PDF, PDF page **169** (printed p.159)
 - **What we wrote:** The Source of Funds narrative says the fringe benefit reimbursement from other city funds (the Fringe Benefit Offset line in the revenue table) is 'anticipated to be $28.0 million in 2026' [sic], 'a $3.0 million increase from 2026'.
 - **What the page says:** The fringe benefit costs associated with reimbursables, grants, enterprise funds, and capital activities are budgeted in the general fund. These other funds make a payroll payment to the general fund to offset the cost of their general fund budgeted fringe benefits, which is anticipated to be $28.0 million in 2026, a $3.0 million increase from 2026. Tax Stabilization Fund (TSF):
 - **Decide:** The page says "$28.0 million **in 2026**, a $3.0 million increase **from 2026**" — the first "2026" looks like a typo for 2027 (the table on printed p.162, PDF 172, puts $28,000,000 in the 2027 Proposed column). Currently we show the table figure first and quote the sentence with [sic]. **Is that how you want readers to see it?** Write `NOTE: ok` or `NOTE:` your preferred wording.
+
+### [ ] fact:contingent-fund-2025-bracketed
+- **Go to:** Detailed PDF, PDF page **379** (printed p.500.1)
+- **What we wrote:** The Common Council Contingent Fund's 2025 actual expenditure is printed in brackets, [4,998,805], and the budget does not say what the brackets mean. The Detailed budget notes: 'Expenditure experience represents transfers and expenditures authorized by resolution.'
+- **What the page says:** COMMON COUNCIL CONTINGENT FUND 1. BUDGET FOR COMMON COUNCIL CONTINGENT FUND Total Budget for Common Council 0001 9990 C001 006300 [4,998,805] 5,000,000 Contingent Fund 5,000,000 5,000,000 For emergency or other purposes which may arise during the year requiring the expenditure of money in addition to the amount provided for the several purposes for which no express provision has been made in the budget. 2. SOURCE OF FUNDS FOR COMMON COUNCIL CONTINGENT FUND 0001 9990 009010 5,000,000 5,000,000 Pr
+- **Decide:** The Summary never defines this term — it's only a column header. The definition is ours. **Is our plain-language definition accurate and neutral?** Write `NOTE: ok` or your correction.
 
 ### [ ] glossary:Actual expenditures
 - **Go to:** Summary PDF, PDF page **126** (printed p.116)
@@ -196,6 +202,7 @@ These were typed by Claude from the pages, then tested (every figure is proven t
 - [ ] **sro-mandate** — Summary PDF PDF **128** (printed p.118): The Police Department maintains a School Resource Division within Milwaukee Public Schools, whose leadership supports the 25 officers mandated by Act 12.
 - [ ] **legal-deadlines** — Summary PDF PDF **4** (printed p.front matter): Budget calendar legal deadlines: the proposed budget is submitted by September 28 and the Common Council acts on the budget by November 14.
 - [ ] **public-survey** — Summary PDF PDF **16** (printed p.6): Thousands of Milwaukee residents took a two-minute, six-question survey about which revenue categories to increase or not, and which services to protect or not. The document says the public asked for better roads and more demolitions of nuisance properties, and to hold the line on taxes and fees.
+- [ ] **contingent-fund-2025-bracketed** — Detailed PDF PDF **379** (printed p.500.1): The Common Council Contingent Fund's 2025 actual expenditure is printed in brackets, [4,998,805], and the budget does not say what the brackets mean. The Detailed budget notes: 'Expenditure experience represents transfers and expenditures authorized by resolution.'
 
 ### D3. Glossary — 43 terms (skim; 10 minutes)
 

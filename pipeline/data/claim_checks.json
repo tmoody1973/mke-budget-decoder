@@ -275,6 +275,30 @@
     "input_tokens": 617,
     "seconds": 0.17
   },
+  "fact:contingent-fund-2025-bracketed": {
+    "key": "e2cbc003fa98301a",
+    "kind": "fact",
+    "cite": {
+      "doc": "detailed",
+      "pdf_page": 379,
+      "printed_page": "500.1",
+      "line_no": 23
+    },
+    "statement": "The Common Council Contingent Fund's 2025 actual expenditure is printed in brackets, [4,998,805], and the budget does not say what the brackets mean. The Detailed budget notes: 'Expenditure experience represents transfers and expenditures authorized by resolution.'",
+    "passage": "COMMON COUNCIL CONTINGENT FUND 1. BUDGET FOR COMMON COUNCIL CONTINGENT FUND Total Budget for Common Council 0001 9990 C001 006300 [4,998,805] 5,000,000 Contingent Fund 5,000,000 5,000,000 For emergency or other purposes which may arise during the year requiring the expenditure of money in addition to the amount provided for the several purposes for which no express provision has been made in the budget. 2. SOURCE OF FUNDS FOR COMMON COUNCIL CONTINGENT FUND 0001 9990 009010 5,000,000 5,000,000 Property Tax Levy 5,000,000 5,000,000 Expenditure experience represents transfers and expenditures authorized by resolution. COMMON COUNCIL CONTINGENT FUND 500.1 3rd Run 9/14/26",
+    "relation": "supports",
+    "confidence": 0.57,
+    "probabilities": {
+      "supports": 0.71,
+      "says_nothing": 0.02,
+      "contradicts": 0.27
+    },
+    "verdict": "verified",
+    "auto": false,
+    "model": "jev-1.13.0",
+    "input_tokens": 755,
+    "seconds": 0.28
+  },
   "glossary:Proposed budget": {
     "key": "2a337404e9d16422",
     "kind": "glossary",
@@ -714,7 +738,7 @@
     "seconds": 0.2
   },
   "glossary:O&M FTEs": {
-    "key": "ac2c27b58a9df0fa",
+    "key": "c56205172029f76b",
     "kind": "glossary",
     "cite": {
       "doc": "detailed",
@@ -722,13 +746,13 @@
       "printed_page": "110.1"
     },
     "statement": "Staff time paid for by the department's regular operating and maintenance budget.",
-    "passage": "BMD-2 CITY OF MILWAUKEE BUDGET 2025 2026 2027 2027 ACCOUNT NUMBER EXPENDITURE BUDGET PAY REQUESTED BUDGET PROPOSED BUDGET FUND ORG SBCL ACCOUNT DOLLARS UNITS DOLLARS LINE DESCRIPTION RANGE UNITS DOLLARS UNITS DOLLARS 1 2 DEPARTMENT OF ADMINISTRATION 3 BUDGETARY CONTROL UNIT 4 (SUMMARY 1 BCU=8 DU) 5 6 SALARIES & WAGES 7 9,663 30,000 Overtime Compensated* 30,000 10,000 8 10,892,230 10,100,279 All Other Salaries & Wages 10,937,573 10,491,580 9 10 0001 1510 R999 006000 10,901,893 10,130,279 NET SALARIES & WAGES TOTAL* 10,967,573 10,501,580 11 12 185 TOTAL NUMBER OF POSITIONS AUTHORIZED 179 172 13 14 112.36 O&M FTE'S 117.26 110.26 15 46.94 NON-O&M FTE'S 38.14 37.14 16 17 0001 1510 R999 006100 4,578,110 4,558,625 ESTIMATED EMPLOYEE FRINGE BENEFITS 4,935,406 4,725,711 18 (Involves Revenue Offset-No Transfers from this Account) 19 20 OPERATING EXPENDITURES 21 0001 1510 R999 630100 86,146 21,400 General Office Expense 21,400 21,400 22 0001 1510 R999 630500 Tools & Machinery Parts 23 0001 1510 R999 631000 Construction Supplies 24 0001 1510 R999 631500 659 Energy 25 0001 1510 R999 632000 7,961 4,100 Other Operating Supplies 4,100 4,100 26 0001 1510 R999 632500 801 2,000 Facility Rental 2,000 2,000 DEPARTMENT OF ADMINISTRATION 110.1 3rd Run 9/14/26",
-    "conflict_probability": 0.1,
+    "passage": "BMD-2 CITY OF MILWAUKEE BUDGET 2025 2026 2027 2027 ACCOUNT NUMBER EXPENDITURE BUDGET PAY REQUESTED BUDGET PROPOSED BUDGET FUND ORG SBCL ACCOUNT DOLLARS UNITS DOLLARS LINE DESCRIPTION RANGE UNITS DOLLARS UNITS DOLLARS DEPARTMENT OF ADMINISTRATION BUDGETARY CONTROL UNIT (SUMMARY 1 BCU=8 DU) SALARIES & WAGES 9,663 30,000 Overtime Compensated* 30,000 10,000 10,892,230 10,100,279 All Other Salaries & Wages 10,937,573 10,491,580 0001 1510 R999 006000 10,901,893 10,130,279 NET SALARIES & WAGES TOTAL* 10,967,573 10,501,580 185 TOTAL NUMBER OF POSITIONS AUTHORIZED 179 172 112.36 O&M FTE'S 117.26 110.26 46.94 NON-O&M FTE'S 38.14 37.14 0001 1510 R999 006100 4,578,110 4,558,625 ESTIMATED EMPLOYEE FRINGE BENEFITS 4,935,406 4,725,711 (Involves Revenue Offset-No Transfers from this Account) OPERATING EXPENDITURES 0001 1510 R999 630100 86,146 21,400 General Office Expense 21,400 21,400 0001 1510 R999 630500 Tools & Machinery Parts 0001 1510 R999 631000 Construction Supplies 0001 1510 R999 631500 659 Energy 0001 1510 R999 632000 7,961 4,100 Other Operating Supplies 4,100 4,100 0001 1510 R999 632500 801 2,000 Facility Rental 2,000 2,000 DEPARTMENT OF ADMINISTRATION 110.1 3rd Run 9/14/26",
+    "conflict_probability": 0.11,
     "verdict": "consistent",
     "auto": true,
     "model": "jev-1.13.0",
-    "input_tokens": 1150,
-    "seconds": 0.17
+    "input_tokens": 1081,
+    "seconds": 0.22
   },
   "glossary:Salaries and wages": {
     "key": "6d5aaf5d41b008e5",
@@ -952,7 +976,7 @@
     "seconds": 0.16
   },
   "glossary:Budgetary control unit": {
-    "key": "a139239241d969e6",
+    "key": "f39d0db7ddfebfd5",
     "kind": "glossary",
     "cite": {
       "doc": "detailed",
@@ -960,16 +984,16 @@
       "printed_page": "110.1"
     },
     "statement": "The level at which the Common Council controls a department's spending in the line-item budget; a unit can contain several decision units.",
-    "passage": "BMD-2 CITY OF MILWAUKEE BUDGET 2025 2026 2027 2027 ACCOUNT NUMBER EXPENDITURE BUDGET PAY REQUESTED BUDGET PROPOSED BUDGET FUND ORG SBCL ACCOUNT DOLLARS UNITS DOLLARS LINE DESCRIPTION RANGE UNITS DOLLARS UNITS DOLLARS 1 2 DEPARTMENT OF ADMINISTRATION 3 BUDGETARY CONTROL UNIT 4 (SUMMARY 1 BCU=8 DU) 5 6 SALARIES & WAGES 7 9,663 30,000 Overtime Compensated* 30,000 10,000 8 10,892,230 10,100,279 All Other Salaries & Wages 10,937,573 10,491,580 9 10 0001 1510 R999 006000 10,901,893 10,130,279 NET SALARIES & WAGES TOTAL* 10,967,573 10,501,580 11 12 185 TOTAL NUMBER OF POSITIONS AUTHORIZED 179 172 13 14 112.36 O&M FTE'S 117.26 110.26 15 46.94 NON-O&M FTE'S 38.14 37.14 16 17 0001 1510 R999 006100 4,578,110 4,558,625 ESTIMATED EMPLOYEE FRINGE BENEFITS 4,935,406 4,725,711 18 (Involves Revenue Offset-No Transfers from this Account) 19 20 OPERATING EXPENDITURES 21 0001 1510 R999 630100 86,146 21,400 General Office Expense 21,400 21,400 22 0001 1510 R999 630500 Tools & Machinery Parts 23 0001 1510 R999 631000 Construction Supplies 24 0001 1510 R999 631500 659 Energy 25 0001 1510 R999 632000 7,961 4,100 Other Operating Supplies 4,100 4,100 26 0001 1510 R999 632500 801 2,000 Facility Rental 2,000 2,000 DEPARTMENT OF ADMINISTRATION 110.1 3rd Run 9/14/26",
-    "conflict_probability": 0.11,
+    "passage": "BMD-2 CITY OF MILWAUKEE BUDGET 2025 2026 2027 2027 ACCOUNT NUMBER EXPENDITURE BUDGET PAY REQUESTED BUDGET PROPOSED BUDGET FUND ORG SBCL ACCOUNT DOLLARS UNITS DOLLARS LINE DESCRIPTION RANGE UNITS DOLLARS UNITS DOLLARS DEPARTMENT OF ADMINISTRATION BUDGETARY CONTROL UNIT (SUMMARY 1 BCU=8 DU) SALARIES & WAGES 9,663 30,000 Overtime Compensated* 30,000 10,000 10,892,230 10,100,279 All Other Salaries & Wages 10,937,573 10,491,580 0001 1510 R999 006000 10,901,893 10,130,279 NET SALARIES & WAGES TOTAL* 10,967,573 10,501,580 185 TOTAL NUMBER OF POSITIONS AUTHORIZED 179 172 112.36 O&M FTE'S 117.26 110.26 46.94 NON-O&M FTE'S 38.14 37.14 0001 1510 R999 006100 4,578,110 4,558,625 ESTIMATED EMPLOYEE FRINGE BENEFITS 4,935,406 4,725,711 (Involves Revenue Offset-No Transfers from this Account) OPERATING EXPENDITURES 0001 1510 R999 630100 86,146 21,400 General Office Expense 21,400 21,400 0001 1510 R999 630500 Tools & Machinery Parts 0001 1510 R999 631000 Construction Supplies 0001 1510 R999 631500 659 Energy 0001 1510 R999 632000 7,961 4,100 Other Operating Supplies 4,100 4,100 0001 1510 R999 632500 801 2,000 Facility Rental 2,000 2,000 DEPARTMENT OF ADMINISTRATION 110.1 3rd Run 9/14/26",
+    "conflict_probability": 0.12,
     "verdict": "consistent",
     "auto": true,
     "model": "jev-1.13.0",
-    "input_tokens": 1162,
-    "seconds": 0.13
+    "input_tokens": 1093,
+    "seconds": 0.22
   },
   "glossary:Decision unit": {
-    "key": "1867becfdc2b8de4",
+    "key": "bdb0d73af2fcfac0",
     "kind": "glossary",
     "cite": {
       "doc": "detailed",
@@ -977,13 +1001,13 @@
       "printed_page": "260.5"
     },
     "statement": "A division or office inside a department that has its own line-item budget.",
-    "passage": "BMD-2 CITY OF MILWAUKEE BUDGET 2025 2026 2027 2027 ACCOUNT NUMBER EXPENDITURE BUDGET PAY REQUESTED BUDGET PROPOSED BUDGET FUND ORG SBCL ACCOUNT DOLLARS UNITS DOLLARS LINE DESCRIPTION RANGE UNITS DOLLARS UNITS DOLLARS 1 LIBRARY 2 BRANCH LIBRARY SERVICES DECISION UNIT 3 4 SALARIES & WAGES 5 6 222 Overtime Compensated 7 Personnel Cost Adjustment 8 9 Gross Salaries & Wages Total 10 11 Reimbursable Service Deduction 12 Capital Improvements Deduction 13 Grants & Aids Deduction 14 15 0001 8612 R999 006000 1,069,582 NET SALARIES & WAGES TOTAL 16 17 O&M FTE'S 18 NON-O&M FTE'S 19 20 0001 8612 R999 006100 378,366 ESTIMATED EMPLOYEE FRINGE BENEFITS 21 (Involves Revenue Offset-No Transfers from this Account) 22 23 OPERATING EXPENDITURES 24 0001 8612 R999 630100 General Office Expense 25 0001 8612 R999 630500 Tools & Machinery Parts 26 0001 8612 R999 631000 Construction Supplies LIBRARY 260.6 3rd Run 9/14/26",
+    "passage": "BMD-2 CITY OF MILWAUKEE BUDGET 2025 2026 2027 2027 ACCOUNT NUMBER EXPENDITURE BUDGET PAY REQUESTED BUDGET PROPOSED BUDGET FUND ORG SBCL ACCOUNT DOLLARS UNITS DOLLARS LINE DESCRIPTION RANGE UNITS DOLLARS UNITS DOLLARS LIBRARY BRANCH LIBRARY SERVICES DECISION UNIT SALARIES & WAGES 222 Overtime Compensated Personnel Cost Adjustment Gross Salaries & Wages Total Reimbursable Service Deduction Capital Improvements Deduction Grants & Aids Deduction 0001 8612 R999 006000 1,069,582 NET SALARIES & WAGES TOTAL O&M FTE'S NON-O&M FTE'S 0001 8612 R999 006100 378,366 ESTIMATED EMPLOYEE FRINGE BENEFITS (Involves Revenue Offset-No Transfers from this Account) OPERATING EXPENDITURES 0001 8612 R999 630100 General Office Expense 0001 8612 R999 630500 Tools & Machinery Parts 0001 8612 R999 631000 Construction Supplies LIBRARY 260.6 3rd Run 9/14/26",
     "conflict_probability": 0.13,
     "verdict": "consistent",
     "auto": true,
     "model": "jev-1.13.0",
-    "input_tokens": 809,
-    "seconds": 0.18
+    "input_tokens": 740,
+    "seconds": 0.23
   },
   "glossary:Clarification of intent": {
     "key": "df7c6043bf4aec4c",

@@ -109,3 +109,12 @@
   unit: null
   cite: {doc: summary, pdf_page: 16, printed_page: "6"}
   reviewed_by: "Tarik (claude-precheck)"
+
+- id: contingent-fund-2025-bracketed
+  topic: document_quirk
+  statement: "The Common Council Contingent Fund's 2025 actual expenditure is printed in brackets, [4,998,805], and the budget does not say what the brackets mean. The Detailed budget notes: 'Expenditure experience represents transfers and expenditures authorized by resolution.'"
+  value: "4998805"
+  unit: dollars
+  cite: {doc: detailed, pdf_page: 379, printed_page: "500.1", line_no: 23}
+  also_cite: [{doc: summary, pdf_page: 197, printed_page: "187", note: "same figure, same brackets, in the Summary of Expenditures table"}]
+  reviewed_by: null

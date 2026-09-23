@@ -92,7 +92,9 @@ def _page(doc: str, pdf_page: int) -> str:
 
     from common.config import DETAILED_PDF
     with pdfplumber.open(DETAILED_PDF) as pdf:
-        return re.sub(r"\s+", " ", pdf.pages[pdf_page - 1].extract_text() or "")
+        # BMD-2 lines start with a printed line number (1-2 digits); drop it so sentences rejoin
+        text = "\n".join(re.sub(r"^\d{1,2}(?:\s+|$)", "", ln) for ln in (pdf.pages[pdf_page - 1].extract_text() or "").splitlines())
+        return re.sub(r"\s+", " ", text)
 
 
 def items() -> list[dict]:
@@ -102,7 +104,7 @@ def items() -> list[dict]:
     for f in facts:
         page = _page(f["cite"]["doc"], f["cite"]["pdf_page"])
         quotes = re.findall(r"(?<![A-Za-z])'([^']+)'(?![A-Za-z])", f["statement"])
-        anchors = quotes + re.findall(r"\$[\d,]+(?:\.\d+)?(?: million| billion)?|\d+(?:\.\d+)?%", f["statement"])
+        anchors = quotes + re.findall(r"\$[\d,]+(?:\.\d+)?(?: million| billion)?|\d+(?:\.\d+)?%|\[[\d,]+\]", f["statement"])
         out.append({"id": f"fact:{f['id']}", "kind": "fact", "statement": f["statement"], "anchors": anchors,
                     "passage": passage(page, f["statement"], anchors), "cite": f["cite"]})
     for g in gloss:
