@@ -18,7 +18,11 @@
     "db:load-parcels": "tsx scripts/load-parcels.ts"
   },
   "dependencies": {
+    "@ag-ui/mastra": "1.1.4",
     "@base-ui/react": "^1.8.0",
+    "@copilotkit/react-core": "1.73.3",
+    "@copilotkit/runtime": "1.73.3",
+    "@mastra/core": "1.69.0",
     "@neondatabase/serverless": "^1.1.0",
     "@visx/hierarchy": "^4.0.0",
     "@visx/scale": "^4.0.0",
@@ -34,7 +38,8 @@
     "react-pdf": "^11.0.0",
     "shadcn": "^4.21.0",
     "tw-animate-css": "^1.4.0",
-    "yaml": "^2.9.1"
+    "yaml": "^2.9.1",
+    "zod": "^4.6.5"
   },
   "devDependencies": {
     "@playwright/test": "^1.63.0",

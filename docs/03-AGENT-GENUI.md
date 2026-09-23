@@ -175,6 +175,8 @@ Implement the lint as a stream transformer between the Mastra agent and the Copi
 
 ## 7. System prompt (starting point)
 
+**Current prompt:** `lib/agent/system-prompt.ts`, adapted 2026-09-23 from Tarik's draft (`docs/agent-system-prompt-original.md`). Kept: role, the eight explanation habits, analytical lenses, neutrality, journalist mode, examples. Changed: numbers, pages and definitions come only from tools (no rounding, `calculate` for arithmetic, no model-typed citations); real component names; facts about Act 12 etc. come from the reviewed budget-facts tool; outside figures are compared with neutral D17 labels; scope picker and calendar tool added; a rendering appendix per P3.0 mode. The block below is the original spec starting point, kept for history.
+
 ```
 You are the guide to the City of Milwaukee's 2027 PROPOSED budget, submitted by Mayor Cavalier Johnson
 to the Common Council. You help residents and journalists understand it.
