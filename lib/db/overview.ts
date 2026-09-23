@@ -21,6 +21,11 @@ const SECTION_NAMES: Record<string, string> = {
   M: 'County delinquent taxes fund', N: 'Settlement funds',
 }
 const LETTERS = Object.keys(SECTION_NAMES)
+// Short names for small chart labels; the full name is always one hover, focus or key row away.
+const SECTION_SHORT: Record<string, string> = {
+  A: 'General city purposes', B: 'Pensions', C: 'Capital', D: 'Debt', F: 'Contingent fund', G: 'Transportation',
+  H: 'Grants and aid', I: 'Economic development', J: 'Water Works', K: 'Sewer', M: 'Delinquent taxes', N: 'Settlements',
+}
 
 /** Summary p.7: the budget, the city tax levy and the tax rate, all funds and general city purposes. */
 export async function getHeadline(db: Db, version: string) {
@@ -51,7 +56,7 @@ export async function getSectionBudgets(db: Db, version: string) {
     const r = rows.find((x) => x.section === k && x.line === 'budget')
     const levy = rows.find((x) => x.section === k && x.line === 'levy')
     if (!r || !levy) throw new Error(`section ${k} missing`)
-    return { section: k, name: SECTION_NAMES[k], adopted2026: r.adopted2026 ?? 0, proposed2027: r.proposed2027 ?? 0,
+    return { section: k, name: SECTION_NAMES[k], short: SECTION_SHORT[k], adopted2026: r.adopted2026 ?? 0, proposed2027: r.proposed2027 ?? 0,
       taxRate2027: Number(levy.taxRate2027 ?? 0), cite: r.cite } // taxRate2027 > 0: paid for partly by property tax
   })
 }

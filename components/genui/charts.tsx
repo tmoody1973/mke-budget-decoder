@@ -24,7 +24,7 @@ export function ShowTable({ children, label = 'Show as table' }: { children: Rea
 // ---------------------------------------------------------------------------- treemap
 
 export type Block = {
-  key: string; letter: string; label: string; value: number
+  key: string; letter: string; label: string; short: string; value: number
   levy: boolean // has a city property tax rate (Summary p.7, from section_totals)
 }
 
@@ -54,7 +54,7 @@ function Tiles({ blocks, total, layout }: { blocks: Block[]; total: number; layo
                 style={{ left: pctOf(x0, layout.w), top: pctOf(y0, layout.h), width: pctOf(x1 - x0, layout.w), height: pctOf(y1 - y0, layout.h) }}>
                 <div className="p-1.5 sm:p-3">{/* padding lives inside, so thin tiles keep their exact size */}
                   <p aria-hidden className="tile-letter text-xs font-bold">{d.letter}</p>
-                  <p aria-hidden className="tile-name text-sm font-semibold leading-snug">{d.letter}. {d.label}</p>
+                  <p aria-hidden className="tile-name text-sm font-semibold leading-snug text-balance">{d.letter}. {d.short}</p>
                   <p aria-hidden className="tile-amt tabular text-sm font-bold">${millions(d.value)}M</p>
                   <p aria-hidden className="tile-share tabular text-sm opacity-85">{share}% of all funds</p>
                 </div>
@@ -79,19 +79,23 @@ function Tiles({ blocks, total, layout }: { blocks: Block[]; total: number; layo
 export function BudgetTreemap({ blocks, total, n }: { blocks: Block[]; total: number; n: number }) {
   const shown = blocks.filter((b) => b.value > 0)
   const zero = blocks.filter((b) => b.value <= 0)
-  const keyed = shown.filter((b) => b.value / total < 0.2) // any tile but the largest can be too narrow for its name
   return (
     <figure>
       {LAYOUTS.map((l) => <Tiles key={l.w} blocks={shown} total={total} layout={l} />)}
       <figcaption className="mt-3 text-sm text-ink">
         <span className="legend flex flex-wrap gap-x-6 gap-y-2">
-          <span className="flex items-center gap-2"><span aria-hidden className="size-3 bg-ink" />Has a city property tax rate<Mark n={n} /></span>
+          <span className="flex items-center gap-2"><span aria-hidden className="size-3 bg-ink" /><span>Has a city property tax rate<Mark n={n} /></span></span>
           <span className="flex items-center gap-2"><span aria-hidden className="size-3 bg-fund ring-1 ring-inset ring-ref" />No city property tax rate; paid from its own revenue</span>
         </span>
-        <span className="tabular mt-2 block text-ink-soft">
-          Key: {keyed.map((b) => `${b.letter}. ${b.label} ${bigDollars(b.value)}`).join(' · ')}.
-          {zero.length > 0 && <> {zero.map((z) => `${z.letter}. ${z.label}`).join(', ')}: $0 in 2027, not shown.</>}
+        <span className="sr-only">Key to the sections:</span>
+        <span className="mt-3 grid gap-x-8 border-t border-rule pt-2 sm:grid-cols-2">
+          {shown.map((b) => (
+            <span key={b.key} className="tabular grid grid-cols-[1.25rem_1fr_auto] items-baseline gap-2 border-b border-rule py-1 text-ink-soft">
+              <span className="font-bold text-ink">{b.letter}</span><span>{b.label}</span><span className="text-right text-ink">{bigDollars(b.value)}</span>
+            </span>
+          ))}
         </span>
+        {zero.length > 0 && <span className="mt-2 block text-ink-soft">{zero.map((z) => `${z.letter}. ${z.label}`).join(', ')}: $0 in 2027, not shown.</span>}
       </figcaption>
     </figure>
   )

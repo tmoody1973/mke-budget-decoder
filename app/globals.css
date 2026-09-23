@@ -164,5 +164,5 @@ a { text-underline-offset: 0.2em; text-decoration-thickness: 1px; }
 .tile-letter, .tile-name, .tile-amt, .tile-share { display: none; }
 @container (min-width: 1.75rem) and (min-height: 1.75rem) { .tile-letter { display: block; } }
 @container (min-width: 4.5rem) and (min-height: 3rem) { .tile-amt { display: block; } }
-@container (min-width: 7rem) and (min-height: 5.25rem) { .tile-name { display: block; } .tile-letter { display: none; } }
+@container (min-width: 5.5rem) and (min-height: 4.5rem) { .tile-name { display: block; } .tile-letter { display: none; } }
 @container (min-width: 12rem) and (min-height: 8.5rem) { .tile-share { display: block; } .tile-amt { font-size: 1.75rem; line-height: 1.1; } }

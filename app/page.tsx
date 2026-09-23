@@ -70,7 +70,7 @@ export default async function Overview() {
   const levyMark = src.mark(h.levy.cite, { id: 'taxes-lead', label: 'the property tax levy and rate' })
   const levyUp = h.levy.proposed2027 > h.levy.adopted2026
 
-  const blocks = sectionRows.map((r) => ({ key: r.section, letter: r.section, label: r.name, value: r.proposed2027, levy: r.taxRate2027 > 0 }))
+  const blocks = sectionRows.map((r) => ({ key: r.section, letter: r.section, label: r.name, short: r.short, value: r.proposed2027, levy: r.taxRate2027 > 0 }))
   const ups = withChange.filter((d) => d.change > 0).length, downs = withChange.filter((d) => d.change < 0).length
   const notes = [
     { l: 'a', text: 'The budget has no sections lettered E or L.' },
