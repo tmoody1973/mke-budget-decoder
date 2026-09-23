@@ -1,0 +1,2875 @@
+{
+  "id": "7dbe744d-0ab2-45f0-8e06-ac7f9ce92454",
+  "prevId": "e57d64b0-fe58-4a39-b77a-aa456411692e",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.amendments": {
+      "name": "amendments",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "budget_version_id": {
+          "name": "budget_version_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "number": {
+          "name": "number",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "sponsor": {
+          "name": "sponsor",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "dept_id": {
+          "name": "dept_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "description": {
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "amount_change": {
+          "name": "amount_change",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "status": {
+          "name": "status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "legistar_url": {
+          "name": "legistar_url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "amendments_budget_version_id_budget_versions_id_fk": {
+          "name": "amendments_budget_version_id_budget_versions_id_fk",
+          "tableFrom": "amendments",
+          "tableTo": "budget_versions",
+          "columnsFrom": [
+            "budget_version_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "amendments_dept_id_departments_id_fk": {
+          "name": "amendments_dept_id_departments_id_fk",
+          "tableFrom": "amendments",
+          "tableTo": "departments",
+          "columnsFrom": [
+            "dept_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.budget_facts": {
+      "name": "budget_facts",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "budget_version_id": {
+          "name": "budget_version_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "topic": {
+          "name": "topic",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "statement": {
+          "name": "statement",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "value": {
+          "name": "value",
+          "type": "numeric(16, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "unit": {
+          "name": "unit",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "reviewed_by": {
+          "name": "reviewed_by",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "lead_with": {
+          "name": "lead_with",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "table_pair": {
+          "name": "table_pair",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "also_cite": {
+          "name": "also_cite",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cite": {
+          "name": "cite",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "budget_facts_budget_version_id_budget_versions_id_fk": {
+          "name": "budget_facts_budget_version_id_budget_versions_id_fk",
+          "tableFrom": "budget_facts",
+          "tableTo": "budget_versions",
+          "columnsFrom": [
+            "budget_version_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.budget_versions": {
+      "name": "budget_versions",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "slug": {
+          "name": "slug",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "fiscal_year": {
+          "name": "fiscal_year",
+          "type": "smallint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "stage": {
+          "name": "stage",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "run_label": {
+          "name": "run_label",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "published_at": {
+          "name": "published_at",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "budget_versions_slug_unique": {
+          "name": "budget_versions_slug_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "slug"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.calendar_events": {
+      "name": "calendar_events",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "budget_version_id": {
+          "name": "budget_version_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "date": {
+          "name": "date",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "title": {
+          "name": "title",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "kind": {
+          "name": "kind",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "source_url": {
+          "name": "source_url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "calendar_events_budget_version_id_budget_versions_id_fk": {
+          "name": "calendar_events_budget_version_id_budget_versions_id_fk",
+          "tableFrom": "calendar_events",
+          "tableTo": "budget_versions",
+          "columnsFrom": [
+            "budget_version_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.capital_projects": {
+      "name": "capital_projects",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "budget_version_id": {
+          "name": "budget_version_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "dept_id": {
+          "name": "dept_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "amount": {
+          "name": "amount",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "amount_text": {
+          "name": "amount_text",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "amount_from_millions": {
+          "name": "amount_from_millions",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "description": {
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "category": {
+          "name": "category",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "place_tags": {
+          "name": "place_tags",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'{}'::text[]"
+        },
+        "pdf_pages": {
+          "name": "pdf_pages",
+          "type": "integer[]",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'{}'::int[]"
+        },
+        "cite": {
+          "name": "cite",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "capital_projects_budget_version_id_budget_versions_id_fk": {
+          "name": "capital_projects_budget_version_id_budget_versions_id_fk",
+          "tableFrom": "capital_projects",
+          "tableTo": "budget_versions",
+          "columnsFrom": [
+            "budget_version_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "capital_projects_dept_id_departments_id_fk": {
+          "name": "capital_projects_dept_id_departments_id_fk",
+          "tableFrom": "capital_projects",
+          "tableTo": "departments",
+          "columnsFrom": [
+            "dept_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.chunks": {
+      "name": "chunks",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "budget_version_id": {
+          "name": "budget_version_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "doc_id": {
+          "name": "doc_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "dept_id": {
+          "name": "dept_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "region": {
+          "name": "region",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "kind": {
+          "name": "kind",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'narrative'"
+        },
+        "section_type": {
+          "name": "section_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "heading": {
+          "name": "heading",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ordinal": {
+          "name": "ordinal",
+          "type": "smallint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "text": {
+          "name": "text",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "context_header": {
+          "name": "context_header",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "pdf_page": {
+          "name": "pdf_page",
+          "type": "smallint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "page_end": {
+          "name": "page_end",
+          "type": "smallint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "printed_page": {
+          "name": "printed_page",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "parent_section_id": {
+          "name": "parent_section_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "linked_tables": {
+          "name": "linked_tables",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'{}'::text[]"
+        },
+        "embedding": {
+          "name": "embedding",
+          "type": "vector(1024)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "tsv": {
+          "name": "tsv",
+          "type": "tsvector",
+          "primaryKey": false,
+          "notNull": false,
+          "generated": {
+            "as": "to_tsvector('english', \"chunks\".\"context_header\" || ' ' || \"chunks\".\"text\")",
+            "type": "stored"
+          }
+        }
+      },
+      "indexes": {
+        "chunks_embedding": {
+          "name": "chunks_embedding",
+          "columns": [
+            {
+              "expression": "embedding",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last",
+              "opclass": "vector_cosine_ops"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "hnsw",
+          "with": {}
+        },
+        "chunks_tsv": {
+          "name": "chunks_tsv",
+          "columns": [
+            {
+              "expression": "tsv",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "gin",
+          "with": {}
+        },
+        "chunks_dept": {
+          "name": "chunks_dept",
+          "columns": [
+            {
+              "expression": "dept_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "chunks_budget_version_id_budget_versions_id_fk": {
+          "name": "chunks_budget_version_id_budget_versions_id_fk",
+          "tableFrom": "chunks",
+          "tableTo": "budget_versions",
+          "columnsFrom": [
+            "budget_version_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "chunks_doc_id_documents_id_fk": {
+          "name": "chunks_doc_id_documents_id_fk",
+          "tableFrom": "chunks",
+          "tableTo": "documents",
+          "columnsFrom": [
+            "doc_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "chunks_dept_id_departments_id_fk": {
+          "name": "chunks_dept_id_departments_id_fk",
+          "tableFrom": "chunks",
+          "tableTo": "departments",
+          "columnsFrom": [
+            "dept_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.concepts": {
+      "name": "concepts",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "budget_version_id": {
+          "name": "budget_version_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "kind": {
+          "name": "kind",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "label": {
+          "name": "label",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "code": {
+          "name": "code",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "dept_ids": {
+          "name": "dept_ids",
+          "type": "integer[]",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'{}'::int[]"
+        },
+        "occurrences": {
+          "name": "occurrences",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "gloss": {
+          "name": "gloss",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "gloss_reviewed": {
+          "name": "gloss_reviewed",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "embedding": {
+          "name": "embedding",
+          "type": "vector(1024)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "tsv": {
+          "name": "tsv",
+          "type": "tsvector",
+          "primaryKey": false,
+          "notNull": false,
+          "generated": {
+            "as": "to_tsvector('english', \"concepts\".\"label\" || ' ' || coalesce(\"concepts\".\"gloss\", ''))",
+            "type": "stored"
+          }
+        }
+      },
+      "indexes": {
+        "concepts_embedding": {
+          "name": "concepts_embedding",
+          "columns": [
+            {
+              "expression": "embedding",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last",
+              "opclass": "vector_cosine_ops"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "hnsw",
+          "with": {}
+        },
+        "concepts_tsv": {
+          "name": "concepts_tsv",
+          "columns": [
+            {
+              "expression": "tsv",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "gin",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "concepts_budget_version_id_budget_versions_id_fk": {
+          "name": "concepts_budget_version_id_budget_versions_id_fk",
+          "tableFrom": "concepts",
+          "tableTo": "budget_versions",
+          "columnsFrom": [
+            "budget_version_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.departments": {
+      "name": "departments",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "budget_version_id": {
+          "name": "budget_version_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "slug": {
+          "name": "slug",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "short_name": {
+          "name": "short_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "section": {
+          "name": "section",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "parent_id": {
+          "name": "parent_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "aliases": {
+          "name": "aliases",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'{}'::text[]"
+        }
+      },
+      "indexes": {
+        "departments_version_slug": {
+          "name": "departments_version_slug",
+          "columns": [
+            {
+              "expression": "budget_version_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "slug",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "departments_budget_version_id_budget_versions_id_fk": {
+          "name": "departments_budget_version_id_budget_versions_id_fk",
+          "tableFrom": "departments",
+          "tableTo": "budget_versions",
+          "columnsFrom": [
+            "budget_version_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.dept_crosswalk": {
+      "name": "dept_crosswalk",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "budget_version_id": {
+          "name": "budget_version_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "dept_id": {
+          "name": "dept_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "summary_pdf_page_start": {
+          "name": "summary_pdf_page_start",
+          "type": "smallint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "summary_pdf_page_end": {
+          "name": "summary_pdf_page_end",
+          "type": "smallint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "detailed_page_prefix": {
+          "name": "detailed_page_prefix",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "org_codes": {
+          "name": "org_codes",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'{}'::text[]"
+        },
+        "fund_codes": {
+          "name": "fund_codes",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'{}'::text[]"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "dept_crosswalk_budget_version_id_budget_versions_id_fk": {
+          "name": "dept_crosswalk_budget_version_id_budget_versions_id_fk",
+          "tableFrom": "dept_crosswalk",
+          "tableTo": "budget_versions",
+          "columnsFrom": [
+            "budget_version_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "dept_crosswalk_dept_id_departments_id_fk": {
+          "name": "dept_crosswalk_dept_id_departments_id_fk",
+          "tableFrom": "dept_crosswalk",
+          "tableTo": "departments",
+          "columnsFrom": [
+            "dept_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.dept_summary": {
+      "name": "dept_summary",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "budget_version_id": {
+          "name": "budget_version_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "dept_id": {
+          "name": "dept_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "metric": {
+          "name": "metric",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "label": {
+          "name": "label",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "group_name": {
+          "name": "group_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "actual_2025": {
+          "name": "actual_2025",
+          "type": "numeric(14, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "adopted_2026": {
+          "name": "adopted_2026",
+          "type": "numeric(14, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "requested_2027": {
+          "name": "requested_2027",
+          "type": "numeric(14, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "proposed_2027": {
+          "name": "proposed_2027",
+          "type": "numeric(14, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "change_vs_adopted": {
+          "name": "change_vs_adopted",
+          "type": "numeric(14, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "change_vs_requested": {
+          "name": "change_vs_requested",
+          "type": "numeric(14, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "flags": {
+          "name": "flags",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'{}'::text[]"
+        },
+        "label_wrapped": {
+          "name": "label_wrapped",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "cite": {
+          "name": "cite",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "dept_summary_budget_version_id_budget_versions_id_fk": {
+          "name": "dept_summary_budget_version_id_budget_versions_id_fk",
+          "tableFrom": "dept_summary",
+          "tableTo": "budget_versions",
+          "columnsFrom": [
+            "budget_version_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "dept_summary_dept_id_departments_id_fk": {
+          "name": "dept_summary_dept_id_departments_id_fk",
+          "tableFrom": "dept_summary",
+          "tableTo": "departments",
+          "columnsFrom": [
+            "dept_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.documents": {
+      "name": "documents",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "budget_version_id": {
+          "name": "budget_version_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "kind": {
+          "name": "kind",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "title": {
+          "name": "title",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "file_path": {
+          "name": "file_path",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "source_url": {
+          "name": "source_url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "page_offset": {
+          "name": "page_offset",
+          "type": "smallint",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "documents_budget_version_id_budget_versions_id_fk": {
+          "name": "documents_budget_version_id_budget_versions_id_fk",
+          "tableFrom": "documents",
+          "tableTo": "budget_versions",
+          "columnsFrom": [
+            "budget_version_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.embedding_cache": {
+      "name": "embedding_cache",
+      "schema": "",
+      "columns": {
+        "hash": {
+          "name": "hash",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "model": {
+          "name": "model",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "input_type": {
+          "name": "input_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "embedding": {
+          "name": "embedding",
+          "type": "vector(1024)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.fees": {
+      "name": "fees",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "budget_version_id": {
+          "name": "budget_version_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "fee": {
+          "name": "fee",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "unit": {
+          "name": "unit",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "value_2026": {
+          "name": "value_2026",
+          "type": "numeric(12, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "value_2027": {
+          "name": "value_2027",
+          "type": "numeric(12, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pct_change": {
+          "name": "pct_change",
+          "type": "numeric(6, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "revenue_2027": {
+          "name": "revenue_2027",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "is_derived": {
+          "name": "is_derived",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "source_text": {
+          "name": "source_text",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "narrative_revenue": {
+          "name": "narrative_revenue",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "reviewed_by": {
+          "name": "reviewed_by",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cite": {
+          "name": "cite",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "fees_budget_version_id_budget_versions_id_fk": {
+          "name": "fees_budget_version_id_budget_versions_id_fk",
+          "tableFrom": "fees",
+          "tableTo": "budget_versions",
+          "columnsFrom": [
+            "budget_version_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.fte_summary": {
+      "name": "fte_summary",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "budget_version_id": {
+          "name": "budget_version_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "funding": {
+          "name": "funding",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "label": {
+          "name": "label",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "group_name": {
+          "name": "group_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "is_division_subtotal": {
+          "name": "is_division_subtotal",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "adopted_2026": {
+          "name": "adopted_2026",
+          "type": "numeric(10, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "requested_2027": {
+          "name": "requested_2027",
+          "type": "numeric(10, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "proposed_2027": {
+          "name": "proposed_2027",
+          "type": "numeric(10, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "change_vs_adopted": {
+          "name": "change_vs_adopted",
+          "type": "numeric(10, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "change_vs_requested": {
+          "name": "change_vs_requested",
+          "type": "numeric(10, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cite": {
+          "name": "cite",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "fte_summary_budget_version_id_budget_versions_id_fk": {
+          "name": "fte_summary_budget_version_id_budget_versions_id_fk",
+          "tableFrom": "fte_summary",
+          "tableTo": "budget_versions",
+          "columnsFrom": [
+            "budget_version_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.glossary": {
+      "name": "glossary",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "budget_version_id": {
+          "name": "budget_version_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "term": {
+          "name": "term",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "plain_definition": {
+          "name": "plain_definition",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "why_it_matters": {
+          "name": "why_it_matters",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cite_text": {
+          "name": "cite_text",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "aliases": {
+          "name": "aliases",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'{}'::text[]"
+        },
+        "definition_source": {
+          "name": "definition_source",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "also_cite": {
+          "name": "also_cite",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "reviewed_by": {
+          "name": "reviewed_by",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cite": {
+          "name": "cite",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "glossary_budget_version_id_budget_versions_id_fk": {
+          "name": "glossary_budget_version_id_budget_versions_id_fk",
+          "tableFrom": "glossary",
+          "tableTo": "budget_versions",
+          "columnsFrom": [
+            "budget_version_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.kpis": {
+      "name": "kpis",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "budget_version_id": {
+          "name": "budget_version_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "dept_id": {
+          "name": "dept_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "measure": {
+          "name": "measure",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "group_name": {
+          "name": "group_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "col_labels": {
+          "name": "col_labels",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "values": {
+          "name": "values",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "footnote": {
+          "name": "footnote",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "flags": {
+          "name": "flags",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'{}'::text[]"
+        },
+        "cite": {
+          "name": "cite",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "kpis_budget_version_id_budget_versions_id_fk": {
+          "name": "kpis_budget_version_id_budget_versions_id_fk",
+          "tableFrom": "kpis",
+          "tableTo": "budget_versions",
+          "columnsFrom": [
+            "budget_version_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "kpis_dept_id_departments_id_fk": {
+          "name": "kpis_dept_id_departments_id_fk",
+          "tableFrom": "kpis",
+          "tableTo": "departments",
+          "columnsFrom": [
+            "dept_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.line_items": {
+      "name": "line_items",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "budget_version_id": {
+          "name": "budget_version_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "dept_id": {
+          "name": "dept_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "row_type": {
+          "name": "row_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "block": {
+          "name": "block",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "fund": {
+          "name": "fund",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "org": {
+          "name": "org",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "sbcl": {
+          "name": "sbcl",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "account": {
+          "name": "account",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "category": {
+          "name": "category",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hierarchy_path": {
+          "name": "hierarchy_path",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'{}'::text[]"
+        },
+        "description": {
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description_raw": {
+          "name": "description_raw",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "pay_range": {
+          "name": "pay_range",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "actual_2025": {
+          "name": "actual_2025",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "adopted_2026_units": {
+          "name": "adopted_2026_units",
+          "type": "numeric(10, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "adopted_2026": {
+          "name": "adopted_2026",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "requested_2027_units": {
+          "name": "requested_2027_units",
+          "type": "numeric(10, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "requested_2027": {
+          "name": "requested_2027",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "proposed_2027_units": {
+          "name": "proposed_2027_units",
+          "type": "numeric(10, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "proposed_2027": {
+          "name": "proposed_2027",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "section": {
+          "name": "section",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "is_subtotal": {
+          "name": "is_subtotal",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "is_unit_total": {
+          "name": "is_unit_total",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "is_position": {
+          "name": "is_position",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "is_deduction": {
+          "name": "is_deduction",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "footnote_flag": {
+          "name": "footnote_flag",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "footnote_codes": {
+          "name": "footnote_codes",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'{}'::text[]"
+        },
+        "flags": {
+          "name": "flags",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'{}'::text[]"
+        },
+        "note": {
+          "name": "note",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cite": {
+          "name": "cite",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "line_items_dept": {
+          "name": "line_items_dept",
+          "columns": [
+            {
+              "expression": "dept_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "line_items_account": {
+          "name": "line_items_account",
+          "columns": [
+            {
+              "expression": "account",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "line_items_budget_version_id_budget_versions_id_fk": {
+          "name": "line_items_budget_version_id_budget_versions_id_fk",
+          "tableFrom": "line_items",
+          "tableTo": "budget_versions",
+          "columnsFrom": [
+            "budget_version_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "line_items_dept_id_departments_id_fk": {
+          "name": "line_items_dept_id_departments_id_fk",
+          "tableFrom": "line_items",
+          "tableTo": "departments",
+          "columnsFrom": [
+            "dept_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.mprop_parcels": {
+      "name": "mprop_parcels",
+      "schema": "",
+      "columns": {
+        "taxkey": {
+          "name": "taxkey",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "yr_assmt": {
+          "name": "yr_assmt",
+          "type": "smallint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "house_nr_lo": {
+          "name": "house_nr_lo",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "house_nr_hi": {
+          "name": "house_nr_hi",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "house_nr_sfx": {
+          "name": "house_nr_sfx",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "sdir": {
+          "name": "sdir",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "street": {
+          "name": "street",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "sttype": {
+          "name": "sttype",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "unit": {
+          "name": "unit",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "c_a_total": {
+          "name": "c_a_total",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "c_a_exm_total": {
+          "name": "c_a_exm_total",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "p_a_total": {
+          "name": "p_a_total",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "p_a_exm_total": {
+          "name": "p_a_exm_total",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "c_a_class": {
+          "name": "c_a_class",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "land_use": {
+          "name": "land_use",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "land_use_gp": {
+          "name": "land_use_gp",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "bldg_type": {
+          "name": "bldg_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "nr_units": {
+          "name": "nr_units",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "own_ocpd": {
+          "name": "own_ocpd",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "tax_rate_cd": {
+          "name": "tax_rate_cd",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "dpw_sanitation": {
+          "name": "dpw_sanitation",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "geo_alder": {
+          "name": "geo_alder",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "lot_area": {
+          "name": "lot_area",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "corner_lot": {
+          "name": "corner_lot",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "loaded_at": {
+          "name": "loaded_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.position_changes": {
+      "name": "position_changes",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "budget_version_id": {
+          "name": "budget_version_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "dept_id": {
+          "name": "dept_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "positions": {
+          "name": "positions",
+          "type": "numeric(10, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "om_ftes": {
+          "name": "om_ftes",
+          "type": "numeric(10, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "non_om_ftes": {
+          "name": "non_om_ftes",
+          "type": "numeric(10, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "title": {
+          "name": "title",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "section": {
+          "name": "section",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "group_name": {
+          "name": "group_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "reason": {
+          "name": "reason",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "reason_category": {
+          "name": "reason_category",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "is_total": {
+          "name": "is_total",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "merged_with_previous": {
+          "name": "merged_with_previous",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "cite": {
+          "name": "cite",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "position_changes_budget_version_id_budget_versions_id_fk": {
+          "name": "position_changes_budget_version_id_budget_versions_id_fk",
+          "tableFrom": "position_changes",
+          "tableTo": "budget_versions",
+          "columnsFrom": [
+            "budget_version_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "position_changes_dept_id_departments_id_fk": {
+          "name": "position_changes_dept_id_departments_id_fk",
+          "tableFrom": "position_changes",
+          "tableTo": "departments",
+          "columnsFrom": [
+            "dept_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.position_lines": {
+      "name": "position_lines",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "budget_version_id": {
+          "name": "budget_version_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "line_item_id": {
+          "name": "line_item_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "dept_id": {
+          "name": "dept_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "title": {
+          "name": "title",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "footnote_codes": {
+          "name": "footnote_codes",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'{}'::text[]"
+        },
+        "pay_range": {
+          "name": "pay_range",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hierarchy_path": {
+          "name": "hierarchy_path",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'{}'::text[]"
+        },
+        "adopted_2026_units": {
+          "name": "adopted_2026_units",
+          "type": "numeric(10, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "adopted_2026": {
+          "name": "adopted_2026",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "requested_2027_units": {
+          "name": "requested_2027_units",
+          "type": "numeric(10, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "requested_2027": {
+          "name": "requested_2027",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "proposed_2027_units": {
+          "name": "proposed_2027_units",
+          "type": "numeric(10, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "proposed_2027": {
+          "name": "proposed_2027",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cite": {
+          "name": "cite",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "position_lines_title": {
+          "name": "position_lines_title",
+          "columns": [
+            {
+              "expression": "title",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "position_lines_budget_version_id_budget_versions_id_fk": {
+          "name": "position_lines_budget_version_id_budget_versions_id_fk",
+          "tableFrom": "position_lines",
+          "tableTo": "budget_versions",
+          "columnsFrom": [
+            "budget_version_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "position_lines_line_item_id_line_items_id_fk": {
+          "name": "position_lines_line_item_id_line_items_id_fk",
+          "tableFrom": "position_lines",
+          "tableTo": "line_items",
+          "columnsFrom": [
+            "line_item_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "position_lines_dept_id_departments_id_fk": {
+          "name": "position_lines_dept_id_departments_id_fk",
+          "tableFrom": "position_lines",
+          "tableTo": "departments",
+          "columnsFrom": [
+            "dept_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.positions_summary": {
+      "name": "positions_summary",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "budget_version_id": {
+          "name": "budget_version_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "dept_id": {
+          "name": "dept_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "label": {
+          "name": "label",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "group_name": {
+          "name": "group_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "is_division_subtotal": {
+          "name": "is_division_subtotal",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "adopted_2026": {
+          "name": "adopted_2026",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "requested_2027": {
+          "name": "requested_2027",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "proposed_2027": {
+          "name": "proposed_2027",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "change_vs_adopted": {
+          "name": "change_vs_adopted",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "change_vs_requested": {
+          "name": "change_vs_requested",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cite": {
+          "name": "cite",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "positions_summary_budget_version_id_budget_versions_id_fk": {
+          "name": "positions_summary_budget_version_id_budget_versions_id_fk",
+          "tableFrom": "positions_summary",
+          "tableTo": "budget_versions",
+          "columnsFrom": [
+            "budget_version_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "positions_summary_dept_id_departments_id_fk": {
+          "name": "positions_summary_dept_id_departments_id_fk",
+          "tableFrom": "positions_summary",
+          "tableTo": "departments",
+          "columnsFrom": [
+            "dept_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.revenues": {
+      "name": "revenues",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "budget_version_id": {
+          "name": "budget_version_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "source": {
+          "name": "source",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "is_total": {
+          "name": "is_total",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "account": {
+          "name": "account",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "fund": {
+          "name": "fund",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "dept_id": {
+          "name": "dept_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "category": {
+          "name": "category",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "subcategory": {
+          "name": "subcategory",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "line": {
+          "name": "line",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "actual_2025": {
+          "name": "actual_2025",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "adopted_2026": {
+          "name": "adopted_2026",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "requested_2027": {
+          "name": "requested_2027",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "proposed_2027": {
+          "name": "proposed_2027",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cite": {
+          "name": "cite",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "revenues_budget_version_id_budget_versions_id_fk": {
+          "name": "revenues_budget_version_id_budget_versions_id_fk",
+          "tableFrom": "revenues",
+          "tableTo": "budget_versions",
+          "columnsFrom": [
+            "budget_version_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "revenues_dept_id_departments_id_fk": {
+          "name": "revenues_dept_id_departments_id_fk",
+          "tableFrom": "revenues",
+          "tableTo": "departments",
+          "columnsFrom": [
+            "dept_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.section_comparisons": {
+      "name": "section_comparisons",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "budget_version_id": {
+          "name": "budget_version_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "section": {
+          "name": "section",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "group_path": {
+          "name": "group_path",
+          "type": "text[]",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'{}'::text[]"
+        },
+        "line": {
+          "name": "line",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "adopted_2026": {
+          "name": "adopted_2026",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "requested_2027": {
+          "name": "requested_2027",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "proposed_2027": {
+          "name": "proposed_2027",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "change_vs_adopted": {
+          "name": "change_vs_adopted",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "change_vs_requested": {
+          "name": "change_vs_requested",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cite": {
+          "name": "cite",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "section_comparisons_budget_version_id_budget_versions_id_fk": {
+          "name": "section_comparisons_budget_version_id_budget_versions_id_fk",
+          "tableFrom": "section_comparisons",
+          "tableTo": "budget_versions",
+          "columnsFrom": [
+            "budget_version_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.section_totals": {
+      "name": "section_totals",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "budget_version_id": {
+          "name": "budget_version_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "section": {
+          "name": "section",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "label": {
+          "name": "label",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "line": {
+          "name": "line",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "adopted_2026": {
+          "name": "adopted_2026",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "proposed_2027": {
+          "name": "proposed_2027",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "change": {
+          "name": "change",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "tax_rate_2026": {
+          "name": "tax_rate_2026",
+          "type": "numeric(8, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "tax_rate_2027": {
+          "name": "tax_rate_2027",
+          "type": "numeric(8, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "tax_rate_change": {
+          "name": "tax_rate_change",
+          "type": "numeric(8, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cite": {
+          "name": "cite",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "section_totals_budget_version_id_budget_versions_id_fk": {
+          "name": "section_totals_budget_version_id_budget_versions_id_fk",
+          "tableFrom": "section_totals",
+          "tableTo": "budget_versions",
+          "columnsFrom": [
+            "budget_version_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.services": {
+      "name": "services",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "budget_version_id": {
+          "name": "budget_version_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "dept_id": {
+          "name": "dept_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "operating": {
+          "name": "operating",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "capital": {
+          "name": "capital",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "grant": {
+          "name": "grant",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ftes": {
+          "name": "ftes",
+          "type": "numeric(10, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "is_total": {
+          "name": "is_total",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "cite": {
+          "name": "cite",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "services_budget_version_id_budget_versions_id_fk": {
+          "name": "services_budget_version_id_budget_versions_id_fk",
+          "tableFrom": "services",
+          "tableTo": "budget_versions",
+          "columnsFrom": [
+            "budget_version_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "services_dept_id_departments_id_fk": {
+          "name": "services_dept_id_departments_id_fk",
+          "tableFrom": "services",
+          "tableTo": "departments",
+          "columnsFrom": [
+            "dept_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {},
+  "schemas": {},
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}

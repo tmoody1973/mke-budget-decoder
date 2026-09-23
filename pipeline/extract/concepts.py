@@ -45,8 +45,13 @@ def build() -> list[dict]:
     body = li[~li.section.isin(["430", "480"])]
     add("account", body[body.row_type == "account"], ["account", "description"], code_col="account")
     add("position_title", body[body.row_type == "position"], ["description"])
+    # Detailed headings often wrap over two lines ('1. BUDGET FOR PROVISIONS FOR' / 'EMPLOYEE
+    # RETIREMENT'); a half is not a program name, and it adds noise to every concept search.
+    fragment = (body.description.str.contains(r"(?:\b(?:FOR|OF|AND|THE|TO|BUDGETARY)|-|–)\s*$", case=False, regex=True)
+                | body.description.str.upper().str.startswith("TOTAL")
+                | body["flags"].map(lambda f: any(str(x).startswith("label_wraps") for x in f)))
     heads = body[(body.row_type == "heading") & ~body.description.str.upper().isin(CATEGORY_WORDS)
-                 & ~body.description.str.contains(r"BCU|SUMMARY", regex=True)]
+                 & ~body.description.str.contains(r"BCU|SUMMARY", regex=True) & ~fragment]
     add("org_unit", heads, ["description"])
     cap = li[(li.section == "480") & li.row_type.isin(["account", "item"])]
     add("capital_line", cap, ["description"], code_col="account")

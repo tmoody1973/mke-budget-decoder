@@ -12,7 +12,8 @@
     "typecheck": "next typegen && tsc --noEmit",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
-    "db:load": "tsx scripts/load.ts"
+    "db:load": "tsx scripts/load.ts && tsx scripts/embed.ts",
+    "db:embed": "tsx scripts/embed.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.8.0",

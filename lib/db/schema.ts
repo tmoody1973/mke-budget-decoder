@@ -44,7 +44,7 @@ const money = (name: string) => bigint(name, { mode: 'number' })
 const fte = (name: string) => numeric(name, { precision: 10, scale: 2 })
 const cite = () => jsonb('cite').$type<Cite>().notNull()
 
-// Voyage embeddings default to 1024 dims; confirm the model in P1.10 (open-questions).
+// voyage-4 default output is 1024 dims (docs.voyageai.com/docs/embeddings, checked 2026-09-23).
 const EMBEDDING_DIMS = 1024
 
 export const budgetVersions = pgTable('budget_versions', {
@@ -439,6 +439,16 @@ export const calendarEvents = pgTable('calendar_events', {
   title: text('title').notNull(),
   kind: text('kind', { enum: ['hearing', 'amendment_day', 'adoption', 'deadline'] }).notNull(),
   sourceUrl: text('source_url').notNull(),
+})
+
+// Embeddings keyed by a fingerprint of (model, input_type, text), not by row: reloads rewrite
+// rows (D14), and the cache refills their vectors without calling the API again.
+export const embeddingCache = pgTable('embedding_cache', {
+  hash: text('hash').primaryKey(), // sha256(model | input_type | text)
+  model: text('model').notNull(),
+  inputType: text('input_type').notNull(),
+  embedding: vector('embedding', { dimensions: EMBEDDING_DIMS }).notNull(),
+  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
 })
 
 // v2 (P5) — table exists so the Adopted load needs no migration.

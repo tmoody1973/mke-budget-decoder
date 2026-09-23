@@ -40,6 +40,7 @@ Stored as printed, flagged on the row; none of these are "fixed" by the parser.
 
 ## 2026-09-23 — P1.10
 
-- **Embeddings not loaded.** `chunks.embedding` and `concepts.embedding` are NULL: no Voyage AI key in `.env.local` yet. Full-text search (`tsv`) works now (tested). Needed: a `VOYAGE_API_KEY`, and confirmation of the Voyage model (the schema assumes 1,024 dimensions). Cost for ~2,500 short texts should be well under a dollar, but check current Voyage pricing before running.
+- ~~Embeddings not loaded.~~ **Resolved 2026-09-23:** `voyage-4` (1,024 dims, matches the schema). 2,463 unique texts cost 85,937 tokens, inside the 200M free tier ($0). Vectors are kept in `embedding_cache`, keyed by sha256(model | input_type | text), so a reload only pays for text that changed. `pnpm db:load` now embeds at the end. Checked by `lib/db/embeddings.test.ts`.
+- **Concept labels: one wrapped heading half survives** (`1. BUDGET FOR COUNTY`). The fragment filter in `extract/concepts.py` catches headings that end in FOR/OF/AND or a hyphen; this one ends in a noun. Harmless to search, but it's not a real program name.
 - **Row ids are not stable across reloads** (D14). Anything outside the database (Boards, share links) must refer to rows by citation, not by id.
 - **pg warns that `sslmode=require` will change meaning in pg v9.** Current behaviour is `verify-full` (strict). Setting `sslmode=verify-full` explicitly in DATABASE_URL keeps it and silences the warning; not changed yet because it's the credentials file.
