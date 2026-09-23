@@ -58,3 +58,5 @@ Snapshot: data.milwaukee.gov resource 0a2c7f31…, 159,949 parcels, taken 2026-0
 - **417 manufacturing parcels (class 3) and 394 with no class have `C_A_TOTAL` = 0.** Manufacturing is state-assessed: "can't estimate", per docs/07.
 - **`TAX_RATE_CD` is the county** (Milwaukee, Washington, Waukesha). The city rate is the same in all three; the receipt is city-only.
 - **The owner-occupied count (97,461 of 159,949 parcels) is not the renter share of residents.** Quote ACS (the Census Bureau's American Community Survey) for that, per docs/07 §1.
+- **Starting view for a non-owner-occupied building (decided 2026-09-23, Tarik):** ask with two buttons, "I own this" / "I rent here", instead of docs/07 §4's landlord default. Most people typing an address into a news-linked tool are likely renters; one tap is never wrong.
+- **Rate limiting is in-memory per server instance** (`lib/rate-limit.ts`): 60 address searches and 20 receipts per visitor per minute. Before launch, add a Vercel Firewall rate-limit rule so the cap holds across instances.

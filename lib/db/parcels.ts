@@ -37,9 +37,10 @@ export function normalizeAddress(input: string): NormalizedAddress {
 }
 
 export type AddressMatch = {
-  taxkey: string
+  taxkey: string | null // null when several parcels share the address (condos): no unit field to pick one
   address: string // as MPROP writes it, with the range when the parcel spans several numbers
   exactNumber: boolean // the typed house number falls inside this parcel's range
+  parcels: number // how many parcels share this address
 }
 
 /** Up to `limit` parcels that look like the typed address: exact house-number matches first,
@@ -47,17 +48,20 @@ export type AddressMatch = {
 export async function searchAddresses(db: Db, input: string, limit = 8): Promise<AddressMatch[]> {
   const { houseNr, street } = normalizeAddress(input)
   if (street.length < 3) return []
+  // Repeated addresses (condo units) collapse to one row: 1300 N Prospect Av has 312 parcels.
   const rows = await db.execute(sql`
-    select taxkey, house_nr_lo, house_nr_hi, house_nr_sfx, sdir, street, sttype,
-           (${houseNr}::int is not null and ${houseNr}::int between house_nr_lo and house_nr_hi) as exact
+    select min(taxkey) as taxkey, count(*)::int as n, house_nr_lo, house_nr_hi, house_nr_sfx, sdir, street, sttype,
+           (${houseNr}::int is not null and ${houseNr}::int between house_nr_lo and house_nr_hi) as exact,
+           max(word_similarity(${street}, address)) as sim
     from parcels
     where ${street} <% address
-    order by exact desc, word_similarity(${street}, address) desc,
-             abs(house_nr_lo - coalesce(${houseNr}::int, house_nr_lo)), house_nr_lo, taxkey
+    group by house_nr_lo, house_nr_hi, house_nr_sfx, sdir, street, sttype
+    order by exact desc, sim desc, abs(house_nr_lo - coalesce(${houseNr}::int, house_nr_lo)), house_nr_lo
     limit ${limit}`)
   return (rows.rows as Record<string, string | number | boolean | null>[]).map((r) => {
     const num = r.house_nr_hi !== r.house_nr_lo ? `${r.house_nr_lo}-${r.house_nr_hi}` : String(r.house_nr_lo)
     const parts = [`${num}${r.house_nr_sfx ?? ''}`, r.sdir, r.street, r.sttype].filter(Boolean)
-    return { taxkey: String(r.taxkey), address: parts.join(' '), exactNumber: Boolean(r.exact) }
+    const n = Number(r.n)
+    return { taxkey: n === 1 ? String(r.taxkey) : null, address: parts.join(' '), exactNumber: Boolean(r.exact), parcels: n }
   })
 }

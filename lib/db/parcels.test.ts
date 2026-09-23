@@ -32,7 +32,7 @@ describe.skipIf(!url)('searchAddresses (Neon)', () => {
 
   it('finds the exact parcel for a full address', async () => {
     const [first] = await searchAddresses(db, '2401 W Wisconsin Ave')
-    expect(first).toEqual({ taxkey: '4000708100', address: '2401 W WISCONSIN AV', exactNumber: true })
+    expect(first).toEqual({ taxkey: '4000708100', address: '2401 W WISCONSIN AV', exactNumber: true, parcels: 1 })
   })
 
   it('tolerates a typo and a missing street type', async () => {
@@ -57,6 +57,12 @@ describe.skipIf(!url)('searchAddresses (Neon)', () => {
 
   it('returns only address and taxkey, never assessment or owner data', async () => {
     const [first] = await searchAddresses(db, '2401 W Wisconsin Ave')
-    expect(Object.keys(first).sort()).toEqual(['address', 'exactNumber', 'taxkey'])
+    expect(Object.keys(first).sort()).toEqual(['address', 'exactNumber', 'parcels', 'taxkey'])
+  })
+
+  it('collapses a condo building to one row with no taxkey', async () => {
+    const [first] = await searchAddresses(db, '1300 n prospect ave')
+    expect(first).toMatchObject({ address: '1300 N PROSPECT AV', taxkey: null, exactNumber: true })
+    expect(first.parcels).toBeGreaterThan(300)
   })
 })
