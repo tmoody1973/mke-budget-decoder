@@ -20,7 +20,7 @@ function fold(line: string): string {
 }
 
 export function buildIcs(events: CivicEvent[], stamp = new Date()): string {
-  const lines = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//MKE Budget Decoder//2027 budget calendar//EN', 'CALSCALE:GREGORIAN',
+  const lines = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Milwaukee Budget Decoder//2027 budget calendar//EN', 'CALSCALE:GREGORIAN',
     'X-WR-CALNAME:Milwaukee 2027 budget: take part']
   for (const e of events) {
     const allDay = !e.start.includes('T')

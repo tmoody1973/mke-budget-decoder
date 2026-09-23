@@ -18,6 +18,7 @@ const C = { ink: '#1a2b49', inkSoft: '#404d66', band: '#fdbe45', bandDeep: '#df9
 const APP_URL = 'mke-budget-decoder.vercel.app'
 const W = 1080, H = 1350, PAPER_W = 800
 
+const logo = readFile(join(process.cwd(), 'assets/logo-160.png')).then((b) => `data:image/png;base64,${b.toString('base64')}`)
 const fonts = Promise.all(['Regular', 'Bold'].map((w) => readFile(join(process.cwd(), `assets/fonts/IBMPlexMono-${w}.ttf`))))
 
 const money = (c: number) => (c / 100).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
@@ -58,7 +59,7 @@ const Barcode = ({ seed }: { seed: number }) => (
   </div>
 )
 
-function ReceiptImage({ r }: { r: Estimate }) {
+function ReceiptImage({ r, logoSrc }: { r: Estimate; logoSrc: string }) {
   const renter = r.view === 'renter'
   const change = renter ? r.perMonth.c2027 - r.perMonth.c2026 : r.total.c2027 - r.total.c2026
   return (
@@ -67,7 +68,11 @@ function ReceiptImage({ r }: { r: Estimate }) {
       <div style={{ display: 'flex', flexDirection: 'column', boxShadow: '0 18px 40px rgba(26,43,73,0.28)' }}>
         <Torn />
         <div style={{ display: 'flex', flexDirection: 'column', width: PAPER_W, background: C.paper, padding: '22px 52px 24px' }}>
-          <Center size={40} bold>MKE BUDGET DECODER</Center>
+          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 2 }}>
+            {/* eslint-disable-next-line @next/next/no-img-element -- rendered by the image generator, not the browser */}
+            <img src={logoSrc} width={60} height={60} alt="" />
+          </div>
+          <Center size={36} bold>MILWAUKEE BUDGET DECODER</Center>
           <Center size={25}>CITY RECEIPT · MILWAUKEE, WI</Center>
           <Center size={22}>ESTIMATE · MAYOR’S PROPOSED 2027 BUDGET</Center>
           <Rule />
@@ -109,8 +114,8 @@ export async function POST(req: Request) {
   const r = await receiptFromBody((await req.json().catch(() => null)) as Record<string, unknown> | null)
   if ('error' in r) return Response.json({ error: r.error }, { status: r.status })
   if (r.receipt.kind !== 'estimate') return Response.json({ error: 'This property has no city receipt estimate to share.' }, { status: 400 })
-  const [regular, bold] = await fonts
-  return new ImageResponse(<ReceiptImage r={r.receipt} />, {
+  const [[regular, bold], logoSrc] = await Promise.all([fonts, logo])
+  return new ImageResponse(<ReceiptImage r={r.receipt} logoSrc={logoSrc} />, {
     width: W, height: H,
     fonts: [{ name: 'Plex Mono', data: regular, weight: 400, style: 'normal' }, { name: 'Plex Mono', data: bold, weight: 700, style: 'normal' }],
     headers: { 'content-disposition': 'attachment; filename="my-milwaukee-city-receipt-2027.png"', 'cache-control': 'no-store' },

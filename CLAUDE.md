@@ -1,4 +1,4 @@
-# CLAUDE.md — MKE Budget Decoder (working name)
+# CLAUDE.md — Milwaukee Budget Decoder
 
 An interactive, AI-assisted guide to the City of Milwaukee **2027 Proposed Executive Budget** for residents and journalists. Users explore the budget visually and ask questions in plain language; answers come back as generative UI (charts, tables, receipts) with a citation to the exact PDF page behind every number.
 

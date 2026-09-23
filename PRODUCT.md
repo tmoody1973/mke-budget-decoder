@@ -16,7 +16,7 @@ Confirmed by Tarik, 2026-09-23. Personal project of Tarik Moody; not a Radio Mil
 
 ## Product Purpose
 
-MKE Budget Decoder makes the City of Milwaukee **2027 Proposed Executive Budget** (a 224-page summary and a 455-page line-item book, $2.26B all funds) understandable during the roughly seven weeks between the Mayor's proposal and the Common Council's vote in November. Residents explore it visually, get an estimated City Receipt for their address, and (later) ask questions in plain language. Success: a reporter finds any department's four-stage numbers with a citation in under 30 seconds on a phone; a resident learns what the budget means for their home.
+Milwaukee Budget Decoder makes the City of Milwaukee **2027 Proposed Executive Budget** (a 224-page summary and a 455-page line-item book, $2.26B all funds) understandable during the roughly seven weeks between the Mayor's proposal and the Common Council's vote in November. Residents explore it visually, get an estimated City Receipt for their address, and (later) ask questions in plain language. Success: a reporter finds any department's four-stage numbers with a citation in under 30 seconds on a phone; a resident learns what the budget means for their home.
 
 ## Positioning
 
@@ -39,7 +39,7 @@ Every number traces to the exact PDF page (and line) it came from, and the numbe
 
 ## Brand Commitments
 
-- Name on screen: **MKE Budget Decoder** (working name).
+- Name on screen: **Milwaukee Budget Decoder** (decided by Tarik, 2026-09-23; web address stays mke-budget-decoder.vercel.app). Logo: `public/logo.png`, a navy-outlined receipt with marigold bars; title set in Libre Franklin 800.
 - Voice: neutral, explanatory, never advocacy. Explains what the documents say; does not argue for or against spending choices, predict Council votes, or call decisions good or bad.
 - Not Radio Milwaukee branded. Colors and fonts live as tokens in one place so branding can be swapped later.
 
