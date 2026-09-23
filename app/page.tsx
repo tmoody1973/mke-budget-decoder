@@ -2,14 +2,17 @@
 import { AskedVsProposed, BiggestChanges, RevenueMix, SectionBudgets } from '@/components/genui/budget-tables'
 import { BoxScore, BudgetTreemap, LevyVsRate, Movers, ShowTable } from '@/components/genui/charts'
 import { Mark, NoteMark, SourcesList, sourceRegistry } from '@/components/genui/sources'
+import { InTheNews } from '@/components/civic/in-the-news'
 import { TakePart } from '@/components/civic/take-part'
 import { ReceiptBand } from '@/components/receipt/receipt-band'
 import { ReceiptFinder } from '@/components/receipt/receipt-finder'
 import { EVENTS } from '@/lib/civic/events'
+import { ARTICLES, TOPICS } from '@/lib/civic/news'
 import { BUDGET_VERSION, getDb } from '@/lib/db/client'
 import {
   getBudgetFact, getDepartmentTotals, getGcpReconciliation, getHeadline, getRevenueMix, getSectionBudgets,
 } from '@/lib/db/overview'
+import { getTopicFigures } from '@/lib/db/news'
 import type { Cite } from '@/lib/db/schema'
 import { bigDollars, pct } from '@/lib/format'
 
@@ -19,7 +22,7 @@ export const dynamic = 'force-dynamic'
 const CALENDAR: Cite = { doc: 'summary', pdf_page: 4, printed_page: 'front matter' }
 const JUMPS = [
   ['#revenue', 'Where it comes from'], ['#departments', 'Departments'], ['#changes', 'Biggest changes'], ['#taxes', 'Your property taxes'],
-  ['#take-part', 'Have your say'],
+  ['#news', 'In the news'], ['#take-part', 'Have your say'],
 ]
 
 const PanelTitle = ({ id, children }: { id: string; children: React.ReactNode }) => (
@@ -28,9 +31,10 @@ const PanelTitle = ({ id, children }: { id: string; children: React.ReactNode })
 
 export default async function Overview() {
   const db = getDb()
-  const [h, sectionRows, mixRows, deptRows, rec, deadlines] = await Promise.all([
+  const [h, sectionRows, mixRows, deptRows, rec, deadlines, topicFigures] = await Promise.all([
     getHeadline(db, BUDGET_VERSION), getSectionBudgets(db, BUDGET_VERSION), getRevenueMix(db, BUDGET_VERSION),
     getDepartmentTotals(db, BUDGET_VERSION), getGcpReconciliation(db, BUDGET_VERSION), getBudgetFact(db, BUDGET_VERSION, 'legal-deadlines'),
+    getTopicFigures(db, BUDGET_VERSION),
   ])
 
   // Number every source in reading order before rendering, so the marks and the list agree.
@@ -70,6 +74,13 @@ export default async function Overview() {
   ].map((d) => ({ id: d.id, name: d.shortName ?? d.name, fullName: d.name, change: d.change, adopted2026: d.adopted2026, proposed2027: d.proposed2027, n: d.n }))
   const levyMark = src.mark(h.levy.cite, { id: 'taxes-lead', label: 'the property tax levy and rate' })
   const levyUp = h.levy.proposed2027 > h.levy.adopted2026
+  // News topics sit before "Have your say", so their marks are numbered first.
+  const topics = TOPICS.map((t) => ({
+    id: t.id, title: t.title,
+    figures: topicFigures[t.id].map((f) => ({ ...f, n: src.mark(f.cite, { id: f.id, label: f.label.split(',')[0].toLowerCase() }) })),
+    pages: t.pages.map((p) => ({ n: src.mark(p.cite, { id: `topic-${t.id}`, label: `${t.title.toLowerCase()} coverage` }), label: p.label, printed: p.cite.printed_page })),
+    articles: ARTICLES.filter((a) => a.topics.includes(t.id)).sort((a, b) => b.date.localeCompare(a.date) || a.outlet.localeCompare(b.outlet)),
+  }))
   const deadlineMark = src.mark(deadlines.cite, { id: 'take-part-deadline', label: 'the legal deadlines' })
 
   const blocks = sectionRows.map((r) => ({ key: r.section, letter: r.section, label: r.name, short: r.short, value: r.proposed2027, levy: r.taxRate2027 > 0 }))
@@ -181,6 +192,14 @@ export default async function Overview() {
             <div className="mt-4"><ReceiptFinder /></div>
           </ReceiptBand>
         </div>
+      </section>
+
+      <section aria-labelledby="news" className="mt-16">
+        <PanelTitle id="news">What’s in the news, and what the budget says</PanelTitle>
+        <p className="mt-2 max-w-[78ch] text-sm leading-relaxed text-ink">
+          The topics local coverage leads with. Figures come from the budget documents, not from the stories; headlines link to each outlet.
+        </p>
+        <InTheNews topics={topics} />
       </section>
 
       <section aria-labelledby="take-part" className="mt-16 grid gap-10 lg:grid-cols-12 lg:gap-0">

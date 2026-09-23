@@ -1,11 +1,11 @@
 # 09 — News coverage and taking part
 
-Plan agreed with Tarik, 2026-09-23. Built in this order: (1) Take part calendar, (2) "What's in the news" topic cards, (3) "Find it in the budget" claims list, (4) topic questions feed the P3 chat.
+Plan agreed with Tarik, 2026-09-23. Status: (1) live; (2) built 2026-09-23 (`lib/civic/news.ts`, `lib/db/news.ts`; article topic tags await Tarik's review). Built in this order: (1) Take part calendar, (2) "What's in the news" topic cards, (3) "Find it in the budget" claims list, (4) topic questions feed the P3 chat.
 
 ## Sources read (2026-09-23)
 
 - FOX6, "Milwaukee mayor $2.2 billion budget proposal 2027", Bill Miston, Sept. 22, 2026.
-- WISN 12, "Milwaukee Mayor Cavalier Johnson 2027 budget proposal", Imani Fleming, Sept. 23, 2026.
+- WISN 12, "Milwaukee Mayor Cavalier Johnson 2027 budget proposal", Imani Fleming, Sept. 22, 2026 (published as "Milwaukee mayor's 2027 budget proposal includes higher parking fees").
 - Urban Milwaukee, "Mayor's budget proposal includes record amount for local streets", Jeramey Jannene, Sept. 20, 2026.
 - Common Council press release, "Common Council Seeks Public Input During 2027 Budget Process", Ald. Marina Dimitrijevic (chair, Finance and Personnel Committee), Sept. 22, 2026 (published on Urban Milwaukee).
 
