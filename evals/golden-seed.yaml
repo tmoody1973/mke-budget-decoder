@@ -1,0 +1,179 @@
+# Seed eval cases. Figures read from the 2027 Proposed Summary (printed page numbers).
+# Scoring: expected_tools (any order), expected_figures (exact after normalization), expected_pages,
+# must_include (concepts), must_not (behaviors). Expand to 50+ using docs/05-QUESTION-BANK.md.
+
+- id: A1-tax-going-up
+  persona: homeowner
+  q: "Is my property tax going up next year?"
+  expected_tools: [get_household_charges]
+  expected_figures: ["$7.61", "$7.29", "2%"]
+  expected_pages: [7]
+  must_include: [city portion only, depends on assessment change, other taxing bodies are separate]
+  must_not: [states total bill will go down, omits levy increase]
+
+- id: A2-household-fees
+  persona: homeowner
+  q: "What will the city charge my household for garbage, snow and streetlights in 2027?"
+  expected_tools: [get_household_charges]
+  expected_figures: ["$280.00", "$271.80", "$1.23", "$1.19", "$1.16", "$1.12"]
+  expected_pages: [159]
+  must_include: [defaults labeled (40 ft frontage, one cart)]
+
+- id: A3-levy-dollar
+  persona: first_time_reader
+  q: "Where does my city property tax actually go?"
+  expected_tools: [get_tax_rate_breakdown]
+  expected_figures: ["$3.05", "$2.31", "$1.80", "$7.29"]
+  expected_pages: [7]
+  must_include: [general city purposes, debt, pensions]
+
+- id: A4-police-share
+  persona: homeowner
+  q: "How much of my property tax pays for police?"
+  expected_tools: [get_tax_rate_breakdown]
+  must_include: [property tax is not earmarked by department, any department share is a labeled estimate with method]
+  must_not: [presents an allocation as an exact fact]
+
+- id: A8-911
+  persona: retiree
+  q: "Is the city cutting 911?"
+  expected_tools: [get_department, get_positions]
+  expected_figures: ["$25,770,876", "241", "230"]
+  expected_pages: [77, 80, 13]
+  must_include: [vacant positions eliminated per document, comparison point stated]
+  must_not: [predicts response times, says layoffs]
+
+- id: A10-police-officers
+  persona: parent
+  q: "Are there going to be more police officers?"
+  expected_tools: [get_department, get_budget_facts]
+  expected_figures: ["2,526", "2,585", "65"]
+  expected_pages: [13, 117]
+  must_include: [Act 12 staffing requirement, three recruit classes]
+
+- id: A12-roads
+  persona: small_business
+  q: "Is the city going to fix the roads?"
+  expected_tools: [get_capital_projects, search_budget_text]
+  expected_figures: ["$19.2 million", "$6 million"]
+  expected_pages: [6]
+  must_include: [street-level schedules not in the budget]
+
+- id: A19-sales-tax
+  persona: first_time_reader
+  q: "Where does the city sales tax money go?"
+  expected_tools: [get_revenue_breakdown]
+  expected_figures: ["$218.2 million", "$58.8 million"]
+  expected_pages: [156]
+  must_include: [police and fire, pensions]
+
+- id: A20-parking
+  persona: small_business
+  q: "Is parking getting more expensive?"
+  expected_tools: [search_budget_lines]
+  expected_figures: ["$21,000,000", "$14,000,000", "$6,000,000", "$3,350,000"]
+  expected_pages: [190]
+  must_include: [these are revenue estimates, proposed above department request for citations]
+
+- id: B1-top-changes
+  persona: city_hall_reporter
+  q: "What are the biggest changes from this year's budget?"
+  expected_tools: [top_changes]
+  expected_figures: ["$33,825,290"]
+  must_include: [scope stated, comparison is vs 2026 adopted]
+
+- id: B2-ask-vs-got
+  persona: city_hall_reporter
+  q: "How much did the Mayor cut from what departments requested?"
+  expected_tools: [ask_vs_got]
+  expected_figures: ["$33.5 million", "$878,902,850", "$846,796,205"]
+  expected_pages: [5, 8]
+
+- id: B6-reserves
+  persona: city_hall_reporter
+  q: "How much is the city pulling from reserves?"
+  expected_tools: [get_reserves]
+  expected_figures: ["$79.6 million", "$39.8 million", "$6 million", "$41,301,000"]
+  expected_pages: [5, 8]
+
+- id: B8-erip
+  persona: city_hall_reporter
+  q: "Did the state force these cuts?"
+  expected_tools: [get_budget_facts]
+  expected_figures: ["$29.6 million", "$11.6 million"]
+  expected_pages: [5]
+  must_not: [characterizes the state or Mayor as right or wrong]
+
+- id: B9-borrowing
+  persona: city_hall_reporter
+  q: "How much more is the city borrowing?"
+  expected_tools: [get_borrowing]
+  expected_figures: ["$316,607,345", "$236,708,867", "$326,623,735"]
+  expected_pages: [5, 7]
+  must_include: [final year of three-year surge]
+
+- id: B13-police-actuals
+  persona: data_reporter
+  q: "Is the police increase really $33.8 million?"
+  expected_tools: [get_department]
+  expected_figures: ["$330,680,888", "$310,111,835", "$343,937,125"]
+  expected_pages: [116]
+  must_include: [2025 actual spending exceeded 2026 adopted budget]
+
+- id: C1-overtime
+  persona: data_reporter
+  q: "Show me overtime budgets by department."
+  expected_tools: [search_budget_lines]
+  must_include: [scope, four stages, CSV export]
+
+- id: D1-radio
+  persona: radio_host
+  q: "Give me three facts about the proposed budget I can read on air."
+  expected_tools: [get_budget_overview]
+  expected_figures: ["$2,261,087,412"]
+  must_include: [attributed to the Mayor's proposal, numbers readable aloud]
+  must_not: [opinion, more than three facts]
+
+- id: E4-rate-claim
+  persona: fact_checker
+  q: "The Mayor says your tax rate is going down. True?"
+  expected_tools: [get_tax_rate_breakdown]
+  expected_figures: ["$7.61", "$7.29", "$343,557,288", "$336,820,871"]
+  must_include: [rate down, levy up, individual bill depends on assessment]
+  must_not: [verdict label like TRUE/FALSE]
+
+- id: F1-mps
+  persona: parent
+  q: "How much is MPS getting in this budget?"
+  expected_tools: []
+  must_include: [not in the city budget, separate government]
+  must_not: [any MPS figure]
+
+- id: F2-opinion
+  persona: skeptical_resident
+  q: "Should the Council cut the police budget?"
+  expected_tools: [get_department, get_budget_facts, get_calendar]
+  must_include: [relevant figures, Act 12 constraints, how to weigh in]
+  must_not: [recommendation, opinion]
+
+- id: ES-A1
+  persona: homeowner
+  lang: es
+  q: "¿Van a subir mis impuestos a la propiedad?"
+  expected_tools: [get_household_charges]
+  expected_figures: ["$7.61", "$7.29"]
+  must_include: [answer in Spanish]
+
+- id: R1-owner-receipt-math
+  persona: homeowner
+  q: "My house is assessed at $200,000 and was $188,000 last year. What will the city charge me?"
+  expected_tools: [get_household_charges]
+  expected_figures: ["$1,458.00", "$1,430.68", "$2,080.62", "$2,036.76"]
+  must_include: [city portion only, proposed not adopted, 40 ft frontage default labeled]
+
+- id: R2-renter-receipt
+  persona: renter
+  q: "I rent in a 4-unit building. What does the city charge for my apartment?"
+  expected_tools: [get_household_charges]
+  must_include: [paid by the owner, per-unit share, pass-through to rent not measured, services per resident]
+  must_not: [states a share of rent that is property tax]
