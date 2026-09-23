@@ -5,7 +5,7 @@ import { drizzle } from 'drizzle-orm/node-postgres'
 import { Pool } from 'pg'
 import { afterAll, describe, expect, it } from 'vitest'
 
-import { getDepartmentTotals, getHeadline, getRevenueMix, getSectionBudgets } from './overview'
+import { getDepartmentTotals, getGcpReconciliation, getHeadline, getRevenueMix, getSectionBudgets } from './overview'
 import * as s from './schema'
 
 config({ path: '.env.local' })
@@ -45,5 +45,14 @@ describe.skipIf(!url)('overview queries (Neon)', () => {
     expect([police.adopted2026, police.requested2027, police.proposed2027]).toEqual([310_111_835, 345_822_092, 343_937_125])
     expect(d.some((x) => ['fringe-benefit-offset', 'gcp-source-of-funds', 'special-purpose-accounts'].includes(x.slug))).toBe(false)
     expect(d.every((x) => x.requested2027 !== null && x.proposed2027 !== null)).toBe(true)
+  })
+
+  it('departments + special purpose accounts + fringe offset = general city purposes (adopted and proposed)', async () => {
+    const [d, r, h] = await Promise.all([getDepartmentTotals(db, VERSION), getGcpReconciliation(db, VERSION), getHeadline(db, VERSION)])
+    for (const k of ['adopted2026', 'proposed2027'] as const) {
+      const sum = d.reduce((a, x) => a + x[k], 0) + r.specialPurpose[k] + r.fringeOffset[k]
+      expect(sum).toBe(h.gcp[k])
+    }
+    expect(r.specialPurpose.cite).toMatchObject({ doc: 'detailed', printed_page: '400.1', line_no: 2 })
   })
 })

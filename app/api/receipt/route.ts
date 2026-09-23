@@ -1,6 +1,6 @@
 // City Receipt for one parcel (by taxkey) or for a typed-in assessed value (condos, or anyone who
 // prefers not to give an address). POST keeps the taxkey out of URL logs (docs/07 §8).
-import { BUDGET_VERSION, db } from '@/lib/db/client'
+import { BUDGET_VERSION, getDb } from '@/lib/db/client'
 import { getParcelFacts, getReceiptRates } from '@/lib/db/receipt'
 import { allow, clientKey } from '@/lib/rate-limit'
 import { computeReceipt, type ReceiptInput, type ReceiptRates } from '@/lib/receipt'
@@ -25,12 +25,12 @@ export async function POST(req: Request) {
   if (extraCarts === null) return bad('extraCarts must be 0 to 10.')
 
   try {
-    rates ??= getReceiptRates(db, BUDGET_VERSION)
+    rates ??= getReceiptRates(getDb(), BUDGET_VERSION)
     let input: ReceiptInput
     let parcel: Record<string, unknown> | null = null
     if (typeof b.taxkey === 'string') {
       if (!/^\d{10}$/.test(b.taxkey)) return bad('taxkey must be 10 digits.')
-      const facts = await getParcelFacts(db, b.taxkey)
+      const facts = await getParcelFacts(getDb(), b.taxkey)
       if (!facts) return Response.json({ error: 'No property with that tax key.' }, { status: 404 })
       const { taxkey: _t, ...rest } = facts
       input = { ...rest, view, frontageFt, extraCarts }

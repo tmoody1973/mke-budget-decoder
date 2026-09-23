@@ -101,3 +101,20 @@ export async function getDepartmentTotals(db: Db, version: string) {
       actual2025: r.actual2025 === null ? null : Number(r.actual2025) }))
     .sort((a, b) => b.proposed2027 - a.proposed2027)
 }
+
+/** The two lines that take the departments' total to general city purposes: special purpose accounts
+ *  (Detailed 400.1 line 2) and the fringe benefit offset (Summary p.155). */
+export async function getGcpReconciliation(db: Db, version: string) {
+  const v = await versionId(db, version)
+  const [spa] = await db.select().from(s.lineItems).where(and(eq(s.lineItems.budgetVersionId, v),
+    eq(s.lineItems.section, '400'), eq(s.lineItems.description, 'TOTAL SPECIAL PURPOSE ACCOUNTS')))
+  const [off] = await db.select({ adopted2026: s.deptSummary.adopted2026, proposed2027: s.deptSummary.proposed2027, cite: s.deptSummary.cite })
+    .from(s.deptSummary).innerJoin(s.departments, eq(s.deptSummary.deptId, s.departments.id))
+    .where(and(eq(s.deptSummary.budgetVersionId, v), eq(s.departments.slug, 'fringe-benefit-offset'),
+      eq(s.deptSummary.metric, 'total_expenditures')))
+  if (!spa || !off) throw new Error('special purpose accounts or fringe benefit offset total missing')
+  return {
+    specialPurpose: { adopted2026: Number(spa.adopted2026), proposed2027: Number(spa.proposed2027), cite: spa.cite },
+    fringeOffset: { adopted2026: Number(off.adopted2026), proposed2027: Number(off.proposed2027), cite: off.cite },
+  }
+}

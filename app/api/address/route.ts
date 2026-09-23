@@ -1,6 +1,6 @@
 // Address suggestions for the City Receipt. POST so the typed address stays out of URL logs
 // (docs/07 §8: typed addresses are never logged or stored).
-import { db } from '@/lib/db/client'
+import { getDb } from '@/lib/db/client'
 import { searchAddresses } from '@/lib/db/parcels'
 import { allow, clientKey } from '@/lib/rate-limit'
 
@@ -14,7 +14,7 @@ export async function POST(req: Request) {
     return Response.json({ error: 'Type at least 3 characters of a Milwaukee street address.' }, { status: 400 })
   }
   try {
-    return Response.json({ results: await searchAddresses(db, q) })
+    return Response.json({ results: await searchAddresses(getDb(), q) })
   } catch {
     console.error('address search failed') // no query text in logs
     return Response.json({ error: 'Address search is unavailable right now.' }, { status: 500 })
