@@ -536,3 +536,10 @@ export const parcels = pgTable(
     index('parcels_address_trgm_idx').using('gin', sql`${t.address} gin_trgm_ops`),
   ],
 )
+
+// Chat questions per Central-time day, for the daily spending cap (D20). The only table the app's
+// read-only role may write.
+export const chatUsage = pgTable('chat_usage', {
+  day: date('day').primaryKey(),
+  questions: integer('questions').notNull().default(0),
+})

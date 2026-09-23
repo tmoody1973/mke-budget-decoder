@@ -18,7 +18,13 @@ const TOOLS = `<tools>
 const budgetGuide = new Agent({
   id: 'budgetGuide',
   name: 'Milwaukee Budget Decoder',
-  instructions: `${systemPrompt('tool-render')}\n\n${TOOLS}`,
+  // Marked for Anthropic prompt caching: the tool list and this prompt (~6,500 tokens) are the same on
+  // every call, so repeat calls within 5 minutes read them at a tenth of the input price.
+  instructions: {
+    role: 'system',
+    content: `${systemPrompt('tool-render')}\n\n${TOOLS}`,
+    providerOptions: { anthropic: { cacheControl: { type: 'ephemeral' } } },
+  },
   model: 'anthropic/claude-sonnet-5',
   tools: { getBudgetOverview, getDepartments, getDepartmentBreakdown, searchBudgetText, getBudgetFacts, lookupGlossary, getHearingCalendar, calculate },
 })

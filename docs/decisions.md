@@ -212,3 +212,22 @@
 **How we'll know if this was right.** Visitors who open the chat do it from an "Ask about …" link or the header button and keep reading the page afterward; no reports of the panel hiding the figures they wanted.
 
 **What actually happened.**
+
+## D20 — Keep the chat under about $45 a month: caching, trimming and a daily cap
+
+**Decision.** The chat stays on Claude Sonnet 5 for now, with Anthropic prompt caching on, budget passages trimmed to the sentences that match the question, and a site-wide cap of 60 questions a day (setting `CHAT_DAILY_LIMIT`). When the cap is reached the chat says so in the conversation and points to the parts of the site that don't use AI.
+
+**Why this came up.** Tarik set a ceiling of $45 a month and asked whether a cheaper model through OpenRouter would do. Measured on 2026-09-23, one question used about 20,000 input tokens (tokens are the units models bill by, roughly three quarters of a word) and cost about 4.8 cents, because the 6,500-token instructions were resent two or three times per question. At that rate $45 bought about 950 questions a month, and one news-driven day could spend half of it.
+
+**Options.**
+1. *Switch to a cheaper model now* (Claude Haiku 4.5 at about half the price, or an OpenRouter model at a tenth to a thirtieth). Cheapest; none tested on whether it calls a lookup instead of inventing a number or stays neutral.
+2. *Cut waste on the current model and cap spending, then test cheaper models* (chosen). Caching bills the repeated instructions at a tenth of the price when questions arrive within five minutes of each other.
+3. *No cap, rely on the provider's monthly spend limit.* Simple, but the chat would stop mid-month without explanation.
+
+**What we chose and why.** Option 2 (Tarik chose; Claude recommended and built it). Measured after the change: about 1.95 cents a question on average (the first question after a quiet spell pays about 2.7 cents to store the instructions), so 60 a day is roughly $1.20 a day, about $36 a month. The counter lives in the database so the site's parallel server copies share one count; the app's read-only login may write only that table.
+
+**What we gave up.** Past 60 questions a day, visitors get no answers until tomorrow, even if they are the most engaged readers. My local testing shares the production database, so test questions count toward the day. A provider spend limit in the Anthropic console is still needed as the last backstop, and only Tarik can set it.
+
+**How we'll know if this was right.** The Anthropic bill stays under $45 in October; the `chat_usage` table shows how often the cap is hit, which tells us whether to raise it or switch models after the model comparison.
+
+**What actually happened.**

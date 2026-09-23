@@ -6,7 +6,7 @@ import { Pool } from 'pg'
 import { afterAll, describe, expect, it } from 'vitest'
 
 import * as s from './schema'
-import { anyWords, searchBudgetText } from './search'
+import { anyWords, focusPassage, searchBudgetText } from './search'
 
 config({ path: '.env.local' })
 const url = process.env.DATABASE_URL
@@ -15,6 +15,15 @@ const VERSION = '2027-proposed-3rd-run-2026-09-14'
 it('anyWords joins a question into an any-word query', () => {
   expect(anyWords('What new buildings?')).toBe('what or new or buildings')
   expect(anyWords('!!')).toBe('')
+})
+
+it('focusPassage keeps the matching sentence of a long passage and stays under the limit', () => {
+  const filler = 'The department continues routine work on many programs across the city. '.repeat(40)
+  const text = `${filler}Branch Library New Construction: The 2027 capital budget provides $2,000,000 to begin a new branch library in the Midtown neighborhood. ${filler}`
+  const out = focusPassage(text, 'What new library buildings are planned?', 600)
+  expect(out).toContain('$2,000,000')
+  expect(out.length).toBeLessThanOrEqual(640)
+  expect(focusPassage('Short passage.', 'anything')).toBe('Short passage.')
 })
 
 describe.skipIf(!url)('searchBudgetText (Neon)', () => {
