@@ -182,3 +182,5 @@ a { text-underline-offset: 0.2em; text-decoration-thickness: 1px; }
 
 /* The sticky site header covers the top ~52px, so in-page jumps land below it. */
 html { scroll-padding-top: 4.5rem; }
+/* The Overview's header adds a row of section links from 768px. */
+@media (min-width: 48rem) { html:has(nav[aria-label="Sections of this page"]) { scroll-padding-top: 7rem; } }
