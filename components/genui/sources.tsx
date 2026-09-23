@@ -26,6 +26,13 @@ export function sourceRegistry() {
 // Glyph-sized mark with an invisible 24x24 px hit area (WCAG 2.2 target size).
 const TAP = "relative no-underline hover:underline before:absolute before:-inset-x-[10px] before:-inset-y-[7px] before:content-['']"
 
+/** Lettered note mark (assumption or explanation), same 24 px hit area as a source mark. */
+export const NoteMark = ({ l }: { l: string }) => (
+  <sup className="ml-0.5 text-[0.7em] italic">
+    <a href={`#note-${l}`} className={`${TAP} before:-inset-x-[10px] text-ink-soft`} aria-label={`Note ${l}`}>{l}</a>
+  </sup>
+)
+
 export const Mark = ({ n }: { n: number }) => (
   <sup className="ml-0.5 text-[0.7em] font-semibold">
     <a href={`#src-${n}`} className={`${TAP} text-ref`} aria-label={`Source ${n}`}>{n}</a>

@@ -20,6 +20,8 @@
   "dependencies": {
     "@base-ui/react": "^1.8.0",
     "@neondatabase/serverless": "^1.1.0",
+    "@visx/hierarchy": "^4.0.0",
+    "@visx/scale": "^4.0.0",
     "class-variance-authority": "^0.7.1",
     "cn": "^0.4.0",
     "drizzle-orm": "^0.45.3",

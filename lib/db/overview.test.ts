@@ -30,6 +30,8 @@ describe.skipIf(!url)('overview queries (Neon)', () => {
     const rows = await getSectionBudgets(db, VERSION)
     expect(rows.map((r) => r.section)).toEqual(['A', 'B', 'C', 'D', 'F', 'G', 'H', 'I', 'J', 'K', 'M', 'N'])
     expect(rows.reduce((a, r) => a + r.proposed2027, 0)).toBe(2_261_087_412)
+    // p.7: only A, B, C, D and F carry a city property tax rate
+    expect(rows.filter((r) => r.taxRate2027 > 0).map((r) => r.section)).toEqual(['A', 'B', 'C', 'D', 'F'])
   })
 
   it('revenue mix: the sources add up exactly to general city purposes ($846,796,205)', async () => {

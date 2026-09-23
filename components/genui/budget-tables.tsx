@@ -4,7 +4,7 @@
 // comes from lib/db; this file only adds up or subtracts cited figures.
 import { millions, pct, signedMillions } from '@/lib/format'
 
-import { Mark, Tail } from './sources'
+import { Mark, NoteMark, Tail } from './sources'
 
 const Bar = ({ value, max }: { value: number; max: number }) => (
   <span aria-hidden className="mt-1.5 block h-1.5 bg-rule">
@@ -59,7 +59,7 @@ export function SectionBudgets({ rows, noteMark }: { rows: SectionRow[]; noteMar
       <tfoot>
         <tr className="border-y-2 border-ink">
           <th scope="row" className="py-3 pr-2 text-left font-semibold">
-            All funds{noteMark && <sup className="ml-0.5 text-[0.7em] italic"><a href={`#note-${noteMark}`} className="text-ink-soft no-underline">{noteMark}</a></sup>}
+            All funds{noteMark && <NoteMark l={noteMark} />}
           </th>
           <td className={`${num} font-semibold`}>{millions(total.a)}</td>
           <td className={`${num} font-bold sm:text-lg`}>{millions(total.p)}</td>
@@ -126,7 +126,7 @@ export function AskedVsProposed({ rows, specialPurpose, fringeOffset, gcp }: {
   return (
     <table className={table}>
       <caption className="sr-only">Department budgets: 2027 requested, 2027 proposed, and the difference; then the lines that take the departments to general city purposes</caption>
-      <Head cols={['Department', '2027<br>requested', '2027<br>proposed', '<span class="sm:hidden">Diff.</span><span class="hidden sm:inline">Difference</span>']} />
+      <Head cols={['Department', '2027<br>requested', '2027<br>proposed', '<span class="sm:hidden">vs. ask</span><span class="hidden sm:inline">Proposed<br>− requested</span>']} />
       <tbody>
         {rows.map((r) => (
           <tr key={r.slug} id={r.id} className="row-target border-b border-rule align-top">

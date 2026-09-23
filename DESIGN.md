@@ -8,6 +8,7 @@ colors:
   ref: "oklch(0.52 0.12 255)"
   rule: "oklch(0.9 0.012 262)"
   mark: "oklch(0.95 0.035 255)"
+  fund: "oklch(0.88 0.045 255)"
 typography:
   display:
     fontFamily: "Libre Franklin, ui-sans-serif, system-ui, sans-serif"
@@ -21,6 +22,12 @@ typography:
     fontWeight: 700
     lineHeight: 1
     letterSpacing: "-0.02em"
+    fontFeature: "tnum, lnum"
+  score:
+    fontFamily: "Libre Franklin, ui-sans-serif, system-ui, sans-serif"
+    fontSize: "1.875rem (2.25rem from 1024px)"
+    fontWeight: 700
+    letterSpacing: "-0.01em"
     fontFeature: "tnum, lnum"
   headline:
     fontFamily: "Libre Franklin, ui-sans-serif, system-ui, sans-serif"
@@ -68,6 +75,8 @@ spacing:
   section: "40px"
   chapter: "48px"
   measure: "42rem"
+  band: "64px"
+  page-wide: "72rem"
 components:
   button-primary:
     backgroundColor: "{colors.ink}"
@@ -104,6 +113,28 @@ components:
   note-mark:
     textColor: "{colors.ink-soft}"
     size: "0.7em"
+  treemap-tile-levy:
+    backgroundColor: "{colors.ink}"
+    textColor: "{colors.paper}"
+    rounded: "{rounded.none}"
+    padding: "12px"
+  treemap-tile-fund:
+    backgroundColor: "{colors.fund}"
+    textColor: "{colors.ink}"
+    rounded: "{rounded.none}"
+    padding: "12px"
+  chart-tooltip:
+    backgroundColor: "{colors.paper}"
+    textColor: "{colors.ink}"
+    rounded: "{rounded.none}"
+    padding: "12px"
+    width: "14rem"
+  box-score-figure:
+    textColor: "{colors.ink}"
+    typography: "{typography.score}"
+  show-table-summary:
+    textColor: "{colors.ref}"
+    typography: "{typography.small}"
 ---
 
 # Design System: MKE Budget Decoder
@@ -112,18 +143,19 @@ components:
 
 **Creative North Star: "The Blue Book Table"**
 
-The system is a Wisconsin Blue Book statistical table set for a phone: exact figures in ruled columns on white paper, navy ink, and one reference blue that only ever means "this points somewhere." Every surface is a single column of type and hairlines. There are no containers to look at, only numbers to read and footnotes that prove them.
+The system is a Wisconsin Blue Book statistical table set for a phone: exact figures in ruled columns on white paper, navy ink, and one reference blue that only ever means "this points somewhere." Reading surfaces are a single column of type and hairlines; the wide dashboard is columns of the same, divided by hairlines. There are no containers to look at, only numbers to read and footnotes that prove them.
 
-Density is roomy rather than governmental: rows breathe (12px vertical padding), labels are plain words, and one table does the work that a dashboard would spread across a grid of cards. The world was built first on the City Receipt (`/receipt`) and is the incumbent for every new surface.
+Density is roomy rather than governmental: rows breathe (12px vertical padding), labels are plain words, and one table does the work that a dashboard would spread across a grid of cards. The world was built first on the City Receipt (`/receipt`) and is the incumbent for every new surface. The Overview dashboard (`/`) extends it to a wide page without leaving it: the same paper, ink and rules, arranged as a newspaper front page (a lead chart, a box score beside it, standings and movers below), with charts drawn as ruled almanac figures rather than dashboard widgets.
 
 It deliberately refuses the card-grid civic dashboard, the dense government form, the fintech ad and the campaign flyer. Authority comes from ruling, alignment and citation, not from color, depth or decoration.
 
 **Key Characteristics:**
-- White paper, navy ink, one reference blue, one pale rule gray, one highlight wash.
+- White paper, navy ink, one reference blue, one pale rule gray, one highlight wash, and one chart fill (Fund Blue) with a single meaning.
 - Hairline row rules between heavy 2px head and total rules.
 - Tabular lining figures, right-aligned, amounts set larger than their labels.
 - Numbered sources and lettered notes, in reading order, each with a "Used for" back-link.
 - Flat: no cards, no shadows, no rounded pills.
+- Charts are ruled figures: opened by a 2px ink rule, zero-based, labeled in plain words, each with a "Show as table" disclosure.
 - One motion: the footnote highlight fade.
 
 ## Colors
@@ -136,6 +168,9 @@ A near-monochrome navy-on-white almanac palette with a single blue reserved for 
 ### Secondary
 - **Reference Blue** (`ref`, about #3C6FB0): footnote source numerals, "Used for" back-links, the focus ring, the caret, the focused underline of fields, and the primary button hover. Nothing decorative is ever blue.
 
+### Tertiary (chart fill)
+- **Fund Blue** (`fund`): one meaning only, in charts: a budget section with no city property tax rate (paid from its own revenue). Always carries ink text, never paper text. Because it sits close to paper in lightness, every fund-blue shape (treemap tile, legend swatch) draws a 1px inset reference-blue ring so its edge meets non-text contrast. Sections with a tax rate are ink-filled; there is no third fill.
+
 ### Neutral
 - **Offset Paper** (`paper`, white): the only ground. Also the text color on ink-filled controls.
 - **Soft Ink** (`ink-soft`): secondary text (hints, 2026 comparison amounts, change column, lettered notes, assessed-value lines). Kept at or above 4.5:1 on paper.
@@ -145,7 +180,9 @@ A near-monochrome navy-on-white almanac palette with a single blue reserved for 
 ### Named Rules
 **The One Ink Rule.** Text and structural rules share the same navy. Hierarchy comes from weight, size and rule thickness, not from extra colors.
 
-**The Reference Blue Rule.** Blue means "this points to a source or takes you somewhere" (marks, links, focus, caret). If a blue element does not navigate or indicate focus, it is wrong.
+**The Reference Blue Rule.** Blue means "this points to a source or takes you somewhere" (marks, links, jump-to links, the "Show as table" disclosure, focus, caret). If a blue element does not navigate, disclose or indicate focus, it is wrong. The single structural exception is the 1px inset ring that edges a Fund Blue shape.
+
+**The One Meaning Rule.** Fund Blue means "no city property tax rate" and nothing else. Light blue is never reused for another series: decreases, prior-year (2026) comparison bars and other secondary marks use soft ink, and emphasis uses ink.
 
 ## Typography
 
@@ -158,12 +195,14 @@ A near-monochrome navy-on-white almanac palette with a single blue reserved for 
 ### Hierarchy
 - **Display** (800, 2.1rem rising to 3rem at 640px, line-height 1.08, -0.02em): the page title only. Directly below it sits a lead paragraph; there is no kicker above it.
 - **Figure** (700, 3rem, -0.02em, tabular lining): the single headline amount of a result (the 2027 estimate), followed by a 1.125rem medium soft-ink unit ("a year", "a month").
-- **Headline** (700, 1.25rem, -0.01em): section heads inside a result ("Where the 2027 city property tax goes").
+- **Score** (700, 1.875rem rising to 2.25rem at 1024px, -0.01em, tabular lining): the box-score figures on the dashboard, one per quoted number, each under a semibold 0.875rem label and above a soft-ink comparison line whose change phrase ("Up 8.9%") is semibold ink.
+- **Headline** (700, 1.25rem, -0.01em): section heads inside a result ("Where the 2027 city property tax goes") and dashboard panel titles, which are full sentence-case questions or statements ("What the Mayor proposes to change most"), not labels.
 - **Body lead** (400, 1.125rem, relaxed 1.625, max 60ch): the page's introductory paragraph and the address field's typed text.
 - **Body** (400 / 600, 1rem): control labels, the change sentence, status and error lines. Errors are semibold ink, not red.
 - **Table** (400, 0.95rem, tabular lining): row labels. **Amount** (1.05rem): figure cells, semibold for the proposed column and for totals; the table's grand total cell steps to 1.125rem bold.
 - **Small** (400, 0.875rem, relaxed): hints, assessed-value lines, sources and notes.
-- **Label** (600, 0.75rem, uppercase, 0.06em tracking): table column heads and the "Sources" / "Notes" heads. These label structure below content; they never sit above a title as a kicker.
+- **Label** (600, 0.75rem, uppercase, 0.06em tracking): table column heads and the "Sources" / "Notes" heads. On phones, table heads drop to normal tracking so four-column tables fit 390px. These label structure below content; they never sit above a title as a kicker.
+- **Chart text:** unit lines and axis captions at 0.75rem soft ink ("Millions of dollars"); bar value labels 0.75–0.875rem semibold ink, tabular.
 
 ### Named Rules
 **The Tabular Figures Rule.** Every element that contains money, counts or percentages carries `tabular-nums lining-nums` (the `.tabular` class), and figure columns are right-aligned.
@@ -176,11 +215,19 @@ A single reading column, `max-width: 42rem`, centered, with 16px side gutters on
 
 Tables are full column width. On phones they show three columns (label, 2026, 2027); the Change column appears from 640px. Row cells use 12px vertical padding, 12px (16px from 640px) left padding on figure columns. Column heads may break onto two lines ("2026 / adopted") so figure columns stay narrow.
 
+### Wide pages (the dashboard)
+The Overview breaks out of the reading column to `max-width: 72rem` (the site header's nav matches it), with 16 / 24 / 32px gutters at phone / 640px / 1024px. From 1024px it is a 12-column grid in three bands, each band 64px below the last:
+- **Lead:** the treemap panel over 8 columns, the box score over 4.
+- **Inside columns:** departments over 7 columns; revenue then movers stacked over 5.
+- **Taxes:** the levy-and-rate panel over 5 columns; the receipt lookup over 7.
+
+Columns are divided by a 1px rule-gray vertical hairline with 32px padding on each side, never by gaps between boxes. Below 1024px every band stacks to one column, and the box score moves above the treemap so a phone reader gets the four quoted numbers first. The title and lead paragraph span the full width (lead max 78ch) above a jump-to row of reference-blue links. Sources and Notes follow all bands; the "How to use this" / "How this was built" footer closes the page in two columns from 640px under a 2px ink rule.
+
 A label's last word is kept on the same line as its footnote marks (`whitespace-nowrap` tail), so a mark never begins a line.
 
 ## Elevation & Depth
 
-Completely flat. There are no shadows anywhere, and no surface sits above another except the address suggestion list, which is drawn as paper with ink side and bottom rules, not lifted. Structure is conveyed by rule weight: 1px rule-gray hairlines between rows, 2px ink rules above and below table heads, totals and the footer. State is conveyed by fills (ink fill for selected, the mark wash for highlighted), and a stale result is dimmed to 50% opacity while its replacement loads.
+Completely flat. There are no shadows anywhere, and no surface sits above another except the address suggestion list and the chart tooltip, both drawn as paper edged in ink (rules or a 1px border), not lifted. Structure is conveyed by rule weight: 1px rule-gray hairlines between rows, 2px ink rules above and below table heads, totals and the footer. State is conveyed by fills (ink fill for selected, the mark wash for highlighted), and a stale result is dimmed to 50% opacity while its replacement loads.
 
 **The Ruled Not Raised Rule.** If something needs separating, rule it. Never add a shadow, a card, or a tinted panel.
 
@@ -215,6 +262,31 @@ Square corners throughout (0px). Buttons, the segmented control, the suggestion 
 - **Total:** 2px ink rules above and below; semibold label, the proposed total bold at 1.125rem. A second total row (per month) closes with its own 2px ink rule.
 - **Anywhere:** a caption is always present for screen readers; the component has no hooks, so it renders identically outside the receipt (Explore pages, chat answers).
 
+### Chart Panel (dashboard)
+- **Opening:** a 2px ink top rule, then a bold sentence-case headline (1.25rem) and a one-line small caption saying what the marks encode, with its source mark. Never boxed, tinted or carded.
+- **Grammar:** bars are zero-based; the unit is stated once in a right-aligned soft-ink line ("Millions of dollars, 2026 adopted to 2027 proposed"); values are printed beside the marks, so no gridlines or axes are needed. Every chart carries `role="img"` with a full-sentence label naming each value, and a "Show as table" disclosure behind it.
+- **Show as table:** a native `details`/`summary` whose summary is semibold 0.875rem reference-blue underlined text with a reference-blue marker; opening it reveals the cited Ruled Table. The table is the chart's accessible version and carries the source marks.
+- **Drawing:** Visx supplies layout math only (squarified treemap, linear scales); every mark is an HTML element positioned in percentages, so labels are real text that stays readable and wraps at any width.
+
+### Budget Treemap (lead chart)
+- **Tiles:** budget sections, squarified and sorted largest first, 8-unit inner gaps of paper between tiles. Ink fill with paper text for sections with a city property tax rate; Fund Blue with ink text and the 1px inset reference-blue ring for self-funded ones. Square corners.
+- **Aspect:** 9:4 from 640px, 1000:1150 on phones; the two layouts are separate renders swapped by breakpoint.
+- **Labels by size:** tiles are size containers, and container queries decide what fits: letter only (from 1.75rem square), then amount (from 4.5rem x 3rem), then "Letter. Short name" replacing the letter (from 5.5rem x 4.5rem), then share of all funds with a 1.75rem amount (from 12rem x 8.5rem). Tiles show short names; full names live in the tooltip, the key and the table.
+- **Focus and tooltip:** every tile is focusable (`tabIndex=0`, full-sentence `aria-label`) with the focus outline drawn inset (-3px) so it shows against neighbors. Hover or focus reveals a 14rem paper tooltip with a 1px ink border and no shadow: full name, amount and share, and the tax-rate status in soft ink. It opens below or above, left- or right-aligned, to stay inside the chart.
+- **Key:** under a two-swatch legend, a two-column list (one on phones) of letter (bold ink), full name (soft ink) and amount (ink, right-aligned), separated by rule hairlines. Zero-dollar sections are named in a line below as not shown.
+
+### Box Score
+- A definition list opened by a 2px ink rule, items divided by rule hairlines with 16px vertical padding: label, Score figure with its source mark, then the comparison line. Each item is a highlight target.
+
+### Movers (diverging bars)
+- One row per department on a rule hairline: short name in a 7.5rem (10rem from 1024px) column, then a bar growing from a 1px ink zero line. Increases are ink, decreases are soft ink, and the signed value sits at the bar's outer end; the scale keeps 14% margins each side for those labels. "Proposed decrease" and "Proposed increase" captions sit under the ends. Direction is carried by side and sign, never by red or green.
+
+### Levy vs Rate (paired bars)
+- Two small panels (side by side from 640px, stacked in the 5-column band until 1280px): a semibold title with its percentage change in soft ink, then a 2026 bar in soft ink over a 2027 bar in ink, each 20px tall, zero-based, scaled to at most 72% of the width so the value label fits after it.
+
+### Label Bars (in tables)
+- Revenue and section tables draw a 6px bar under each row label: an ink fill on a rule-gray track, proportional to the largest 2027 proposed row, noted in the unit line ("bars show 2027 proposed").
+
 ### Footnote Marks
 - **Source mark:** a numbered superscript at 0.7em, semibold, reference blue, linking to `#fn-N`.
 - **Note mark:** a lettered superscript at 0.7em, italic, soft ink, linking to `#note-x`.
@@ -234,11 +306,15 @@ Square corners throughout (0px). Buttons, the segmented control, the suggestion 
 - **Do** give every mark an invisible 24px tap area, splitting the area at the gap when a source and note mark sit side by side.
 - **Do** keep the global focus ring (2px reference blue, 2px offset) in the base layer so underline fields can opt out and show only the blue underline.
 - **Do** use exactly one motion: `mark-fade` (1.6s, `cubic-bezier(0.16, 1, 0.3, 1)`) on a targeted footnote or row, with a static mark wash under `prefers-reduced-motion`.
+- **Do** open every chart panel with a 2px ink rule and a sentence-case headline, start bars at zero, state the unit once, and put a "Show as table" disclosure behind every chart.
+- **Do** let tiles show short names and put full names in the tooltip, key and table.
 - **Do** keep brand colors and the font as tokens in `app/globals.css` and `app/layout.tsx` only, so branding can be swapped later.
 
 ### Don't:
 - **Don't** use cards, shadows, tinted panels or rounded pills.
 - **Don't** put a kicker or eyebrow above a title; the page opens with the title.
-- **Don't** use reference blue for anything that is not a link, mark, caret or focus state.
+- **Don't** use reference blue for anything that is not a link, mark, disclosure, caret or focus state (the Fund Blue edge ring excepted).
+- **Don't** reuse Fund Blue for any meaning but "no city property tax rate"; decreases and 2026 comparisons are soft ink.
+- **Don't** draw chart labels inside SVG text or box a chart panel.
 - **Don't** add a second accent color, including red or green for up and down; change is stated in words and a signed figure.
 - **Don't** add motion beyond the highlight fade.
