@@ -125,3 +125,11 @@ export async function getGcpReconciliation(db: Db, version: string) {
     fringeOffset: { adopted2026: Number(off.adopted2026), proposed2027: Number(off.proposed2027), cite: off.cite },
   }
 }
+
+/** One curated, human-reviewed budget fact (pipeline/data/budget_facts.yaml) with its citation. */
+export async function getBudgetFact(db: Db, version: string, id: string) {
+  const v = await versionId(db, version)
+  const [f] = await db.select().from(s.budgetFacts).where(and(eq(s.budgetFacts.budgetVersionId, v), eq(s.budgetFacts.id, id)))
+  if (!f) throw new Error(`budget fact ${id} missing`)
+  return { statement: f.statement, cite: f.cite, reviewedBy: f.reviewedBy }
+}

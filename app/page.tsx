@@ -2,10 +2,12 @@
 import { AskedVsProposed, BiggestChanges, RevenueMix, SectionBudgets } from '@/components/genui/budget-tables'
 import { BoxScore, BudgetTreemap, LevyVsRate, Movers, ShowTable } from '@/components/genui/charts'
 import { Mark, NoteMark, SourcesList, sourceRegistry } from '@/components/genui/sources'
+import { TakePart } from '@/components/civic/take-part'
 import { ReceiptFinder } from '@/components/receipt/receipt-finder'
+import { EVENTS } from '@/lib/civic/events'
 import { BUDGET_VERSION, getDb } from '@/lib/db/client'
 import {
-  getDepartmentTotals, getGcpReconciliation, getHeadline, getRevenueMix, getSectionBudgets,
+  getBudgetFact, getDepartmentTotals, getGcpReconciliation, getHeadline, getRevenueMix, getSectionBudgets,
 } from '@/lib/db/overview'
 import type { Cite } from '@/lib/db/schema'
 import { bigDollars, pct } from '@/lib/format'
@@ -16,6 +18,7 @@ export const dynamic = 'force-dynamic'
 const CALENDAR: Cite = { doc: 'summary', pdf_page: 4, printed_page: 'front matter' }
 const JUMPS = [
   ['#revenue', 'Where it comes from'], ['#departments', 'Departments'], ['#changes', 'Biggest changes'], ['#taxes', 'Your property taxes'],
+  ['#take-part', 'Have your say'],
 ]
 
 const PanelTitle = ({ id, children }: { id: string; children: React.ReactNode }) => (
@@ -24,9 +27,9 @@ const PanelTitle = ({ id, children }: { id: string; children: React.ReactNode })
 
 export default async function Overview() {
   const db = getDb()
-  const [h, sectionRows, mixRows, deptRows, rec] = await Promise.all([
+  const [h, sectionRows, mixRows, deptRows, rec, deadlines] = await Promise.all([
     getHeadline(db, BUDGET_VERSION), getSectionBudgets(db, BUDGET_VERSION), getRevenueMix(db, BUDGET_VERSION),
-    getDepartmentTotals(db, BUDGET_VERSION), getGcpReconciliation(db, BUDGET_VERSION),
+    getDepartmentTotals(db, BUDGET_VERSION), getGcpReconciliation(db, BUDGET_VERSION), getBudgetFact(db, BUDGET_VERSION, 'legal-deadlines'),
   ])
 
   // Number every source in reading order before rendering, so the marks and the list agree.
@@ -66,6 +69,7 @@ export default async function Overview() {
   ].map((d) => ({ id: d.id, name: d.shortName ?? d.name, fullName: d.name, change: d.change, adopted2026: d.adopted2026, proposed2027: d.proposed2027, n: d.n }))
   const levyMark = src.mark(h.levy.cite, { id: 'taxes-lead', label: 'the property tax levy and rate' })
   const levyUp = h.levy.proposed2027 > h.levy.adopted2026
+  const deadlineMark = src.mark(deadlines.cite, { id: 'take-part-deadline', label: 'the legal deadlines' })
 
   const blocks = sectionRows.map((r) => ({ key: r.section, letter: r.section, label: r.name, short: r.short, value: r.proposed2027, levy: r.taxRate2027 > 0 }))
   const ups = withChange.filter((d) => d.change > 0).length, downs = withChange.filter((d) => d.change < 0).length
@@ -173,6 +177,20 @@ export default async function Overview() {
         <div className="lg:col-span-7 lg:border-l lg:border-rule lg:pl-8">
           <h3 className="border-t-2 border-ink pt-3 text-xl font-bold text-ink">Look up your city receipt</h3>
           <div className="mt-4"><ReceiptFinder /></div>
+        </div>
+      </section>
+
+      <section aria-labelledby="take-part" className="mt-16 grid gap-10 lg:grid-cols-12 lg:gap-0">
+        <div className="lg:col-span-4 lg:pr-8">
+          <PanelTitle id="take-part">Have your say before the Council votes</PanelTitle>
+          <p className="mt-2 leading-relaxed text-ink">
+            The Common Council reviews and can amend the Mayor’s proposal. There are two hearings where residents can speak,
+            and every step is broadcast on the City Channel.
+          </p>
+        </div>
+        <div className="lg:col-span-8 lg:border-l lg:border-rule lg:pl-8">
+          <TakePart events={EVENTS} now={new Date()}
+            deadline={<span id="take-part-deadline" className="row-target -mx-1 px-1">{deadlines.statement}<Mark n={deadlineMark} q={['November 14']} /></span>} />
         </div>
       </section>
 

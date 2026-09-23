@@ -155,3 +155,22 @@
 **How we'll know if this was right.** A resident on a phone finds their estimate and taps through to a source without instructions. Nobody testing it calls it "a government form".
 
 **What actually happened.**
+
+## D17 — News coverage is shown next to the budget's own figures, never as data
+
+**Decision.** The site links to news coverage by topic and, in a later step, lines up specific news figures against the budget pages with neutral labels (Matches the budget / Rounded / Not in the budget documents / Different measure). Articles appear as headline, outlet, date and link only. Every label is reviewed by Tarik before publication. Plan: `docs/09-NEWS-AND-CIVIC.md`.
+
+**Why this came up.** Residents meet the budget through news stories first. Those stories are the questions people arrive with ("roads, roads, roads", parking fees, police classes) — but a few of their figures do not match the documents as extracted (for example a reported "3% property tax increase" against a city levy up 2.0% with a falling rate).
+
+**Options.**
+1. *Ignore coverage.* Simplest; misses the questions people actually have.
+2. *Summarize articles in our own words, figures included.* Friendly, but it launders unverified figures into a tool whose promise is "every number traced to its page."
+3. *Link coverage by topic and set its specific figures beside the budget's, with reviewed neutral labels.* More work; keeps the promise and serves journalists.
+
+**What we chose and why.** Option 3 (Tarik, 2026-09-23), headline-and-link only, labels human-reviewed. It turns the coverage into entry points without letting any unverified figure look like budget data.
+
+**What we gave up.** Speed (each label needs a human check) and some friendliness (no pull quotes). A label like "Not in the budget documents" can read as criticism of an outlet even when the figure came from an interview; the wording must stay descriptive.
+
+**How we'll know if this was right.** Reporters cite the site's page references; no outlet objects to how its story is represented; no label has to be withdrawn.
+
+**What actually happened.**
