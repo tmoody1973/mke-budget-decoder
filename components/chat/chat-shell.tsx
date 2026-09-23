@@ -65,7 +65,7 @@ const OFF: Ask = { enabled: false, open: false, setOpen: () => {}, ask: () => {}
 export function ChatShell({ enabled, children }: { enabled: boolean; children: React.ReactNode }) {
   if (!enabled) return <AskContext.Provider value={OFF}>{children}</AskContext.Provider>
   return (
-    <CopilotKit runtimeUrl="/api/copilotkit" agent={AGENT} useSingleEndpoint={false}>
+    <CopilotKit runtimeUrl="/api/copilotkit" agent={AGENT} useSingleEndpoint={false} enableInspector={false} showDevConsole={false}>
       <Panel>{children}</Panel>
     </CopilotKit>
   )
