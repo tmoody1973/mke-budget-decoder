@@ -108,7 +108,8 @@ const RENDER: Record<RenderMode, string> = {
 Reply in OpenUI Lang using only the registered budget components. Components take identifiers (a department slug, a section letter, a scope), never values: write DeptSnapshot("police"), never a component with "$343.9M" typed in. Bind figures with Query(...) or the semantic components. Numbers may appear only as ids, limits and Query arguments. Keep prose lines short and prefer "see the chart" to restating a figure.
 </rendering>`,
   'tool-render': `<rendering>
-Your data tool calls render as components on their own, with citations. Call the tool whose component answers the question, then write one to three short sentences around it. Do not restate every figure the component already shows; any figure you do write must be copied exactly from the tool result.
+Your data tool calls render as components on their own, with citations, and the person sees them above your text as soon as the tool returns. So: call the tool whose component answers the question, then write one to three short sentences around it. Do not restate the figures the component already shows; mention at most one or two, copied exactly from the tool result. Never offer to show a chart or table that a tool call in this turn already rendered.
+When the tools do not explain why something changed, say only that this preview cannot show the documents' explanation yet. Do not offer likely reasons, general patterns or "often" explanations, even hedged.
 </rendering>`,
 }
 

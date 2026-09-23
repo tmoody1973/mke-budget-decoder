@@ -7,7 +7,9 @@ import { scaleLinear } from '@visx/scale'
 
 import { bigDollars, millions, pct, signedMillions } from '@/lib/format'
 
-import { Mark, Tail } from './sources'
+import type { getHeadline } from '@/lib/db/overview'
+
+import { Mark, Tail, type Sources } from './sources'
 
 /** A disclosure that swaps in the cited table behind a chart (the chart's accessible version). */
 export function ShowTable({ children, label = 'Show as table' }: { children: React.ReactNode; label?: string }) {
@@ -104,6 +106,25 @@ export function BudgetTreemap({ blocks, total, n }: { blocks: Block[]; total: nu
 // ---------------------------------------------------------------------------- box score
 
 export type Score = { id: string; label: string; value: string; was: string; change: string; n: number; q?: (number | string)[] }
+
+/** The four headline figures (Summary p.7) as box-score rows, registering each source in `src`. */
+export function headlineScores(h: Awaited<ReturnType<typeof getHeadline>>, src: Sources): Score[] {
+  const scores: Score[] = [
+    { id: 'score-all', label: 'All city funds', a: h.allFunds.adopted2026, p: h.allFunds.proposed2027, cite: h.allFunds.cite },
+    { id: 'score-gcp', label: 'General city purposes', a: h.gcp.adopted2026, p: h.gcp.proposed2027, cite: h.gcp.cite },
+    { id: 'score-levy', label: 'City property tax levy', a: h.levy.adopted2026, p: h.levy.proposed2027, cite: h.levy.cite },
+  ].map((s) => ({
+    id: s.id, label: s.label, value: bigDollars(s.p), was: bigDollars(s.a),
+    change: `${s.p >= s.a ? 'Up' : 'Down'} ${pct(s.a, s.p)?.replace(/^[+−]/, '')}`,
+    n: src.mark(s.cite, { id: s.id, label: s.label.toLowerCase() }), q: [s.a, s.p],
+  }))
+  const rateDown = Number(h.rate.r2027) < Number(h.rate.r2026)
+  return [...scores, {
+    id: 'score-rate', label: 'City tax rate per $1,000 of assessed value', value: `$${h.rate.r2027}`, was: `$${h.rate.r2026}`,
+    change: `${rateDown ? 'Down' : 'Up'} $${Math.abs(Number(h.rate.r2027) - Number(h.rate.r2026)).toFixed(2)}`,
+    n: src.mark(h.rate.cite, { id: 'score-rate', label: 'the tax rate' }), q: [h.rate.r2026, h.rate.r2027],
+  }]
+}
 
 /** The four numbers people quote, each with its 2026 comparison and source. */
 export function BoxScore({ scores }: { scores: Score[] }) {

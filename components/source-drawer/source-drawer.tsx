@@ -23,7 +23,9 @@ export function SourceDrawer() {
     function onClick(e: MouseEvent) {
       if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return
       const a = (e.target as Element).closest<HTMLAnchorElement>('a[href^="#src-"], a[href^="#fn-"]')
-      const li = a && document.getElementById(a.getAttribute('href')!.slice(1))
+      const id = a?.getAttribute('href')!.slice(1)
+      // Chat answers number their own sources from 1, so look inside the answer card first.
+      const li = a && (a.closest('[data-src-scope]')?.querySelector<HTMLElement>(`[id="${id}"]`) ?? document.getElementById(id!))
       const doc = li?.dataset.doc as Source['doc'] | undefined
       if (!a || !li || !doc || !(doc in FILES)) return
       e.preventDefault()

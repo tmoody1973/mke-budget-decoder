@@ -85,3 +85,17 @@ export function SourcesList({ sources, notes = [] }: { sources: Sources; notes?:
     </section>
   )
 }
+
+/** Compact source list for one chat answer card (the card carries `data-src-scope`). */
+export function CardSources({ sources }: { sources: Sources }) {
+  return (
+    <ol className="mt-3 space-y-1 border-t border-rule pt-2 text-xs leading-relaxed text-ink-soft">
+      {sources.list.map(({ cite }, i) => (
+        <li key={i} id={`src-${i + 1}`} className="fn-target -mx-1 px-1" data-doc={cite.doc} data-pdf-page={cite.pdf_page} data-where={where(cite)}>
+          <a href={`#src-${i + 1}`} className="tabular mr-1 font-semibold text-ref">{i + 1}.</a>
+          {DOCS[cite.doc]}, {where(cite)}.
+        </li>
+      ))}
+    </ol>
+  )
+}
