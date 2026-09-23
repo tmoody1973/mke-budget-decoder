@@ -1,5 +1,5 @@
 ---
-name: MKE Budget Decoder
+name: Milwaukee Budget Decoder
 description: The City of Milwaukee 2027 proposed budget, explained, with every number cited to its page.
 colors:
   paper: "oklch(1 0 0)"
@@ -137,7 +137,7 @@ components:
     typography: "{typography.small}"
 ---
 
-# Design System: MKE Budget Decoder
+# Design System: Milwaukee Budget Decoder
 
 ## Overview
 

@@ -3,6 +3,7 @@
 // Wide screens show the links inline; phones get a menu button that opens a stacked list, which on
 // the Overview also carries the page's section links ("On this page").
 import { Menu, X } from 'lucide-react'
+import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
@@ -28,7 +29,10 @@ export function SiteHeader() {
   return (
     <header className="sticky top-0 z-30 border-b border-rule bg-paper">
       <nav aria-label="Site" className="mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-4 py-2.5 sm:px-6 lg:px-8">
-        <Link href="/" onClick={() => setOpen(false)} className="font-bold text-ink no-underline">MKE Budget Decoder</Link>
+        <Link href="/" onClick={() => setOpen(false)} className="flex items-center gap-2.5 text-ink no-underline">
+          <Image src="/logo.png" alt="" width={40} height={40} priority className="size-9 sm:size-10" />
+          <span className="text-[0.95rem] font-extrabold leading-[1.05] tracking-[-0.02em] sm:text-[1.05rem]">Milwaukee<br />Budget Decoder</span>
+        </Link>
         <span className="flex items-center gap-5">
           <span className="hidden items-center gap-5 text-sm md:flex">{PAGES.slice(1).map(([h, l]) => link(h, l, ''))}</span>
           <AskButton />

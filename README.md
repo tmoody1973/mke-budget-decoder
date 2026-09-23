@@ -1,4 +1,4 @@
-# MKE Budget Decoder — Claude Code handoff pack
+# Milwaukee Budget Decoder — Claude Code handoff pack
 
 Drop this folder into a new repo root, copy the two budget PDFs into `data/raw/`, then start Claude Code with:
 

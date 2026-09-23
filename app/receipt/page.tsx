@@ -4,7 +4,7 @@ import { ReceiptBand } from '@/components/receipt/receipt-band'
 import { ReceiptFinder } from '@/components/receipt/receipt-finder'
 
 export const metadata: Metadata = {
-  title: 'Your City Receipt · MKE Budget Decoder',
+  title: 'Your City Receipt · Milwaukee Budget Decoder',
   description: 'What the city charges your Milwaukee home under the Mayor’s proposed 2027 budget, with every rate cited to its page.',
 }
 

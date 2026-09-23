@@ -14,7 +14,7 @@ This build has only getBudgetOverview, getDepartments and calculate. The budget-
 
 const budgetGuide = new Agent({
   id: 'budgetGuide',
-  name: 'MKE Budget Decoder',
+  name: 'Milwaukee Budget Decoder',
   instructions: `${systemPrompt('tool-render')}\n\n${SPIKE_TOOLS}`,
   model: 'anthropic/claude-sonnet-5',
   tools: { getBudgetOverview, getDepartments, calculate },

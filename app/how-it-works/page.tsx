@@ -9,8 +9,8 @@ import { getReceiptRates } from '@/lib/db/receipt'
 
 export const dynamic = 'force-dynamic'
 export const metadata: Metadata = {
-  title: 'How it works · MKE Budget Decoder',
-  description: 'What MKE Budget Decoder is, how its numbers are checked against the budget documents, and how the City Receipt is calculated.',
+  title: 'How it works · Milwaukee Budget Decoder',
+  description: 'What Milwaukee Budget Decoder is, how its numbers are checked against the budget documents, and how the City Receipt is calculated.',
 }
 
 const H2 = ({ id, children }: { id: string; children: React.ReactNode }) => (
@@ -48,7 +48,7 @@ export default async function HowItWorks() {
       {/* TODO(Tarik): rewrite this section in your own voice: who you are and why you built this. */}
       <H2 id="about">About</H2>
       <P>
-        MKE Budget Decoder explains the City of Milwaukee’s 2027 budget as the Mayor proposed it to the Common Council, for residents
+        Milwaukee Budget Decoder explains the City of Milwaukee’s 2027 budget as the Mayor proposed it to the Common Council, for residents
         and for reporters. It is an independent, personal project by Tarik Moody. It is not an official City of Milwaukee website and
         is not affiliated with any news organization.
       </P>

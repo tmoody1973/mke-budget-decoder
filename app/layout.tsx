@@ -15,7 +15,7 @@ const franklin = Libre_Franklin({
 });
 
 export const metadata: Metadata = {
-  title: "MKE Budget Decoder",
+  title: "Milwaukee Budget Decoder",
   description:
     "The City of Milwaukee 2027 proposed budget, explained, with every number cited to its page.",
 };
