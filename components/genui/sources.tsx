@@ -33,11 +33,14 @@ export const NoteMark = ({ l }: { l: string }) => (
   </sup>
 )
 
-export const Mark = ({ n }: { n: number }) => (
+/** Source mark. `q` = the figures this mark stands for, highlighted when the page opens. */
+export const Mark = ({ n, q }: { n: number; q?: (number | string)[] }) => (
   <sup className="ml-0.5 text-[0.7em] font-semibold">
-    <a href={`#src-${n}`} className={`${TAP} text-ref`} aria-label={`Source ${n}`}>{n}</a>
+    <a href={`#src-${n}`} className={`${TAP} text-ref`} aria-label={`Source ${n}`} data-q={terms(q)}>{n}</a>
   </sup>
 )
+const terms = (q?: (number | string)[]) =>
+  q?.map((v) => (typeof v === 'number' ? Math.abs(v).toLocaleString('en-US') : v)).join('|') || undefined
 
 /** Keeps a label's last word on the same line as its mark, so a mark never starts a line. */
 export function Tail({ label, children }: { label: string; children: React.ReactNode }) {
@@ -55,7 +58,7 @@ export function SourcesList({ sources, notes = [] }: { sources: Sources; notes?:
       <p className="mt-1 text-ink-soft">All from the City of Milwaukee’s 2027 proposed budget documents.</p>
       <ol className="mt-3 space-y-2">
         {sources.list.map(({ cite, uses }, i) => (
-          <li key={i} id={`src-${i + 1}`} className="fn-target -mx-1 px-1">
+          <li key={i} id={`src-${i + 1}`} className="fn-target -mx-1 px-1" data-doc={cite.doc} data-pdf-page={cite.pdf_page} data-where={where(cite)}>
             <span className="tabular mr-1 font-semibold text-ref">{i + 1}.</span>
             {DOCS[cite.doc]}, {where(cite)}.
             <span className="ml-1 text-ink-soft">

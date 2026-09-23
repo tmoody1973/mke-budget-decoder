@@ -166,3 +166,6 @@ a { text-underline-offset: 0.2em; text-decoration-thickness: 1px; }
 @container (min-width: 4.5rem) and (min-height: 3rem) { .tile-amt { display: block; } }
 @container (min-width: 5.5rem) and (min-height: 4.5rem) { .tile-name { display: block; } .tile-letter { display: none; } }
 @container (min-width: 12rem) and (min-height: 8.5rem) { .tile-share { display: block; } .tile-amt { font-size: 1.75rem; line-height: 1.1; } }
+
+/* Source drawer: cited figures highlighted over the PDF page (the text layer's own text stays transparent). */
+.pdf-page .textLayer mark { color: transparent; background: color-mix(in oklch, var(--ref) 30%, transparent); outline: 2px solid var(--ref); outline-offset: 1px; }

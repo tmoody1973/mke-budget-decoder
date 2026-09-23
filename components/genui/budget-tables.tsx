@@ -48,7 +48,7 @@ export function SectionBudgets({ rows, noteMark }: { rows: SectionRow[]; noteMar
         {rows.map((r) => (
           <tr key={r.section} id={r.id} className="row-target border-b border-rule align-top">
             <th scope="row" className={label}>
-              <span className="mr-1.5 font-semibold">{r.section}.</span><Tail label={r.name}><Mark n={r.n} /></Tail>
+              <span className="mr-1.5 font-semibold">{r.section}.</span><Tail label={r.name}><Mark n={r.n} q={[r.adopted2026, r.proposed2027]} /></Tail>
               <Bar value={r.proposed2027} max={max} />
             </th>
             <td className={`${num} text-ink-soft`}>{millions(r.adopted2026)}</td>
@@ -83,7 +83,7 @@ export function RevenueMix({ rows }: { rows: MixRow[] }) {
       <tbody>
         {sorted.map((r) => (
           <tr key={r.key} id={r.id} className="row-target border-b border-rule align-top">
-            <th scope="row" className={label}><Tail label={r.label}><Mark n={r.n} /></Tail><Bar value={r.proposed2027} max={max} /></th>
+            <th scope="row" className={label}><Tail label={r.label}><Mark n={r.n} q={r.key === 'tsf' ? undefined : [r.proposed2027]} /></Tail><Bar value={r.proposed2027} max={max} /></th>
             <td className={`${num} font-semibold`}>{millions(r.proposed2027)}</td>
             <td className={`${num} text-ink-soft`}>{((r.proposed2027 / total) * 100).toFixed(1)}%</td>
           </tr>
@@ -104,13 +104,13 @@ export type DeptRow = Numbered & { slug: string; name: string; shortName: string
 type Line = Numbered & { label: string; proposed2027: number }
 
 const DeptName = ({ r }: { r: DeptRow }) => (
-  <Tail label={r.shortName ?? r.name}><Mark n={r.n} /></Tail>
+  <Tail label={r.shortName ?? r.name}><Mark n={r.n} q={[r.adopted2026, r.requested2027, r.proposed2027]} /></Tail>
 )
 
 function Footing({ l, sign }: { l: Line; sign?: string }) {
   return (
     <tr id={l.id} className="row-target border-b border-rule">
-      <th scope="row" className={label}>{sign && <span aria-hidden className="mr-1">{sign}</span>}<Tail label={l.label}><Mark n={l.n} /></Tail></th>
+      <th scope="row" className={label}>{sign && <span aria-hidden className="mr-1">{sign}</span>}<Tail label={l.label}><Mark n={l.n} q={[l.proposed2027]} /></Tail></th>
       <td className={num} />
       <td className={`${num} font-semibold`}>{millions(l.proposed2027)}</td>
       <td className={num} />
@@ -149,7 +149,7 @@ export function AskedVsProposed({ rows, specialPurpose, fringeOffset, gcp }: {
       </tbody>
       <tfoot>
         <tr className="border-y-2 border-ink">
-          <th scope="row" className="py-3 pr-2 text-left font-semibold"><Tail label={gcp.label}><Mark n={gcp.n} /></Tail></th>
+          <th scope="row" className="py-3 pr-2 text-left font-semibold"><Tail label={gcp.label}><Mark n={gcp.n} q={[gcp.proposed2027]} /></Tail></th>
           <td className={num} />
           <td className={`${num} font-bold sm:text-lg`}>{millions(gcp.proposed2027)}</td>
           <td className={num} />

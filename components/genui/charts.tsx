@@ -103,7 +103,7 @@ export function BudgetTreemap({ blocks, total, n }: { blocks: Block[]; total: nu
 
 // ---------------------------------------------------------------------------- box score
 
-export type Score = { id: string; label: string; value: string; was: string; change: string; n: number }
+export type Score = { id: string; label: string; value: string; was: string; change: string; n: number; q?: (number | string)[] }
 
 /** The four numbers people quote, each with its 2026 comparison and source. */
 export function BoxScore({ scores }: { scores: Score[] }) {
@@ -113,7 +113,7 @@ export function BoxScore({ scores }: { scores: Score[] }) {
         <div key={s.id} id={s.id} className="row-target py-4">
           <dt className="text-sm font-semibold text-ink">{s.label}</dt>
           <dd className="tabular mt-1 text-3xl font-bold tracking-[-0.01em] text-ink lg:text-4xl">
-            <Tail label={s.value}><Mark n={s.n} /></Tail>
+            <Tail label={s.value}><Mark n={s.n} q={s.q} /></Tail>
           </dd>
           <dd className="tabular mt-1 text-sm text-ink-soft"><span className="font-semibold text-ink">{s.change}</span> from {s.was} in 2026</dd>
         </div>

@@ -224,7 +224,8 @@ export function ReceiptTable({ receipt, parcel, entered = null }: { receipt: Est
         <h3 className="mt-6 text-xs font-semibold uppercase tracking-[0.06em]">Sources</h3>
         <ol className="mt-2 space-y-1">
           {src.list.map((c, i) => (
-            <li key={i} id={`fn-${i + 1}`} className="fn-target -mx-1 px-1">
+            <li key={i} id={`fn-${i + 1}`} className="fn-target -mx-1 px-1" data-doc={c.doc} data-pdf-page={c.pdf_page}
+              data-where={c.printed_page === 'front matter' ? 'front matter (PDF page 4)' : `page ${c.printed_page} (PDF page ${c.pdf_page})`}>
               <span className="tabular mr-1 font-semibold text-ref">{i + 1}.</span>
               City of Milwaukee 2027 {DOCS[c.doc]}, {c.printed_page === 'front matter' ? 'budget calendar' : `page ${c.printed_page}`} (PDF page {c.pdf_page}).
               <Back to={usedBy(i + 1)} />
