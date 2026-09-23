@@ -23,7 +23,7 @@ def test_statement_has_a_current_check(item):
 @pytest.mark.parametrize("item", ITEMS, ids=[i["id"] for i in ITEMS])
 def test_no_statement_contradicts_its_page(item):
     stored = RESULTS[item["id"]]
-    assert stored["verdict"] not in ("contradicted", "conflict", "no_passage"), (
+    assert stored["verdict"] not in ("contradicted", "conflict"), (
         f"{item['id']}: {stored['verdict']} — read the passage and fix the statement")
 
 

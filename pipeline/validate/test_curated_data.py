@@ -100,3 +100,12 @@ def test_glossary_size_and_no_numbers():
     assert 35 <= len(GLOSSARY) <= 50
     for g in GLOSSARY:
         assert not re.search(r"\$\s?\d|\d{1,3},\d{3}|\d{5,}", g["plain_definition"]), f"definition states an amount: {g['term']}"
+
+
+@pytest.mark.parametrize("entry", [g for g in GLOSSARY if g.get("also_cite")], ids=lambda g: g["term"])
+def test_glossary_additional_citations_mention_the_term(entry):
+    names = [entry["cite_text"], *entry.get("aliases", []), entry["term"].split(" (")[0]]
+    for c in entry["also_cite"]:
+        text = _any_page_text(c["doc"], c["pdf_page"]).lower()
+        want = [c["cite_text"]] if c.get("cite_text") else names   # a citation can name its own exact phrase
+        assert any(n.lower() in text for n in want), f"{entry['term']}: none of {want} on pdf p.{c['pdf_page']}"

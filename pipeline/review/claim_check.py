@@ -25,7 +25,7 @@ from time import perf_counter
 import yaml
 
 from common.config import PIPELINE_DATA, ROOT
-from common.summary_pdf import searchable_text
+from common.summary_pdf import lines
 
 MODEL = "jev-1.13.0"          # pinned: thresholds are only meaningful for one version
 AUTO_ACCEPT = 0.8             # cookbook starting point; below it a person confirms
@@ -78,9 +78,16 @@ def passage(page: str, statement: str, anchors: list[str], window: int = 1, max_
     return " ".join(" ".join(sents[j] for j in keep).split()[:max_words])
 
 
+LETTER_SPACED = re.compile(r"(?:\b\S\b ){3,}\S\b")   # 'S O U R C E' — sideways text read letter by letter
+
+
 def _page(doc: str, pdf_page: int) -> str:
+    """Page text for passages: our rebuilt words only. searchable_text() joins pdfplumber's text and
+    the rebuilt words, which suits 'is this figure on the page' but duplicates every sentence in a
+    passage (reviewer finding, 2026-09-23); letter-by-letter sideways text is dropped."""
     if doc == "summary":
-        return searchable_text(pdf_page)
+        text = " ".join(ln.text for ln in lines(pdf_page)).replace("’", "'")
+        return re.sub(r"\s+", " ", LETTER_SPACED.sub(" ", text))
     import pdfplumber
 
     from common.config import DETAILED_PDF
@@ -96,15 +103,25 @@ def items() -> list[dict]:
         page = _page(f["cite"]["doc"], f["cite"]["pdf_page"])
         quotes = re.findall(r"(?<![A-Za-z])'([^']+)'(?![A-Za-z])", f["statement"])
         anchors = quotes + re.findall(r"\$[\d,]+(?:\.\d+)?(?: million| billion)?|\d+(?:\.\d+)?%", f["statement"])
-        out.append({"id": f"fact:{f['id']}", "kind": "fact", "statement": f["statement"],
+        out.append({"id": f"fact:{f['id']}", "kind": "fact", "statement": f["statement"], "anchors": anchors,
                     "passage": passage(page, f["statement"], anchors), "cite": f["cite"]})
     for g in gloss:
         page = _page(g["cite"]["doc"], g["cite"]["pdf_page"])
-        out.append({"id": f"glossary:{g['term']}", "kind": "glossary", "term": g["term"],
+        names = [g["cite_text"], *g.get("aliases", [])]
+        out.append({"id": f"glossary:{g['term']}", "kind": "glossary", "term": g["term"], "names": names,
                     "statement": g["plain_definition"],
-                    "passage": passage(page, g["cite_text"] + " " + g["plain_definition"], [g["cite_text"]]),
+                    "passage": passage(page, g["cite_text"] + " " + g["plain_definition"], names),
                     "cite": g["cite"]})
     return out
+
+
+def sufficient(item: dict) -> bool:
+    p = item["passage"].lower()
+    if not p:
+        return False
+    if item["kind"] == "glossary":
+        return any(n.lower() in p for n in item["names"])
+    return all(a.lower() in p for a in item["anchors"])
 
 
 def key(item: dict) -> str:
@@ -155,8 +172,11 @@ def main() -> dict:
             if prev and prev.get("key") == k:          # cache: same statement, passage, model
                 results[it["id"]] = prev
                 continue
-            if not it["passage"]:
-                results[it["id"]] = {"key": k, "verdict": "no_passage", "auto": False, "passage": ""}
+            if not sufficient(it):
+                # the passage lacks the term / the statement's figures: a 'consistent' here would be a
+                # false pass (reviewer finding), so no model call — a person reads the page
+                results[it["id"]] = {"key": k, "kind": it["kind"], "cite": it["cite"], "statement": it["statement"],
+                                     "passage": it["passage"], "verdict": "passage_insufficient", "auto": False}
                 continue
             results[it["id"]] = {"key": k, "kind": it["kind"], "cite": it["cite"], "statement": it["statement"],
                                  "passage": it["passage"], **ask(client, it)}

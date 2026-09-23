@@ -15,3 +15,11 @@
 **What happened.** A small judgment model (TypeSafe Jev) read each statement beside its page and flagged "budget gap" as a possible conflict (0.54). The page defines the gap as the cost of continuing current services minus expected revenue; the glossary said department requests minus available money. The numbers were never the problem. The definition was.
 
 **What we now believe.** A number check and a meaning check are different tests, and both are needed. The useful design keeps them apart: code verifies numbers exactly, the model only judges meaning, and anything the model isn't confident about goes to a person.
+
+## 2026-09-23 — The checker needed checking
+
+**What we expected.** Jev's first pass left 6 items for review, and the rest looked settled.
+
+**What happened.** Tarik read all six against the PDF. None was a factual error, but four were problems with the *checker*, not the wording. Every sentence in a passage appeared twice (the page's raw text and our rebuilt text were joined together). Sideways table text came through letter by letter. Two glossary terms cited pages that only *use* the term. And an irrelevant passage could still come back "consistent", which is a false pass. After the fixes, the stricter checker also caught a bad citation (special revenue fund), a definition that wasn't in the document at all, and a sentence I'd added about a table that the cited narrative page can't support.
+
+**What we now believe.** A model's "consistent" is only as good as the passage it was shown. The evidence step has to prove the evidence is there (the term, the figures) before a model is asked anything; otherwise the check can pass things it never looked at. Human review of the first batch is what found this.
