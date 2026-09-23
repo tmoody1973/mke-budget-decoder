@@ -29,3 +29,15 @@
     The Parking decision unit lists TRANSFER TO CAPITAL FUND $6,000,000 (510.8 line 16)
     but its printed proposed total (36,699,370 = O&M 33,908,268 + deposit 2,791,102)
     leaves it out. The BCU total includes it.
+
+# --- Summary book: department tables whose printed Total differs from their printed rows ---
+# `section` = department slug, `column` = table column. extracted = sum of the printed rows.
+- {id: dcd-services-grant, doc: summary, check: services_rows_equal_total, section: city-development, column: grant, printed: 1037055, extracted: 1037056, note: "Summary p.48: service rows sum $1 above the printed Total (rounding)."}
+- {id: council-services-operating, doc: summary, check: services_rows_equal_total, section: common-council-city-clerk, column: operating, printed: 13954238, extracted: 13954239, note: "Summary p.61: rows sum $1 above the printed Total (rounding)."}
+- {id: dce-services-grant, doc: summary, check: services_rows_equal_total, section: compliance-engagement, column: grant, printed: 215000, extracted: 315000, note: "Summary p.67-68: ADA Compliance/Equal Rights Compliance prints $100,000 in the Grant Budget column (x 455-492, verified on the page) and Contract Compliance $215,000, but the printed Total grant is $215,000. The Total leaves out the $100,000."}
+- {id: comptroller-services-operating, doc: summary, check: services_rows_equal_total, section: comptroller, column: operating, printed: 6899694, extracted: 6896694, note: "Summary p.71: the four service rows (1,083,086 + 4,442,761 + 329,261 + 1,041,586, each verified on the page) sum to 6,896,694; the printed Total is 6,899,694 ($3,000 more)."}
+- {id: dpw-isd-services-operating, doc: summary, check: services_rows_equal_total, section: dpw-infrastructure, column: operating, printed: 54403862, extracted: 54403863, note: "Summary p.127: rows sum $1 above the printed Total (rounding)."}
+- {id: election-services-operating, doc: summary, check: services_rows_equal_total, section: election-commission, column: operating, printed: 3496354, extracted: 3496355, note: "Summary p.75: rows sum $1 above the printed Total (rounding)."}
+- {id: library-services-operating, doc: summary, check: services_rows_equal_total, section: library, column: operating, printed: 35142226, extracted: 35142227, note: "Summary p.101: rows sum $1 above the printed Total (rounding)."}
+- {id: mayor-services-operating, doc: summary, check: services_rows_equal_total, section: mayor, column: operating, printed: 2256261, extracted: 2256260, note: "Summary p.106: rows sum $1 below the printed Total (rounding)."}
+- {id: police-position-changes-non-om, doc: summary, check: position_changes_rows_equal_total, section: police, column: non_om_ftes, printed: "21.0", extracted: "20.96", note: "Summary p.120: the Totals row prints FTEs to one decimal (21.0); the rows sum to 20.96."}

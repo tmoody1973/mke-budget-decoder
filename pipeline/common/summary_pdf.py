@@ -23,20 +23,21 @@ def pdf_page_for(printed: int) -> int:
 @lru_cache(maxsize=256)
 def words(pdf_page: int) -> tuple:
     page = _pdf().pages[pdf_page - 1]
-    chars = page.chars
-    if chars and sum(not c.get("upright", True) for c in chars) > len(chars) / 2:
-        return tuple(_words_from_chars(chars))
-    return tuple(page.extract_words(keep_blank_chars=False, use_text_flow=False))
+    upright = page.filter(lambda o: o.get("object_type") != "char" or o.get("upright", True))
+    normal = upright.extract_words(keep_blank_chars=False, use_text_flow=False)
+    rotated = _words_from_chars([c for c in page.chars if not c.get("upright", True)])
+    return tuple(sorted(normal + rotated, key=lambda w: (round(w["top"]), w["x0"])))
 
 
 def _words_from_chars(chars: list[dict], gap: float = 1.0, line_tol: float = 2.0) -> list[dict]:
-    """Some Summary pages (p.8–10) flag every glyph as non-upright, so pdfplumber won't join
+    """Some Summary tables (p.8–10, every department BUDGET SUMMARY) flag glyphs as non-upright, so pdfplumber won't join
     them into words. The glyphs still sit on horizontal lines with real space characters:
     join touching glyphs, split at spaces and gaps."""
     out: list[dict] = []
     cur: dict | None = None
     for c in sorted(chars, key=lambda c: (round(c["top"] / line_tol), c["x0"])):
-        if cur and (abs(c["top"] - cur["top"]) > line_tol or c["x0"] - cur["x1"] > gap or c["text"] == " "):
+        if cur and (abs(c["top"] - cur["top"]) > line_tol or c["x0"] - cur["x1"] > gap
+                    or c["x0"] < cur["x1"] - 1 or c["text"] == " "):   # a jump back left = new word
             out.append(cur)
             cur = None
         if c["text"] == " ":

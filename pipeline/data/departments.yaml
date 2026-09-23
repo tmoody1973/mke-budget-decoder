@@ -1,0 +1,59 @@
+# Departments and budget sections of the 2027 Proposed budget — hand-curated (P1.6).
+#
+# slug          stable id used by every table, chunk and URL (/department/<slug>)
+# name          as printed on the Summary title page
+# section       budget section letter from Summary p.7 (A = General City Purposes)
+# parent        DPW divisions roll up to `dpw`
+# summary_page  printed page of the Summary title page (MISSION:); pdf_page = +10
+# detailed      Detailed-book page-id prefix(es) (footer "300.1" → "300")
+# detailed_name footer department name(s) in the Detailed book, exactly as printed
+# aliases       words a resident or reporter might type; conservative, common usage only
+# reviewed_by   null until a human checks the row against the pages
+#
+# Drafted by Claude 2026-09-22 from Summary title pages and Detailed footers. Not reviewed.
+# Every alias was checked to appear in the Summary text (acronyms) or is a plain synonym.
+
+# --- A. General City Purposes: departments ------------------------------------------------
+- {slug: administration, name: "Department of Administration", short_name: "Administration", section: A, summary_page: 29, detailed: ["110"], detailed_name: ["DEPARTMENT OF ADMINISTRATION"], aliases: [DOA, "Dept. of Administration", "Budget and Management Division", "Office of the Director"], reviewed_by: null}
+- {slug: assessor, name: "Assessor's Office", short_name: "Assessor", section: A, summary_page: 40, detailed: ["120"], detailed_name: ["ASSESSOR'S OFFICE"], aliases: [assessor, assessments], reviewed_by: null}
+- {slug: city-attorney, name: "City Attorney", short_name: "City Attorney", section: A, summary_page: 43, detailed: ["130"], detailed_name: ["CITY ATTORNEY"], aliases: ["City Attorney's Office"], reviewed_by: null}
+- {slug: city-development, name: "Department of City Development", short_name: "City Development", section: A, summary_page: 47, detailed: ["140"], detailed_name: ["DEPARTMENT OF CITY DEVELOPMENT"], aliases: [DCD], reviewed_by: null}
+- {slug: city-treasurer, name: "City Treasurer", short_name: "Treasurer", section: A, summary_page: 56, detailed: ["150"], detailed_name: ["CITY TREASURER"], aliases: [treasurer], reviewed_by: null}
+- {slug: common-council-city-clerk, name: "Common Council - City Clerk", short_name: "Common Council", section: A, summary_page: 60, detailed: ["160"], detailed_name: ["COMMON COUNCIL-CITY CLERK"], aliases: ["Common Council", "City Clerk", council, alderpersons], reviewed_by: null}
+- {slug: community-wellness-safety, name: "Department of Community Wellness and Safety", short_name: "Community Wellness and Safety", section: A, summary_page: 65, detailed: ["170"], detailed_name: ["DEPARTMENT OF COMMUNITY WELLNESS AND SAFETY"], aliases: [DCWS], reviewed_by: null}
+- {slug: compliance-engagement, name: "Department of Compliance and Engagement", short_name: "Compliance and Engagement", section: A, summary_page: 67, detailed: ["180"], detailed_name: ["DEPARTMENT OF COMPLIANCE AND ENGAGEMENT"], aliases: [], reviewed_by: null}
+- {slug: comptroller, name: "Comptroller", short_name: "Comptroller", section: A, summary_page: 70, detailed: ["190"], detailed_name: ["COMPTROLLER"], aliases: ["Comptroller's Office"], reviewed_by: null}
+- {slug: election-commission, name: "Election Commission", short_name: "Elections", section: A, summary_page: 74, detailed: ["200"], detailed_name: ["ELECTION COMMISSION"], aliases: [elections, "election commission"], reviewed_by: null}
+- {slug: emergency-communications, name: "Department of Emergency Communications", short_name: "Emergency Communications", section: A, summary_page: 77, detailed: ["210"], detailed_name: ["DEPT. OF EMERGENCY COMMUNICATIONS"], aliases: ["911", DEC, dispatch, "911 call center"], reviewed_by: null}
+- {slug: employee-relations, name: "Department of Employee Relations", short_name: "Employee Relations", section: A, summary_page: 81, detailed: ["220"], detailed_name: ["DEPARTMENT OF EMPLOYEE RELATIONS"], aliases: [DER, "human resources", HR], reviewed_by: null}
+- {slug: fire-police-commission, name: "Fire and Police Commission", short_name: "Fire and Police Commission", section: A, summary_page: 87, detailed: ["230"], detailed_name: ["FIRE AND POLICE COMMISSION"], aliases: [FPC], reviewed_by: null}
+- {slug: fire, name: "Fire Department", short_name: "Fire", section: A, summary_page: 91, detailed: ["240"], detailed_name: ["FIRE DEPARTMENT"], aliases: [MFD, "fire department", firefighters, EMS], reviewed_by: null}
+- {slug: health, name: "Health Department", short_name: "Health", section: A, summary_page: 95, detailed: ["250"], detailed_name: ["HEALTH DEPARTMENT"], aliases: [MHD, "health department", "public health"], reviewed_by: null}
+- {slug: library, name: "Library", short_name: "Library", section: A, summary_page: 100, detailed: ["260"], detailed_name: ["LIBRARY"], aliases: [MPL, "Milwaukee Public Library", libraries], reviewed_by: null}
+- {slug: mayor, name: "Mayor's Office", short_name: "Mayor", section: A, summary_page: 105, detailed: ["270"], detailed_name: ["MAYOR"], aliases: ["Mayor's Office"], reviewed_by: null}
+- {slug: municipal-court, name: "Municipal Court", short_name: "Municipal Court", section: A, summary_page: 108, detailed: ["280"], detailed_name: ["MUNICIPAL COURT"], aliases: [court], reviewed_by: null}
+- {slug: neighborhood-services, name: "Neighborhood Services", short_name: "Neighborhood Services", section: A, summary_page: 112, detailed: ["290"], detailed_name: ["DEPARTMENT OF NEIGHBORHOOD SERVICES"], aliases: [DNS, "building inspection", "code enforcement"], reviewed_by: null}
+- {slug: police, name: "Police Department", short_name: "Police", section: A, summary_page: 116, detailed: ["300"], detailed_name: ["POLICE DEPARTMENT"], aliases: [MPD, police, "Milwaukee Police Department"], reviewed_by: null}
+- {slug: port, name: "Port Milwaukee", short_name: "Port", section: A, summary_page: 121, detailed: ["310"], detailed_name: ["PORT MILWAUKEE"], aliases: [port, "Port of Milwaukee"], reviewed_by: null}
+- {slug: dpw, name: "Department of Public Works", short_name: "Public Works", section: A, summary_page: null, detailed: ["320"], detailed_name: ["DEPT. OF PUBLIC WORKS-SUMMARY"], aliases: [DPW, "public works"], note: "Parent of the three divisions; no Summary title page of its own. Detailed 320 is its summary (restated).", reviewed_by: null}
+- {slug: dpw-administrative-services, name: "Department of Public Works - Administrative Services Division", short_name: "DPW Administrative Services", section: A, parent: dpw, summary_page: 124, detailed: ["330"], detailed_name: ["DPW-ADMINISTRATIVE SERVICES DIVISION"], aliases: ["DPW administration"], reviewed_by: null}
+- {slug: dpw-infrastructure, name: "Department of Public Works - Infrastructure Services Division", short_name: "DPW Infrastructure", section: A, parent: dpw, summary_page: 127, detailed: ["340"], detailed_name: ["DPW-INFRASTRUCTURE SERVICES DIVISION"], aliases: [streets, bridges, "street lighting", "traffic signals", "DPW infrastructure"], reviewed_by: null}
+- {slug: dpw-operations, name: "Department of Public Works - Operations Division", short_name: "DPW Operations", section: A, parent: dpw, summary_page: 137, detailed: ["350"], detailed_name: ["DPW-OPERATIONS DIVISION"], aliases: [sanitation, "garbage collection", recycling, forestry, fleet, "snow removal"], reviewed_by: null}
+
+# --- A. General City Purposes: non-department accounts ------------------------------------
+- {slug: special-purpose-accounts, name: "Special Purpose Accounts", short_name: "Special Purpose Accounts", section: A, summary_page: 144, detailed: ["360", "370", "380", "390"], detailed_name: ["SPECIAL PURPOSE ACCOUNTS-MISCELLANEOUS", "SPA-WORKERS' COMPENSATION", "SPA-EMPLOYEE HEALTH CARE BENEFITS", "SPA-BOARD OF ZONING APPEALS"], aliases: [SPA, "employee health care"], note: "Detailed 400 restates 360-390.", reviewed_by: null}
+- {slug: gcp-source-of-funds, name: "Source of Funds for General City Purposes", short_name: "GCP Revenues", section: A, summary_page: 156, detailed: ["430"], detailed_name: ["SOURCE OF FUNDS FOR GENERAL CITY PURPOSES"], aliases: [revenues, "source of funds", "tax stabilization fund", "state shared revenue", "sales tax"], note: "Summary 156-161 Source of Funds, 162 Tax Stabilization Fund withdrawal.", reviewed_by: null}
+- {slug: fringe-benefit-offset, name: "Fringe Benefit Offset", short_name: "Fringe Benefit Offset", section: A, summary_page: 155, detailed: ["410"], detailed_name: ["FRINGE BENEFIT OFFSET"], aliases: [], reviewed_by: null}
+
+# --- B–N. Other budget sections -----------------------------------------------------------
+- {slug: employee-retirement, name: "Provision for Employes' Retirement Fund", short_name: "Employee Retirement", section: B, summary_page: 163, detailed: ["440", "450", "460", "470"], detailed_name: ["BUDGET FOR PROVISIONS FOR EMPLOYEE RETIREMENT", "EMPLOYES' RETIREMENT SYSTEM", "DEFERRED COMPENSATION PLAN", "PROVISION FOR EMPLOYES' RETIREMENT"], aliases: [pensions, retirement, ERS], note: "Detailed 450-470 restate lines of 440.", reviewed_by: null}
+- {slug: capital-improvements, name: "Capital Improvements", short_name: "Capital", section: C, summary_page: 174, detailed: ["480"], detailed_name: ["CAPITAL IMPROVEMENTS"], aliases: [capital, "capital budget"], reviewed_by: null}
+- {slug: city-debt, name: "City Debt", short_name: "Debt", section: D, summary_page: 184, detailed: ["490"], detailed_name: ["CITY DEBT FUNDS"], aliases: [debt, "debt service"], reviewed_by: null}
+- {slug: contingent-fund, name: "Common Council Contingent Fund", short_name: "Contingent Fund", section: F, summary_page: 187, detailed: ["500"], detailed_name: ["COMMON COUNCIL CONTINGENT FUND"], aliases: [contingent], reviewed_by: null}
+- {slug: transportation-fund, name: "Transportation Fund", short_name: "Transportation Fund", section: G, summary_page: 190, detailed: ["510"], detailed_name: ["TRANSPORTATION FUND"], aliases: [parking, streetcar, "The Hop", towing], reviewed_by: null}
+- {slug: grant-and-aid-fund, name: "Grant and Aid Fund", short_name: "Grant and Aid", section: H, summary_page: 193, detailed: ["520"], detailed_name: ["SPECIAL REVENUE FUND-GRANT AND AID"], aliases: [grants], reviewed_by: null}
+- {slug: economic-development-fund, name: "Economic Development Fund", short_name: "Economic Development Fund", section: I, summary_page: 195, detailed: ["530"], detailed_name: ["ECONOMIC DEVELOPMENT FUND"], aliases: [TID, "tax incremental district"], reviewed_by: null}
+- {slug: water-works, name: "Water Works", short_name: "Water Works", section: J, summary_page: 197, detailed: ["540", "550", "560"], detailed_name: ["DPW-WATER WORKS", "DPW-WATER WORKS-CAPITAL IMPROVEMENTS", "DPW-WATER WORKS-RECAP OF AUTHORIZATIONS"], aliases: [water, MWW, "Milwaukee Water Works"], note: "Detailed 560 restates 540-550.", reviewed_by: null}
+- {slug: sewer-maintenance-fund, name: "Sewer Maintenance Fund", short_name: "Sewer", section: K, summary_page: 203, detailed: ["570"], detailed_name: ["SEWER MAINTENANCE FUND"], aliases: [sewer, stormwater], reviewed_by: null}
+- {slug: county-delinquent-tax-fund, name: "County Delinquent Tax Fund", short_name: "County Delinquent Tax", section: M, summary_page: 208, detailed: ["580"], detailed_name: ["COUNTY DELINQUENT TAXES FUND"], aliases: [], reviewed_by: null}
+- {slug: settlement-fund, name: "Settlement Funds", short_name: "Settlement", section: N, summary_page: 209, detailed: ["590"], detailed_name: ["SETTLEMENT FUND"], aliases: [settlements, "opioid settlement"], reviewed_by: null}
