@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Libre_Franklin } from "next/font/google";
 
 import { ChatShell } from "@/components/chat/chat-shell";
+import { SiteFooter } from "@/components/site/site-footer";
 import { SiteHeader } from "@/components/site/site-header";
 import { SourceDrawer } from "@/components/source-drawer/source-drawer";
 import "@copilotkit/react-core/v2/styles.css";
@@ -27,6 +28,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <ChatShell enabled={process.env.CHAT_ENABLED === 'true'}>
           <SiteHeader />
           {children}
+          <SiteFooter />
         </ChatShell>
         <SourceDrawer />
       </body>

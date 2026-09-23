@@ -11,6 +11,8 @@ import { useEffect, useState } from 'react'
 import { AskButton } from '@/components/chat/chat-shell'
 import { OVERVIEW_SECTIONS, PAGES } from '@/lib/site-nav'
 
+import { MadeWithLove } from './made-with-love'
+
 export function SiteHeader() {
   const path = usePathname()
   const [open, setOpen] = useState(false)
@@ -33,6 +35,7 @@ export function SiteHeader() {
           <Image src="/logo.png" alt="" width={40} height={40} priority className="size-9 sm:size-10" />
           <span className="text-[0.95rem] font-extrabold leading-[1.05] tracking-[-0.02em] sm:text-[1.05rem]">Milwaukee<br />Budget Decoder</span>
         </Link>
+        <span className="mr-auto hidden border-l border-rule pl-4 text-xs text-ink-soft lg:block"><MadeWithLove /></span>
         <span className="flex items-center gap-5">
           <span className="hidden items-center gap-5 text-sm md:flex">{PAGES.slice(1).map(([h, l]) => link(h, l, ''))}</span>
           <AskButton />
@@ -65,6 +68,7 @@ export function SiteHeader() {
             </ul>
           </>
         )}
+        <p className="mt-5 border-t border-rule pt-4 text-sm text-ink-soft"><MadeWithLove /></p>
       </div>
     </header>
   )
