@@ -1,0 +1,1 @@
+ALTER TABLE "budget_facts" ADD COLUMN "context" text;

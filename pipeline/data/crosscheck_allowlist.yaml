@@ -1,0 +1,210 @@
+# Rows the independent bbox cross-check (validate/bbox_crosscheck.py) cannot match, each a known
+# checker limitation verified by hand in the 2026-09-23 review. test_bbox_crosscheck fails on any
+# NEW non-matching row, and on any entry here that starts matching (so the list can't go stale).
+- dept: employee-retirement
+  table: budget_summary
+  row: Charges for Service Deferred Compensation
+  pdf_page: 173
+  status: values_ok_label_not_on_line
+  reason: label wraps across three printed lines with the numbers between them (Summary p.163); values found on the page — this is the B1/B2 layout,
+    fixed in the parser
+- dept: employee-retirement
+  table: budget_summary
+  row: Misc. Employees' Retirement System
+  pdf_page: 173
+  status: values_ok_label_not_on_line
+  reason: label wraps across three printed lines with the numbers between them (Summary p.163); values found on the page — this is the B1/B2 layout,
+    fixed in the parser
+- dept: economic-development-fund
+  table: budget_summary
+  row: Business Improvement Districts
+  pdf_page: 205
+  status: MISMATCH
+  reason: table prints fewer stage columns (known checker limitation, verified in the 2026-09-23 review)
+- dept: economic-development-fund
+  table: budget_summary
+  row: Excess TID Revenue
+  pdf_page: 205
+  status: MISMATCH
+  reason: table prints fewer stage columns (known checker limitation, verified in the 2026-09-23 review)
+- dept: city-treasurer
+  table: services
+  row: Total
+  pdf_page: 67
+  status: MISMATCH
+  reason: 'services row: FTE printed on a different baseline from the dollars, or blanks printed as nothing; verified by hand in the 2026-09-23
+    review, and every services table reconciles to its printed Total'
+- dept: common-council-city-clerk
+  table: services
+  row: Administer over 100 types of licenses and permits; advise the Licenses Committee and Council members in reviewing license applications.
+  pdf_page: 71
+  status: MISMATCH
+  reason: 'services row: FTE printed on a different baseline from the dollars, or blanks printed as nothing; verified by hand in the 2026-09-23
+    review, and every services table reconciles to its printed Total'
+- dept: comptroller
+  table: services
+  row: Perform the City’s accounting activities, provide oversight of Federal and State grants, prepare financial reports, process citywide bi-weekly
+    payroll and related administrative functions, administer the citywide financial and human resource systems.
+  pdf_page: 81
+  status: MISMATCH
+  reason: 'services row: FTE printed on a different baseline from the dollars, or blanks printed as nothing; verified by hand in the 2026-09-23
+    review, and every services table reconciles to its printed Total'
+- dept: fire
+  table: services
+  row: 'Emergency Medical Services and Training: EMS, training academy, Mobile Integrated Health, community relations, recruiting, and Basic Life
+    Support partnerships'
+  pdf_page: 101
+  status: MISMATCH
+  reason: 'services row: FTE printed on a different baseline from the dollars, or blanks printed as nothing; verified by hand in the 2026-09-23
+    review, and every services table reconciles to its printed Total'
+- dept: library
+  table: services
+  row: Facilities and Fleet Services, and Security at 13 facilities
+  pdf_page: 111
+  status: MISMATCH
+  reason: 'services row: FTE printed on a different baseline from the dollars, or blanks printed as nothing; verified by hand in the 2026-09-23
+    review, and every services table reconciles to its printed Total'
+- dept: municipal-court
+  table: services
+  row: The Municipal Court provides fair, impartial hearings for ordinance violations brought by the City prosecutor. It enables both the City
+    and defendants to present cases, issues judgments, and enforces them. The Accounting section processes payments via phone, online, or in person.
+    Court Services handles public reception, correspondence, and phone calls, while Court Clerks provide vital administrative support for judicial
+    proceedings. Collaboratively, all sections manage and fulfill public records requests.
+  pdf_page: 119
+  status: MISMATCH
+  reason: 'services row: FTE printed on a different baseline from the dollars, or blanks printed as nothing; verified by hand in the 2026-09-23
+    review, and every services table reconciles to its printed Total'
+- dept: neighborhood-services
+  table: services
+  row: Residential Inspection Services inspects residential properties including 1 and 2 family homes, condos, and apartments, and enforces the
+    Milwaukee Code of Ordinances as well as local, state, and national fire codes. Through the enforcement of the code, Special Enforcement Inspectors
+    address neighborhood issues, nuisance activities, and gain compliance of maintenance violations by using a multifaceted approach.
+  pdf_page: 123
+  status: MISMATCH
+  reason: 'services row: FTE printed on a different baseline from the dollars, or blanks printed as nothing; verified by hand in the 2026-09-23
+    review, and every services table reconciles to its printed Total'
+- dept: dpw-infrastructure
+  table: services
+  row: BRIDGES Engineering, Design, Construction Management, and Maintenance
+  pdf_page: 137
+  status: MISMATCH
+  reason: 'services row: FTE printed on a different baseline from the dollars, or blanks printed as nothing; verified by hand in the 2026-09-23
+    review, and every services table reconciles to its printed Total'
+- dept: dpw-infrastructure
+  table: services
+  row: FACILITIES Engineering, Design, Construction Management, and Maintenance
+  pdf_page: 137
+  status: MISMATCH
+  reason: 'services row: FTE printed on a different baseline from the dollars, or blanks printed as nothing; verified by hand in the 2026-09-23
+    review, and every services table reconciles to its printed Total'
+- dept: sewer-maintenance-fund
+  table: services
+  row: Sewer Design and Construction
+  pdf_page: 214
+  status: MISMATCH
+  reason: 'services row: FTE printed on a different baseline from the dollars, or blanks printed as nothing; verified by hand in the 2026-09-23
+    review, and every services table reconciles to its printed Total'
+- dept: sewer-maintenance-fund
+  table: services
+  row: Stormwater Management
+  pdf_page: 214
+  status: MISMATCH
+  reason: 'services row: FTE printed on a different baseline from the dollars, or blanks printed as nothing; verified by hand in the 2026-09-23
+    review, and every services table reconciles to its printed Total'
+- dept: sewer-maintenance-fund
+  table: services
+  row: TOTAL
+  pdf_page: 214
+  status: MISMATCH
+  reason: 'services row: FTE printed on a different baseline from the dollars, or blanks printed as nothing; verified by hand in the 2026-09-23
+    review, and every services table reconciles to its printed Total'
+- dept: dpw-administrative-services
+  table: position_changes
+  row: Administrative Services Director (X)(Y)
+  pdf_page: 136
+  status: MISMATCH
+  reason: non-standard position-table column layout (Summary p.126), verified by hand in the 2026-09-23 review
+- dept: dpw-administrative-services
+  table: position_changes
+  row: Administrative Services Director (X)(Y)
+  pdf_page: 136
+  status: MISMATCH
+  reason: non-standard position-table column layout (Summary p.126), verified by hand in the 2026-09-23 review
+- dept: dpw-administrative-services
+  table: position_changes
+  row: Financial Services Director
+  pdf_page: 136
+  status: MISMATCH
+  reason: non-standard position-table column layout (Summary p.126), verified by hand in the 2026-09-23 review
+- dept: dpw-administrative-services
+  table: position_changes
+  row: DPW Financial Administration Director (X)(Y)
+  pdf_page: 136
+  status: MISMATCH
+  reason: non-standard position-table column layout (Summary p.126), verified by hand in the 2026-09-23 review
+- dept: dpw-administrative-services
+  table: position_changes
+  row: Business Operations Manager
+  pdf_page: 136
+  status: MISMATCH
+  reason: non-standard position-table column layout (Summary p.126), verified by hand in the 2026-09-23 review
+- dept: dpw-administrative-services
+  table: position_changes
+  row: Management Accountant-Senior
+  pdf_page: 136
+  status: MISMATCH
+  reason: non-standard position-table column layout (Summary p.126), verified by hand in the 2026-09-23 review
+- dept: dpw-administrative-services
+  table: position_changes
+  row: Payroll Assistant III
+  pdf_page: 136
+  status: MISMATCH
+  reason: non-standard position-table column layout (Summary p.126), verified by hand in the 2026-09-23 review
+- dept: dpw-administrative-services
+  table: position_changes
+  row: DPW Payroll Services Assistant
+  pdf_page: 136
+  status: MISMATCH
+  reason: non-standard position-table column layout (Summary p.126), verified by hand in the 2026-09-23 review
+- dept: dpw-administrative-services
+  table: position_changes
+  row: Business Operations Manager
+  pdf_page: 136
+  status: MISMATCH
+  reason: non-standard position-table column layout (Summary p.126), verified by hand in the 2026-09-23 review
+- dept: dpw-administrative-services
+  table: position_changes
+  row: Management Accountant-Senior
+  pdf_page: 136
+  status: MISMATCH
+  reason: non-standard position-table column layout (Summary p.126), verified by hand in the 2026-09-23 review
+- dept: dpw-administrative-services
+  table: position_changes
+  row: Payroll Assistant 3
+  pdf_page: 136
+  status: MISMATCH
+  reason: non-standard position-table column layout (Summary p.126), verified by hand in the 2026-09-23 review
+- dept: dpw-administrative-services
+  table: position_changes
+  row: DPW Payroll Services Assistant
+  pdf_page: 136
+  status: MISMATCH
+  reason: non-standard position-table column layout (Summary p.126), verified by hand in the 2026-09-23 review
+- dept: dpw-administrative-services
+  table: position_changes
+  row: Totals
+  pdf_page: 136
+  status: MISMATCH
+  reason: non-standard position-table column layout (Summary p.126), verified by hand in the 2026-09-23 review
+- dept: emergency-communications
+  table: kpis
+  row: Complete the implementation of the unified computer-aided dispatch system
+  pdf_page: 88
+  status: MISMATCH
+  reason: text KPI value ('100% - ongoing enhancements'), verified by hand
+- dept: '460'
+  table: detailed_unit_total
+  row: BUDGETARY CONTROL UNIT TOTAL (1 BCU=1 DU)
+  pdf_page: 332
+  status: MISMATCH
+  reason: Detailed total whose numbers sit on the line after its label (Retirement 460.x), verified by hand

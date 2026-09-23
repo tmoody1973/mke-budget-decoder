@@ -1,0 +1,3 @@
+CREATE EXTENSION IF NOT EXISTS pg_trgm;--> statement-breakpoint
+ALTER TABLE "parcels" ADD COLUMN "address" text GENERATED ALWAYS AS (trim(coalesce(house_nr_lo::text, '') || coalesce(house_nr_sfx, '') || coalesce(' ' || sdir, '') || coalesce(' ' || street, '') || coalesce(' ' || sttype, ''))) STORED;--> statement-breakpoint
+CREATE INDEX "parcels_address_trgm_idx" ON "parcels" USING gin ("address" gin_trgm_ops);

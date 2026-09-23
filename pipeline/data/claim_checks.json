@@ -1,0 +1,1046 @@
+{
+  "fact:act12-sales-tax": {
+    "key": "6744aa4594e4cbb3",
+    "kind": "fact",
+    "cite": {
+      "doc": "summary",
+      "pdf_page": 14,
+      "printed_page": "4"
+    },
+    "statement": "In the summer of 2023, the State of Wisconsin passed Act 12, which generated significant new revenue for the City of Milwaukee. The 2% local sales tax it authorized generated over $200 million in 2024.",
+    "passage": "In those three years, budget requests did not assume revenue replacement ARPA funding, so that when ARPA was allocated to maintain services, it was another factor, on top of those SSR and pension factors described above, pushing those years' budget gaps higher and higher. In the summer of 2023, the State of Wisconsin passed Act 12, which generated significant new revenue for the City of Milwaukee. The 2% local sales tax it authorized generated over $200 million in 2024 and increased in following years with consumer spending. Act 12 also increased SSR to Milwaukee in 2024 by over $20 million and indexed future annual growth to consumer spending and wage growth.",
+    "relation": "supports",
+    "confidence": 1.0,
+    "probabilities": {
+      "says_nothing": 0.0,
+      "supports": 1.0,
+      "contradicts": 0.0
+    },
+    "verdict": "verified",
+    "auto": true,
+    "model": "jev-1.13.0",
+    "input_tokens": 651,
+    "seconds": 0.31
+  },
+  "fact:sales-tax-2027": {
+    "key": "86137c56dfc592e7",
+    "kind": "fact",
+    "cite": {
+      "doc": "summary",
+      "pdf_page": 166,
+      "printed_page": "156"
+    },
+    "statement": "2027 marks the fourth year of the city's two percent sales tax, which will result in an estimated revenue of $218.2 million. Approximately $58.8 million of the sales tax will be used in the general fund to maintain and increase police and fire department service levels. The remainder of the sales tax revenue will be a source of revenue for the city's pension obligations.",
+    "passage": "State Shared Revenue is expected to increase by $5.5 million over 2026 and by $40.7 million over 2023, the last year before Wisconsin Act 12 implemented annual increases to State Shared Revenues. 2027 marks the fourth year of the city's two percent sales tax, which will result in an estimated revenue of $218.2 million. Approximately $58.8 million of the sales tax will be used in the general fund to maintain and increase police and fire department service levels. The remainder of the sales tax revenue will be a source of revenue for the city's pension obligations.",
+    "relation": "supports",
+    "confidence": 1.0,
+    "probabilities": {
+      "supports": 1.0,
+      "says_nothing": 0.0,
+      "contradicts": 0.0
+    },
+    "verdict": "verified",
+    "auto": true,
+    "model": "jev-1.13.0",
+    "input_tokens": 667,
+    "seconds": 0.19
+  },
+  "fact:ssr-2027": {
+    "key": "15ada05000997661",
+    "kind": "fact",
+    "cite": {
+      "doc": "summary",
+      "pdf_page": 167,
+      "printed_page": "157"
+    },
+    "statement": "In 2027, the city expects to receive $260.0 million of State Shared Revenue.",
+    "passage": "The largest amount of state aids received by the city comes in the form of State Shared Revenue. In 2027, the city expects to receive $260.0 million of State Shared Revenue; an increase of $5.5 million from 2026. 2027 PROPOSED PLAN AND EXECUTIVE BUDGET SUMMARY 157",
+    "relation": "supports",
+    "confidence": 1.0,
+    "probabilities": {
+      "supports": 1.0,
+      "says_nothing": 0.0,
+      "contradicts": 0.0
+    },
+    "verdict": "verified",
+    "auto": true,
+    "model": "jev-1.13.0",
+    "input_tokens": 553,
+    "seconds": 0.15
+  },
+  "fact:erip-2027": {
+    "key": "f58896bf52a217ba",
+    "kind": "fact",
+    "cite": {
+      "doc": "summary",
+      "pdf_page": 15,
+      "printed_page": "5"
+    },
+    "statement": "The State's Expenditure Restraint Incentive Program (ERIP) required at least $29.6 million in reductions from requested level in order to qualify for $11.6 million in conditional state aid.",
+    "passage": "3) Expenditure Reductions Deeper cuts across the board are proposed in 2027 than in 2026, just as 2026 proposed deeper cuts than in 2025. This was necessitated partly because revenue increases were not as substantial, and also because the State's Expenditure Restraint Incentive Program (ERIP) required at least $29.6 million in reductions from requested level in order to qualify for $11.6 million in conditional state aid. The 2027 proposed budget total cut about $33.5 million from the requested budget.",
+    "relation": "supports",
+    "confidence": 1.0,
+    "probabilities": {
+      "says_nothing": 0.0,
+      "contradicts": 0.0,
+      "supports": 1.0
+    },
+    "verdict": "verified",
+    "auto": true,
+    "model": "jev-1.13.0",
+    "input_tokens": 631,
+    "seconds": 0.17
+  },
+  "fact:cut-from-requests": {
+    "key": "4a3f96f68a5df46d",
+    "kind": "fact",
+    "cite": {
+      "doc": "summary",
+      "pdf_page": 15,
+      "printed_page": "5"
+    },
+    "statement": "The budget introduction says the 2027 proposed budget cut about $33.5 million from the requested budget.",
+    "passage": "This was necessitated partly because revenue increases were not as substantial, and also because the State's Expenditure Restraint Incentive Program (ERIP) required at least $29.6 million in reductions from requested level in order to qualify for $11.6 million in conditional state aid. The 2027 proposed budget total cut about $33.5 million from the requested budget. In 2026, such reductions totaled just under $30 million.",
+    "relation": "supports",
+    "confidence": 0.99,
+    "probabilities": {
+      "supports": 1.0,
+      "says_nothing": 0.0,
+      "contradicts": 0.0
+    },
+    "verdict": "verified",
+    "auto": true,
+    "model": "jev-1.13.0",
+    "input_tokens": 578,
+    "seconds": 0.23
+  },
+  "fact:tsf-withdrawal-2027": {
+    "key": "3e729e25a8e7394a",
+    "kind": "fact",
+    "cite": {
+      "doc": "summary",
+      "pdf_page": 169,
+      "printed_page": "159"
+    },
+    "statement": "The unrestricted balance of the Tax Stabilization Fund as of December 31, 2025 was $79.6 million. The 2027 budget includes a withdrawal of $39.8 million from the Tax Stabilization Fund, an increase of $7.5 million from 2026.",
+    "passage": "The unrestricted balance of the fund as of December 31, 2025 was $79.6 million. The 2027 budget includes a withdrawal of $39.8 million from the Tax Stabilization Fund, an increase of $7.5 million from 2026. In addition, revenues which the Comptroller will only recognize if ordinance changes are signed into law are reflected on a line in the budget labelled “Tax Stabilization Fund Withdrawal (in anticipation of revenue).” The 2027 proposed budget includes $1.5 million in additional revenues tied to DNS fee increases and Board of Zoning Appeals fee increases.",
+    "relation": "supports",
+    "confidence": 1.0,
+    "probabilities": {
+      "contradicts": 0.0,
+      "says_nothing": 0.0,
+      "supports": 1.0
+    },
+    "verdict": "verified",
+    "auto": true,
+    "model": "jev-1.13.0",
+    "input_tokens": 665,
+    "seconds": 0.19
+  },
+  "fact:street-lighting-revenue": {
+    "key": "b0a798f1fd1a0986",
+    "kind": "fact",
+    "cite": {
+      "doc": "summary",
+      "pdf_page": 169,
+      "printed_page": "159"
+    },
+    "statement": "The street lighting fee is estimated to generate $11.2 million in 2027, with $500,000 of that revenue being used for capital expenditures to improve the city's streetlights.",
+    "passage": "This fee will increase from $1.12 in 2026 to $1.16 per frontage foot on streets served by the city's streetlights, a 3.6% increase. This fee is estimated to generate $11.2 million in 2027, with $500,000 of that revenue being used for capital expenditures to improve the city's streetlights. Miscellaneous Revenues:",
+    "relation": "supports",
+    "confidence": 1.0,
+    "probabilities": {
+      "contradicts": 0.0,
+      "supports": 1.0,
+      "says_nothing": 0.0
+    },
+    "verdict": "verified",
+    "auto": true,
+    "model": "jev-1.13.0",
+    "input_tokens": 595,
+    "seconds": 0.16
+  },
+  "fact:fringe-offset-year-wording": {
+    "key": "66da161a45b520d3",
+    "kind": "fact",
+    "cite": {
+      "doc": "summary",
+      "pdf_page": 169,
+      "printed_page": "159"
+    },
+    "statement": "The Source of Funds narrative says the fringe benefit reimbursement from other city funds (the Fringe Benefit Offset line in the revenue table) is 'anticipated to be $28.0 million in 2026' [sic], 'a $3.0 million increase from 2026'.",
+    "passage": "The fringe benefit costs associated with reimbursables, grants, enterprise funds, and capital activities are budgeted in the general fund. These other funds make a payroll payment to the general fund to offset the cost of their general fund budgeted fringe benefits, which is anticipated to be $28.0 million in 2026, a $3.0 million increase from 2026. Tax Stabilization Fund (TSF):",
+    "relation": "supports",
+    "confidence": 0.53,
+    "probabilities": {
+      "supports": 0.68,
+      "says_nothing": 0.01,
+      "contradicts": 0.31
+    },
+    "verdict": "verified",
+    "auto": false,
+    "model": "jev-1.13.0",
+    "input_tokens": 606,
+    "seconds": 0.29
+  },
+  "fact:police-recruit-classes": {
+    "key": "b71281660e508dac",
+    "kind": "fact",
+    "cite": {
+      "doc": "summary",
+      "pdf_page": 127,
+      "printed_page": "117"
+    },
+    "statement": "The 2027 budget funds the maximum number of annual classes (3) each at the maximum level of recruits per class (65), which allows the City to meet the State's Act 12 requirements for sworn staffing levels and sales tax expenditures.",
+    "passage": "Robbery, burglary, larceny theft, motor vehicle theft, and arson count distinct offenses. SERVICE HIGHLIGHTS • The 2027 budget funds the maximum number of annual classes (3) each at the maximum level of recruits per class (65). This full funding reflects the Mayor's strategic goal of advancing public safety, and allows the City to meet the State's Act 12 requirements for sworn staffing levels and sales tax expenditures. • Reduce violent crime through implementation of the 2025 Violent Crime Reduction Plan, to include enhanced guardianship that focuses on more visible police presence and positive community interactions that are designed to mitigate opportunities for crime to occur. 2027 PROPOSED PLAN AND EXECUTIVE BUDGET SUMMARY 117",
+    "relation": "supports",
+    "confidence": 1.0,
+    "probabilities": {
+      "says_nothing": 0.0,
+      "contradicts": 0.0,
+      "supports": 1.0
+    },
+    "verdict": "verified",
+    "auto": true,
+    "model": "jev-1.13.0",
+    "input_tokens": 667,
+    "seconds": 0.29
+  },
+  "fact:sro-mandate": {
+    "key": "cd5a94e79e1d2684",
+    "kind": "fact",
+    "cite": {
+      "doc": "summary",
+      "pdf_page": 128,
+      "printed_page": "118"
+    },
+    "statement": "The Police Department maintains a School Resource Division within Milwaukee Public Schools, whose leadership supports the 25 officers mandated by Act 12.",
+    "passage": "This program has been an important strategy and pipeline for police officer recruitment and long-term officer retention. In addition, provide funding for five community service officers in 2026. • Maintain a School Resource Division to strengthen the coordination and management of the department's School Resource Officer Program within Milwaukee Public Schools. This division's leadership structure shall include a Captain of Police, Police Lieutenant and Police Sergeants to compliment/support the 25 officers mandated by Act 12. • Deploy and evaluate the use of unmanned aerial systems equipment and technology (drones) Pilot Program as a first responder to improve responsiveness to critical incidents, active threats, and natural disasters. • Implement the new L3Harris P25 700 MHz simulcast radio system to improve public safety communications. This public safety radio upgrade will provide faster emergency response for the Milwaukee community and provide clearer, more reliable radio coverage citywide, even inside dense buildings.",
+    "relation": "supports",
+    "confidence": 0.99,
+    "probabilities": {
+      "says_nothing": 0.0,
+      "contradicts": 0.0,
+      "supports": 1.0
+    },
+    "verdict": "verified",
+    "auto": true,
+    "model": "jev-1.13.0",
+    "input_tokens": 669,
+    "seconds": 0.16
+  },
+  "fact:legal-deadlines": {
+    "key": "ad6fd56c299990a5",
+    "kind": "fact",
+    "cite": {
+      "doc": "summary",
+      "pdf_page": 4,
+      "printed_page": "front matter"
+    },
+    "statement": "Budget calendar legal deadlines: the proposed budget is submitted by September 28 and the Common Council acts on the budget by November 14.",
+    "passage": "BUDGET AND PLANNING PROCESS City Strategic Plan Citywide Objectives Citywide Strategies Department Plans and Budget Department Objectives Department Strategies Department Performance Measures Department Annual Budget Annual Budget Executive Budget Adopted City Budget Calendar Date Activity January - March Departments Prepare Plans, Objectives, and Performance Measures March Departments Receive Budget Request Materials Early May* Department Plans and Budget Requests Due Mid-Summer Mayor's Public Hearing on Plans and Budgets July - September Mayor's Executive Plan and Budget Review Late September** Plan and Budget Submitted to Common Council October Legislative Hearings Early November Finance and Personnel Committee Budget Amendment Day Early November *** Common Council Action on Budget * Legal Deadline Second Tuesday in May ** Legal Deadline September 28 *** Legal Deadline November 14",
+    "relation": "supports",
+    "confidence": 0.95,
+    "probabilities": {
+      "contradicts": 0.03,
+      "supports": 0.97,
+      "says_nothing": 0.0
+    },
+    "verdict": "verified",
+    "auto": true,
+    "model": "jev-1.13.0",
+    "input_tokens": 630,
+    "seconds": 0.14
+  },
+  "fact:public-survey": {
+    "key": "bbb62d64a27530f5",
+    "kind": "fact",
+    "cite": {
+      "doc": "summary",
+      "pdf_page": 16,
+      "printed_page": "6"
+    },
+    "statement": "Thousands of Milwaukee residents took a two-minute, six-question survey about which revenue categories to increase or not, and which services to protect or not. The document says the public asked for better roads and more demolitions of nuisance properties, and to hold the line on taxes and fees.",
+    "passage": "At neighborhood meetings, on social media via video clips, and at two public forums in July, the public was encouraged to help the Mayor make decisions. Some of this feedback was verbal, some was on notes stuck to easel boards at those public forums, and thousands of Milwaukee residents took a two-minute, six-question survey about which revenue categories to increase or not, and which services to protect or not. Overwhelming, the public asked for better roads and more demolitions of nuisance properties, and to hold the line on taxes and fees.",
+    "relation": "supports",
+    "confidence": 1.0,
+    "probabilities": {
+      "says_nothing": 0.0,
+      "supports": 1.0,
+      "contradicts": 0.0
+    },
+    "verdict": "verified",
+    "auto": true,
+    "model": "jev-1.13.0",
+    "input_tokens": 617,
+    "seconds": 0.17
+  },
+  "fact:contingent-fund-2025-bracketed": {
+    "key": "e2cbc003fa98301a",
+    "kind": "fact",
+    "cite": {
+      "doc": "detailed",
+      "pdf_page": 379,
+      "printed_page": "500.1",
+      "line_no": 23
+    },
+    "statement": "The Common Council Contingent Fund's 2025 actual expenditure is printed in brackets, [4,998,805], and the budget does not say what the brackets mean. The Detailed budget notes: 'Expenditure experience represents transfers and expenditures authorized by resolution.'",
+    "passage": "COMMON COUNCIL CONTINGENT FUND 1. BUDGET FOR COMMON COUNCIL CONTINGENT FUND Total Budget for Common Council 0001 9990 C001 006300 [4,998,805] 5,000,000 Contingent Fund 5,000,000 5,000,000 For emergency or other purposes which may arise during the year requiring the expenditure of money in addition to the amount provided for the several purposes for which no express provision has been made in the budget. 2. SOURCE OF FUNDS FOR COMMON COUNCIL CONTINGENT FUND 0001 9990 009010 5,000,000 5,000,000 Property Tax Levy 5,000,000 5,000,000 Expenditure experience represents transfers and expenditures authorized by resolution. COMMON COUNCIL CONTINGENT FUND 500.1 3rd Run 9/14/26",
+    "relation": "supports",
+    "confidence": 0.57,
+    "probabilities": {
+      "supports": 0.71,
+      "says_nothing": 0.02,
+      "contradicts": 0.27
+    },
+    "verdict": "verified",
+    "auto": false,
+    "model": "jev-1.13.0",
+    "input_tokens": 755,
+    "seconds": 0.28
+  },
+  "glossary:Proposed budget": {
+    "key": "2a337404e9d16422",
+    "kind": "glossary",
+    "cite": {
+      "doc": "summary",
+      "pdf_page": 11,
+      "printed_page": "1"
+    },
+    "statement": "The Mayor's budget plan for next year, sent to the Common Council. The Council can change it before adopting it.",
+    "passage": "2027 Budget Introduction The 2027 Proposed Budget maintains core services while holding increases to property taxes and user fees under the rate of inflation. This seeming stability occurs in the context of an ongoing structural deficit, which will persist unless changes occur to expected revenues or expenditure requirements.",
+    "conflict_probability": 0.06,
+    "verdict": "consistent",
+    "auto": true,
+    "model": "jev-1.13.0",
+    "input_tokens": 460,
+    "seconds": 0.16
+  },
+  "glossary:Requested budget": {
+    "key": "19ec96af4dcec330",
+    "kind": "glossary",
+    "cite": {
+      "doc": "summary",
+      "pdf_page": 15,
+      "printed_page": "5"
+    },
+    "statement": "What each department asked for before the Mayor's office decided what to propose.",
+    "passage": "This was necessitated partly because revenue increases were not as substantial, and also because the State's Expenditure Restraint Incentive Program (ERIP) required at least $29.6 million in reductions from requested level in order to qualify for $11.6 million in conditional state aid. The 2027 proposed budget total cut about $33.5 million from the requested budget. In 2026, such reductions totaled just under $30 million.",
+    "conflict_probability": 0.08,
+    "verdict": "consistent",
+    "auto": true,
+    "model": "jev-1.13.0",
+    "input_tokens": 496,
+    "seconds": 0.21
+  },
+  "glossary:Adopted budget": {
+    "key": "c5ce628f3017d818",
+    "kind": "glossary",
+    "cite": {
+      "doc": "summary",
+      "pdf_page": 18,
+      "printed_page": "8"
+    },
+    "statement": "The budget the Common Council passed. In this document, '2026 Adopted' is this year's final budget.",
+    "passage": "Comparisons by Budget Sections Between 2027 Proposed Budget Versus 2026 Adopted Budget, and 2027 Requested Revenues, Tax Levies, and Resulting Changes Change 2026 2027 2027 2027 Proposed Adopted Requested Proposed Versus Budget Budget Budget 2026 Adopted 2027 Requested A. General City Purposes Appropriations Salaries and Wages $507,779,368 $535,112,298 $521,327,643 $13,548,275 $-13,784,655 Fringe Benefits 225,321,709 244,666,955 240,573,987 15,252,278 -4,092,968 Operating Expenditures 93,883,626 105,523,463 100,814,805 6,931,179 -4,708,658 Equipment Purchases 10,042,000 14,357,815 10,514,340 472,340 -3,843,475 Special Funds 44,986,968 47,756,409 46,762,552 1,775,584 -993,857 Special Purpose Account Miscellaneous* 23,056,921 30,352,865 26,726,865 3,669,944 -3,626,000 Workers Compensation Special Purpose Accounts 12,000,000 12,500,000 11,850,000 -150,000 -650,000 Employee Health Care Special Purpose Accounts 123,924,500 133,300,000 128,800,000 4,875,500 -4,500,000 Fringe Benefit Offset -225,321,709 -244,666,955 -240,573,987 -15,252,278 4,092,968 Total Appropriations $815,673,383 $878,902,850 $846,796,205 $31,122,822 $-32,106,645 Funding Sources General City Revenues $636,066,363 $644,347,217 $661,806,465 $25,740,102 $17,459,248 Tax Stabilization Fund Withdrawal 32,300,000 0 41,301,000 9,001,000 41,301,000 Property Tax Levy 147,307,020 234,555,633 143,688,740 -3,618,280 -90,866,893 Total Revenues $815,673,383 $878,902,850 $846,796,205 $31,122,822 $-32,106,645 B.",
+    "conflict_probability": 0.06,
+    "verdict": "consistent",
+    "auto": true,
+    "model": "jev-1.13.0",
+    "input_tokens": 1353,
+    "seconds": 0.16
+  },
+  "glossary:Actual expenditures": {
+    "key": "25230aaf20d83d05",
+    "kind": "glossary",
+    "cite": {
+      "doc": "summary",
+      "pdf_page": 126,
+      "printed_page": "116"
+    },
+    "statement": "What a department actually spent in a completed year (in this budget, 2025), as opposed to what was budgeted for it.",
+    "passage": "To be a department where every member works with our community to help build sustainable healthy neighborhoods, free of crime, and maintained by positive relationships. BUDGET SUMMARY Change 2025 2026 2027 2027 2027 Proposed Actual Adopted Requested Proposed Versus Expenditures Budget Budget Budget 2026 Adopted 2027 Requested Personnel FTEs - Operations & Maintenance 2,443.76 2,324.95 2,352.95 2,349.45 24.50 -3.50 FTEs - Other 117.87 81.50 103.50 102.50 21.00 -1.00 Total Positions Authorized 2,668 2,526 2,586 2,585 59 -1 Expenditures Salaries and Wages $215,495,540 $190,364,638 $214,768,305 $214,743,752 $24,379,114 $-24,553 Fringe Benefits 80,987,282 91,375,026 103,088,787 103,077,001 11,701,975 -11,786 Operating Expenditures 22,449,229 25,055,571 24,880,000 24,631,372 -424,199 -248,628 Equipment 11,263,728 2,889,000 2,620,000 1,070,000 -1,819,000 -1,550,000 Special Funds 485,109 427,600 465,000 415,000 -12,600 -50,000 Total $330,680,888 $310,111,835 $345,822,092 $343,937,125 $33,825,290 $-1,884,967 Revenues Intergovernmental $1,134,738 $1,036,000 $1,300,000 $1,300,000 $264,000 $0 Charges for Services 7,324,512 7,198,000 8,024,000 8,224,000 1,026,000 200,000 Total $8,459,250 $8,234,000 $9,324,000 $9,524,000 $1,290,000 $200,000 SUMMARY OF SERVICES DELIVERED BY THIS DEPARTMENT As the City of Milwaukee's lead law enforcement agency, the Milwaukee Police Department (MPD) is primarily responsible for mitigating crime and disorder in the city. MPD remains steadfast in its commitment to constitutional policing, and employing community-oriented, problem-oriented and intelligence-led initiatives.",
+    "verdict": "definition_ours",
+    "auto": false
+  },
+  "glossary:General City Purposes": {
+    "key": "b9b8f6b0edea029f",
+    "kind": "glossary",
+    "cite": {
+      "doc": "summary",
+      "pdf_page": 17,
+      "printed_page": "7"
+    },
+    "statement": "The main part of the city budget that pays for most departments, such as police, fire, public works, libraries and health.",
+    "passage": "2027 PROPOSED BUDGET AND TAX RATE COMPARED TO PRIOR YEAR 2026 2027 CHANGE 2026 2027 CHANGE Purpose Of Expenditure Adopted Proposed 2027 Minus Adopted Proposed 2027 Minus And Funding Source Budget Budget 2026 Adopted Budget Budget 2026 Adopted A. GENERAL CITY PURPOSES 1. Budget (Expenditure Authority) $815,673,383 $846,796,205 $31,122,822 2.",
+    "conflict_probability": 0.07,
+    "verdict": "consistent",
+    "auto": true,
+    "model": "jev-1.13.0",
+    "input_tokens": 551,
+    "seconds": 0.16
+  },
+  "glossary:All funds": {
+    "key": "9de5394ecb9594a8",
+    "kind": "glossary",
+    "cite": {
+      "doc": "summary",
+      "pdf_page": 17,
+      "printed_page": "7"
+    },
+    "statement": "Every part of the city budget added together: general city purposes plus retirement, capital, debt, the contingent fund and the special funds.",
+    "passage": "Non Tax Levy Funding $484,892,055 $492,642,743 $7,750,688 3. Tax Levy Funding $0 $0 $0 $0.00 $0.00 $0.00 TOTAL (A thru M) 1. Budget (Expenditure Authority) $2,075,687,722 $2,261,087,412 $185,399,690 2.",
+    "conflict_probability": 0.12,
+    "verdict": "consistent",
+    "auto": true,
+    "model": "jev-1.13.0",
+    "input_tokens": 528,
+    "seconds": 0.17
+  },
+  "glossary:Budget section": {
+    "key": "94d6d1a9dc7a03ee",
+    "kind": "glossary",
+    "cite": {
+      "doc": "summary",
+      "pdf_page": 17,
+      "printed_page": "7"
+    },
+    "statement": "The budget is divided into lettered sections (A for general city purposes, B for employee retirement, C for capital improvements, and so on).",
+    "passage": "2027 PROPOSED BUDGET AND TAX RATE COMPARED TO PRIOR YEAR 2026 2027 CHANGE 2026 2027 CHANGE Purpose Of Expenditure Adopted Proposed 2027 Minus Adopted Proposed 2027 Minus And Funding Source Budget Budget 2026 Adopted Budget Budget 2026 Adopted A. GENERAL CITY PURPOSES 1. Budget (Expenditure Authority) $815,673,383 $846,796,205 $31,122,822 2.",
+    "conflict_probability": 0.07,
+    "verdict": "consistent",
+    "auto": true,
+    "model": "jev-1.13.0",
+    "input_tokens": 552,
+    "seconds": 0.17
+  },
+  "glossary:Property tax levy": {
+    "key": "32759a96314a587a",
+    "kind": "glossary",
+    "cite": {
+      "doc": "summary",
+      "pdf_page": 17,
+      "printed_page": "7"
+    },
+    "statement": "The total amount the city plans to raise from property taxes.",
+    "passage": "Budget (Expenditure Authority) $815,673,383 $846,796,205 $31,122,822 2. Non Tax Levy Funding 668,366,363 703,107,465 34,741,102 3. Tax Levy Funding 147,307,020 143,688,740 -3,618,280 $3.33 $3.05 $-0.28 B. EMPLOYEE RETIREMENT 1. Budget (Expenditure Authority) $261,171,274 $273,417,384 $12,246,110 2. Non Tax Levy Funding 184,339,698 188,766,653 4,426,955 3. Tax Levy Funding 76,831,576 84,650,731 7,819,155 $1.74 $1.80 $0.06 C.",
+    "conflict_probability": 0.18,
+    "verdict": "consistent",
+    "auto": true,
+    "model": "jev-1.13.0",
+    "input_tokens": 679,
+    "seconds": 0.19
+  },
+  "glossary:Tax rate": {
+    "key": "fcac16a651948776",
+    "kind": "glossary",
+    "cite": {
+      "doc": "summary",
+      "pdf_page": 17,
+      "printed_page": "7"
+    },
+    "statement": "The city property tax charged for each thousand dollars of a property's assessed value.",
+    "passage": "2027 PROPOSED BUDGET AND TAX RATE COMPARED TO PRIOR YEAR 2026 2027 CHANGE 2026 2027 CHANGE Purpose Of Expenditure Adopted Proposed 2027 Minus Adopted Proposed 2027 Minus And Funding Source Budget Budget 2026 Adopted Budget Budget 2026 Adopted A. GENERAL CITY PURPOSES 1. Non Tax Levy Funding $1,738,866,851 $1,917,530,124 $178,663,273 3. Tax Levy Funding $336,820,871 $343,557,288 $6,736,417 $7.61 $7.29 $-0.32 Tax Rates and Assessed Value - 2027 rate column is based on an estimated assessed value of: $47,141,816,729 as of August 31, 2026.",
+    "conflict_probability": 0.15,
+    "verdict": "consistent",
+    "auto": true,
+    "model": "jev-1.13.0",
+    "input_tokens": 645,
+    "seconds": 0.16
+  },
+  "glossary:Assessed value": {
+    "key": "a47cf1fa90e89a1c",
+    "kind": "glossary",
+    "cite": {
+      "doc": "summary",
+      "pdf_page": 17,
+      "printed_page": "7"
+    },
+    "statement": "The value the city assigns to a property for tax purposes.",
+    "passage": "Non Tax Levy Funding $1,738,866,851 $1,917,530,124 $178,663,273 3. Tax Levy Funding $336,820,871 $343,557,288 $6,736,417 $7.61 $7.29 $-0.32 Tax Rates and Assessed Value - 2027 rate column is based on an estimated assessed value of: $47,141,816,729 as of August 31, 2026.",
+    "conflict_probability": 0.06,
+    "verdict": "consistent",
+    "auto": true,
+    "model": "jev-1.13.0",
+    "input_tokens": 541,
+    "seconds": 0.21
+  },
+  "glossary:Non-levy funding": {
+    "key": "bbbf8e80d77ff229",
+    "kind": "glossary",
+    "cite": {
+      "doc": "summary",
+      "pdf_page": 17,
+      "printed_page": "7"
+    },
+    "statement": "Money for a budget section that does not come from property taxes, such as state aid, fees, grants and borrowing.",
+    "passage": "Budget (Expenditure Authority) $815,673,383 $846,796,205 $31,122,822 2. Non Tax Levy Funding 668,366,363 703,107,465 34,741,102 3. Tax Levy Funding 147,307,020 143,688,740 -3,618,280 $3.33 $3.05 $-0.28 B. Budget (Expenditure Authority) $261,171,274 $273,417,384 $12,246,110 2. Non Tax Levy Funding 184,339,698 188,766,653 4,426,955 3. Tax Levy Funding 76,831,576 84,650,731 7,819,155 $1.74 $1.80 $0.06 C. Budget (Expenditure Authority) $236,708,867 $316,607,345 $79,898,478 2. Non Tax Levy Funding 235,803,867 315,522,345 79,718,478 3. Tax Levy Funding 905,000 1,085,000 180,000 $0.02 $0.02 $0.00 D.",
+    "conflict_probability": 0.08,
+    "verdict": "consistent",
+    "auto": true,
+    "model": "jev-1.13.0",
+    "input_tokens": 817,
+    "seconds": 0.2
+  },
+  "glossary:State Shared Revenue": {
+    "key": "803fdf3504906b2d",
+    "kind": "glossary",
+    "cite": {
+      "doc": "summary",
+      "pdf_page": 11,
+      "printed_page": "1"
+    },
+    "statement": "Money the State of Wisconsin gives the city each year to help pay for local services.",
+    "passage": "Requested Budget Gaps (in Millions) $200.0 $180.0 $160.0 $140.0 $120.0 $100.0 $80.0 $60.0 $40.0 $20.0 $0.0 The historic pattern of these gaps can be distilled into five distinct, and recently overlapping, driving factors: 1) State Shared Revenue (SSR) was reduced between the 1990s and 2023. 2) Pension costs were no longer fully covered by the pension fund's investment returns, beginning in 2010.",
+    "conflict_probability": 0.06,
+    "verdict": "consistent",
+    "auto": true,
+    "model": "jev-1.13.0",
+    "input_tokens": 535,
+    "seconds": 0.2
+  },
+  "glossary:Act 12": {
+    "key": "51903f1f77f0efb7",
+    "kind": "glossary",
+    "cite": {
+      "doc": "summary",
+      "pdf_page": 14,
+      "printed_page": "4"
+    },
+    "statement": "A 2023 state law that allowed Milwaukee to add a local sales tax and changed State Shared Revenue, with conditions on how the city uses the money.",
+    "passage": "In those three years, budget requests did not assume revenue replacement ARPA funding, so that when ARPA was allocated to maintain services, it was another factor, on top of those SSR and pension factors described above, pushing those years' budget gaps higher and higher. In the summer of 2023, the State of Wisconsin passed Act 12, which generated significant new revenue for the City of Milwaukee. The 2% local sales tax it authorized generated over $200 million in 2024 and increased in following years with consumer spending.",
+    "conflict_probability": 0.1,
+    "verdict": "consistent",
+    "auto": true,
+    "model": "jev-1.13.0",
+    "input_tokens": 527,
+    "seconds": 0.19
+  },
+  "glossary:Local sales tax": {
+    "key": "df9411775eb9ab10",
+    "kind": "glossary",
+    "cite": {
+      "doc": "summary",
+      "pdf_page": 14,
+      "printed_page": "4"
+    },
+    "statement": "The city's own sales tax on purchases in Milwaukee, authorized by Act 12.",
+    "passage": "In the summer of 2023, the State of Wisconsin passed Act 12, which generated significant new revenue for the City of Milwaukee. The 2% local sales tax it authorized generated over $200 million in 2024 and increased in following years with consumer spending. Act 12 also increased SSR to Milwaukee in 2024 by over $20 million and indexed future annual growth to consumer spending and wage growth.",
+    "conflict_probability": 0.05,
+    "verdict": "consistent",
+    "auto": true,
+    "model": "jev-1.13.0",
+    "input_tokens": 491,
+    "seconds": 0.15
+  },
+  "glossary:Expenditure Restraint Incentive Program (ERIP)": {
+    "key": "338efe5a8807c9f7",
+    "kind": "glossary",
+    "cite": {
+      "doc": "summary",
+      "pdf_page": 168,
+      "printed_page": "158"
+    },
+    "statement": "A state program that pays cities that keep general fund spending growth within a limit: inflation plus 60% of net new construction.",
+    "passage": "In 2027, these aids total $31.5 million, an increase of $537,000 from 2026. The Expenditure Restraint Program provides payments to communities that control their general fund expenditures. General fund expenses are allowed to increase by the Consumer Price Index plus 60% of net new construction in the city.",
+    "conflict_probability": 0.07,
+    "verdict": "consistent",
+    "auto": true,
+    "model": "jev-1.13.0",
+    "input_tokens": 495,
+    "seconds": 0.18
+  },
+  "glossary:Tax Stabilization Fund": {
+    "key": "7cf2b36580db25d9",
+    "kind": "glossary",
+    "cite": {
+      "doc": "summary",
+      "pdf_page": 169,
+      "printed_page": "159"
+    },
+    "statement": "A city savings fund built from unspent money and revenue surpluses, used to keep the tax rate steady.",
+    "passage": "These other funds make a payroll payment to the general fund to offset the cost of their general fund budgeted fringe benefits, which is anticipated to be $28.0 million in 2026, a $3.0 million increase from 2026. Tax Stabilization Fund (TSF): The tax stabilization fund accumulates unexpended appropriations and revenue surpluses. It assists in stabilizing the city's tax rate and protects citizens from tax rate fluctuations that can result from erratic variations in non-property tax revenues. The unrestricted balance of the fund as of December 31, 2025 was $79.6 million. The 2027 budget includes a withdrawal of $39.8 million from the Tax Stabilization Fund, an increase of $7.5 million from 2026. In addition, revenues which the Comptroller will only recognize if ordinance changes are signed into law are reflected on a line in the budget labelled “Tax Stabilization Fund Withdrawal (in anticipation of revenue).” The 2027 proposed budget includes $1.5 million in additional revenues tied to DNS fee increases and Board of Zoning Appeals fee increases.",
+    "conflict_probability": 0.07,
+    "verdict": "consistent",
+    "auto": true,
+    "model": "jev-1.13.0",
+    "input_tokens": 667,
+    "seconds": 0.19
+  },
+  "glossary:Budget gap": {
+    "key": "d2fbbc683de43f91",
+    "kind": "glossary",
+    "cite": {
+      "doc": "summary",
+      "pdf_page": 11,
+      "printed_page": "1"
+    },
+    "statement": "The difference between what it would cost to keep providing current city services next year and the revenue the city expects to have. The city calculates it each spring and calls it the requested budget gap.",
+    "passage": "Unfortunately, this stability reveals a stubborn imbalance between the overall revenues required to continue current services in each year, and the expected annual revenues. That difference is calculated every spring in the year before the budget takes effect, and is known as the requested budget gap. The following chart illustrates its history over the prior two decades:",
+    "conflict_probability": 0.06,
+    "verdict": "consistent",
+    "auto": true,
+    "model": "jev-1.13.0",
+    "input_tokens": 478,
+    "seconds": 0.19
+  },
+  "glossary:Structural deficit": {
+    "key": "93a59e32339d97c2",
+    "kind": "glossary",
+    "cite": {
+      "doc": "summary",
+      "pdf_page": 11,
+      "printed_page": "1"
+    },
+    "statement": "A gap that comes back every year because ongoing costs grow faster than ongoing revenue.",
+    "passage": "2027 Budget Introduction The 2027 Proposed Budget maintains core services while holding increases to property taxes and user fees under the rate of inflation. This seeming stability occurs in the context of an ongoing structural deficit, which will persist unless changes occur to expected revenues or expenditure requirements. Recent volatility in annual budget gaps seems to be giving way to a new stability, now that federal American Rescue Plan Act (ARPA) dollars have expired and the scale of local sales tax collections are better understood.",
+    "conflict_probability": 0.08,
+    "verdict": "consistent",
+    "auto": true,
+    "model": "jev-1.13.0",
+    "input_tokens": 495,
+    "seconds": 0.22
+  },
+  "glossary:Appropriation": {
+    "key": "b59337ef7bfa3f8f",
+    "kind": "glossary",
+    "cite": {
+      "doc": "summary",
+      "pdf_page": 18,
+      "printed_page": "8"
+    },
+    "statement": "Permission in the budget to spend a set amount for a set purpose.",
+    "passage": "Total Cash Financed 88,444,924 86,464,000 97,942,345 9,497,421 11,478,345 Total Revenues (Capital Improvements) $236,708,867 $396,656,097 $316,607,345 $79,898,478 $-80,048,752 D. City Debt Total Appropriations (Includes Borrowing for Milwaukee Public Schools) $272,242,143 $327,248,735 $326,623,735 $54,381,592 $-625,000 8 2027 PROPOSED PLAN AND EXECUTIVE BUDGET SUMMARY",
+    "conflict_probability": 0.1,
+    "verdict": "consistent",
+    "auto": true,
+    "model": "jev-1.13.0",
+    "input_tokens": 615,
+    "seconds": 0.16
+  },
+  "glossary:Source of funds": {
+    "key": "70be3332c76443f9",
+    "kind": "glossary",
+    "cite": {
+      "doc": "summary",
+      "pdf_page": 166,
+      "printed_page": "156"
+    },
+    "statement": "The revenues that pay for a part of the budget.",
+    "passage": "SOURCE OF FUNDS FOR GENERAL CITY PURPOSES Each year, the Comptroller's Office develops revenue estimates for the upcoming budget year. These estimates determine the property tax levy and reserve fund withdrawals needed to balance the budget.",
+    "conflict_probability": 0.09,
+    "verdict": "consistent",
+    "auto": true,
+    "model": "jev-1.13.0",
+    "input_tokens": 434,
+    "seconds": 0.19
+  },
+  "glossary:Intergovernmental revenue": {
+    "key": "59c1c1f71c9e8265",
+    "kind": "glossary",
+    "cite": {
+      "doc": "summary",
+      "pdf_page": 167,
+      "printed_page": "157"
+    },
+    "statement": "Money from other governments, mainly state aid formulas and programs.",
+    "passage": "The following chart illustrates the distribution of the different revenue categories for general city purposes between 1995 budget and 2027 budget. A noticeable shift in intergovernmental revenues, property taxes, and charges for service is evident over the time period. The other notable shift is implementation of a local sales tax, which began in 2024. Intergovernmental Revenue: These revenues include funding received from other governmental jurisdictions, primarily state aid formulas and programs. In the 2027 budget, intergovernmental revenues total $323.3 million, an increase of $6.5 million from 2026.",
+    "conflict_probability": 0.03,
+    "verdict": "consistent",
+    "auto": true,
+    "model": "jev-1.13.0",
+    "input_tokens": 534,
+    "seconds": 0.21
+  },
+  "glossary:Charges for services": {
+    "key": "10b83161be188bb2",
+    "kind": "glossary",
+    "cite": {
+      "doc": "summary",
+      "pdf_page": 168,
+      "printed_page": "158"
+    },
+    "statement": "Revenue from fees for services city departments provide, such as garbage collection, snow and ice control and street lighting, many charged to property owners according to use.",
+    "passage": "This increase is primarily due to anticipated increases in sales tax revenues available for Police and Fire expenditures. Charges for Services: The 2027 budget includes $171.7 million in revenue from charges for services, an increase of $8.2 million from 2026. This category of funding encompasses revenue received for services provided by city departments.",
+    "conflict_probability": 0.07,
+    "verdict": "consistent",
+    "auto": true,
+    "model": "jev-1.13.0",
+    "input_tokens": 484,
+    "seconds": 0.19
+  },
+  "glossary:Payment in lieu of taxes (PILOT)": {
+    "key": "8a150d7410e069e5",
+    "kind": "glossary",
+    "cite": {
+      "doc": "summary",
+      "pdf_page": 170,
+      "printed_page": "160"
+    },
+    "statement": "A payment to the city from an organization that does not pay property tax, made instead of that tax.",
+    "passage": "SOURCE OF FUNDS FOR GENERAL CITY PURPOSES SOURCE OF FUNDS FOR GENERAL CITY PURPOSES Change 2025 2026 2027 2027 2027 Proposed Actual Adopted Requested Proposed Versus Expenditures Budget Budget Budget 2026 Adopted 2027 Requested Taxes and Payments in Lieu of Taxes Housing Authority $0 $1,000,000 $0 $0 $-1,000,000 $0 Parking 1,529,100 1,569,000 1,569,000 1,625,000 56,000 56,000 Water Works 15,137,196 15,000,000 15,000,000 16,000,000 1,000,000 1,000,000 Trailer Park Taxes 91,400 90,000 90,000 90,000 0 0 Payment in Lieu of Taxes Other 433,327 380,000 425,000 425,000 45,000 0 PILOT Wisconsin Center District 0 500,000 513,000 513,000 13,000 0 Interest/Penalties on Taxes 2,365,740 2,327,000 2,365,000 2,365,000 38,000 0 TID Excess Revenue 3,733,827 5,037,000 0 0 -5,037,000 0 Other Taxes -5,988 316,000 117,000 117,000 -199,000 0 Local Sales Tax 67,931,399 49,662,544 59,491,517 58,839,110 9,176,566 -652,407 Total Taxes $91,216,001 $75,881,544 $79,570,517 $79,974,110 $4,092,566 $403,593 Licenses and Permits Licenses Dog and Cat $77,757 $94,000 $100,000 $100,000 $6,000 $0 Food City Clerk 2,454,548 2,750,000 2,750,000 2,750,000 0 0 Food Health Dept. 199,193 220,000 200,000 200,000 -20,000 0 Health Dept.",
+    "conflict_probability": 0.1,
+    "verdict": "consistent",
+    "auto": true,
+    "model": "jev-1.13.0",
+    "input_tokens": 1181,
+    "seconds": 0.18
+  },
+  "glossary:Solid waste fee": {
+    "key": "6ff9b7cf259f45fd",
+    "kind": "glossary",
+    "cite": {
+      "doc": "summary",
+      "pdf_page": 169,
+      "printed_page": "159"
+    },
+    "statement": "An annual charge on residential units that pays for garbage collection and related services such as recycling and special collections.",
+    "passage": "Service costs for related solid waste services like recycling, and special collections are also recovered through the fee. In 2027, the solid waste fee will increase from $271.80 per year for residential units to $280.00, a 3.0% increase. An additional charge is made to residences that have more than one garbage cart per household.",
+    "conflict_probability": 0.06,
+    "verdict": "consistent",
+    "auto": true,
+    "model": "jev-1.13.0",
+    "input_tokens": 479,
+    "seconds": 0.28
+  },
+  "glossary:Full-time equivalent (FTE)": {
+    "key": "7044234293937e1a",
+    "kind": "glossary",
+    "cite": {
+      "doc": "summary",
+      "pdf_page": 13,
+      "printed_page": "3"
+    },
+    "statement": "A way to count staff time: one FTE is one full-time job; two half-time jobs are also one FTE.",
+    "passage": "2027 BUDGET INTRODUCTION Because increased revenue from property taxes and user fees was not enough to fully offset the scale of reduced SSR revenue, this led to expenditure reductions, and thus service reductions, becoming an annual occurrence. Between 2000 and 2023, the City's workforce declined by over 1,000 Full Time Equivalents (FTEs), or roughly a 14% reduction in total employees. These annual adjustments to expenditures meant that the baseline “cost-to-continue” expenditures were reduced each year to reflect lower service levels adopted in the prior year's budget, and the baseline revenues from property taxes and fees increased each year in an analogous fashion, creating new baselines of expected revenues.",
+    "conflict_probability": 0.06,
+    "verdict": "consistent",
+    "auto": true,
+    "model": "jev-1.13.0",
+    "input_tokens": 564,
+    "seconds": 0.17
+  },
+  "glossary:Position": {
+    "key": "0b9e477828ed777d",
+    "kind": "glossary",
+    "cite": {
+      "doc": "summary",
+      "pdf_page": 23,
+      "printed_page": "13"
+    },
+    "statement": "A job the budget authorizes a department to fill, whether or not someone currently holds it.",
+    "passage": "CHANGE IN POSITIONS Change 2026 2027 2027 2027 Proposed Adopted Requested Proposed Versus Budget Budget Budget 2026 Adopted 2027 Requested General City Purposes Administration, Dept. of 185 179 172 -13 -7 Assessor's Office 53 53 53 0 0 City Attorney 63 65 64 1 -1 City Development, Dept. of 103 101 93 -10 -8 City Treasurer 44 44 44 0 0 Common Council City Clerk 127 126 132 5 6 Community Wellness and Safety, Dept. of 14 18 13 -1 -5 Compliance and Engagement, Dept. of 19 19 23 4 4 Comptroller's Office 58 58 56 -2 -2 Election Commission * 2,332 2,469 2,330 -2 -139 Emergency Communications, Dept. of 241 241 230 -11 -11 Employee Relations, Dept. of 89 86 84 -5 -2 Fire and Police Commission 37 37 37 0 0 Fire Department 966 997 984 18 -13 Health Department 310 322 323 13 1 Library 394 394 398 4 4 Mayor's Office 16 16 17 1 1 Municipal Court 33 33 33 0 0 Neighborhood Services, Dept. of 290 290 277 -13 -13 Police Department 2,526 2,586 2,585 59 -1 Port Milwaukee 38 38 38 0 0 Public Works, Dept. of (Total) (1,608) (1,593) (1,582) (-26) (-11) Administrative Services Division 45 47 45 0 -2 Infrastructure Services Division 792 775 754 -38 -21 Operations Division 771 771",
+    "conflict_probability": 0.13,
+    "verdict": "consistent",
+    "auto": true,
+    "model": "jev-1.13.0",
+    "input_tokens": 949,
+    "seconds": 0.2
+  },
+  "glossary:O&M FTEs": {
+    "key": "c56205172029f76b",
+    "kind": "glossary",
+    "cite": {
+      "doc": "detailed",
+      "pdf_page": 3,
+      "printed_page": "110.1"
+    },
+    "statement": "Staff time paid for by the department's regular operating and maintenance budget.",
+    "passage": "BMD-2 CITY OF MILWAUKEE BUDGET 2025 2026 2027 2027 ACCOUNT NUMBER EXPENDITURE BUDGET PAY REQUESTED BUDGET PROPOSED BUDGET FUND ORG SBCL ACCOUNT DOLLARS UNITS DOLLARS LINE DESCRIPTION RANGE UNITS DOLLARS UNITS DOLLARS DEPARTMENT OF ADMINISTRATION BUDGETARY CONTROL UNIT (SUMMARY 1 BCU=8 DU) SALARIES & WAGES 9,663 30,000 Overtime Compensated* 30,000 10,000 10,892,230 10,100,279 All Other Salaries & Wages 10,937,573 10,491,580 0001 1510 R999 006000 10,901,893 10,130,279 NET SALARIES & WAGES TOTAL* 10,967,573 10,501,580 185 TOTAL NUMBER OF POSITIONS AUTHORIZED 179 172 112.36 O&M FTE'S 117.26 110.26 46.94 NON-O&M FTE'S 38.14 37.14 0001 1510 R999 006100 4,578,110 4,558,625 ESTIMATED EMPLOYEE FRINGE BENEFITS 4,935,406 4,725,711 (Involves Revenue Offset-No Transfers from this Account) OPERATING EXPENDITURES 0001 1510 R999 630100 86,146 21,400 General Office Expense 21,400 21,400 0001 1510 R999 630500 Tools & Machinery Parts 0001 1510 R999 631000 Construction Supplies 0001 1510 R999 631500 659 Energy 0001 1510 R999 632000 7,961 4,100 Other Operating Supplies 4,100 4,100 0001 1510 R999 632500 801 2,000 Facility Rental 2,000 2,000 DEPARTMENT OF ADMINISTRATION 110.1 3rd Run 9/14/26",
+    "conflict_probability": 0.11,
+    "verdict": "consistent",
+    "auto": true,
+    "model": "jev-1.13.0",
+    "input_tokens": 1081,
+    "seconds": 0.22
+  },
+  "glossary:Salaries and wages": {
+    "key": "6d5aaf5d41b008e5",
+    "kind": "glossary",
+    "cite": {
+      "doc": "summary",
+      "pdf_page": 126,
+      "printed_page": "116"
+    },
+    "statement": "Pay for city employees.",
+    "passage": "To be a department where every member works with our community to help build sustainable healthy neighborhoods, free of crime, and maintained by positive relationships. BUDGET SUMMARY Change 2025 2026 2027 2027 2027 Proposed Actual Adopted Requested Proposed Versus Expenditures Budget Budget Budget 2026 Adopted 2027 Requested Personnel FTEs - Operations & Maintenance 2,443.76 2,324.95 2,352.95 2,349.45 24.50 -3.50 FTEs - Other 117.87 81.50 103.50 102.50 21.00 -1.00 Total Positions Authorized 2,668 2,526 2,586 2,585 59 -1 Expenditures Salaries and Wages $215,495,540 $190,364,638 $214,768,305 $214,743,752 $24,379,114 $-24,553 Fringe Benefits 80,987,282 91,375,026 103,088,787 103,077,001 11,701,975 -11,786 Operating Expenditures 22,449,229 25,055,571 24,880,000 24,631,372 -424,199 -248,628 Equipment 11,263,728 2,889,000 2,620,000 1,070,000 -1,819,000 -1,550,000 Special Funds 485,109 427,600 465,000 415,000 -12,600 -50,000 Total $330,680,888 $310,111,835 $345,822,092 $343,937,125 $33,825,290 $-1,884,967 Revenues Intergovernmental $1,134,738 $1,036,000 $1,300,000 $1,300,000 $264,000 $0 Charges for Services 7,324,512 7,198,000 8,024,000 8,224,000 1,026,000 200,000 Total $8,459,250 $8,234,000 $9,324,000 $9,524,000 $1,290,000 $200,000 SUMMARY OF SERVICES DELIVERED BY THIS DEPARTMENT As the City of Milwaukee's lead law enforcement agency, the Milwaukee Police Department (MPD) is primarily responsible for mitigating crime and disorder in the city. MPD remains steadfast in its commitment to constitutional policing, and employing community-oriented, problem-oriented and intelligence-led initiatives.",
+    "conflict_probability": 0.1,
+    "verdict": "consistent",
+    "auto": true,
+    "model": "jev-1.13.0",
+    "input_tokens": 1240,
+    "seconds": 0.23
+  },
+  "glossary:Fringe benefits": {
+    "key": "0325956e4a8d8870",
+    "kind": "glossary",
+    "cite": {
+      "doc": "summary",
+      "pdf_page": 126,
+      "printed_page": "116"
+    },
+    "statement": "Employee costs on top of pay, such as health insurance and pensions.",
+    "passage": "To be a department where every member works with our community to help build sustainable healthy neighborhoods, free of crime, and maintained by positive relationships. BUDGET SUMMARY Change 2025 2026 2027 2027 2027 Proposed Actual Adopted Requested Proposed Versus Expenditures Budget Budget Budget 2026 Adopted 2027 Requested Personnel FTEs - Operations & Maintenance 2,443.76 2,324.95 2,352.95 2,349.45 24.50 -3.50 FTEs - Other 117.87 81.50 103.50 102.50 21.00 -1.00 Total Positions Authorized 2,668 2,526 2,586 2,585 59 -1 Expenditures Salaries and Wages $215,495,540 $190,364,638 $214,768,305 $214,743,752 $24,379,114 $-24,553 Fringe Benefits 80,987,282 91,375,026 103,088,787 103,077,001 11,701,975 -11,786 Operating Expenditures 22,449,229 25,055,571 24,880,000 24,631,372 -424,199 -248,628 Equipment 11,263,728 2,889,000 2,620,000 1,070,000 -1,819,000 -1,550,000 Special Funds 485,109 427,600 465,000 415,000 -12,600 -50,000 Total $330,680,888 $310,111,835 $345,822,092 $343,937,125 $33,825,290 $-1,884,967 Revenues Intergovernmental $1,134,738 $1,036,000 $1,300,000 $1,300,000 $264,000 $0 Charges for Services 7,324,512 7,198,000 8,024,000 8,224,000 1,026,000 200,000 Total $8,459,250 $8,234,000 $9,324,000 $9,524,000 $1,290,000 $200,000 SUMMARY OF SERVICES DELIVERED BY THIS DEPARTMENT As the City of Milwaukee's lead law enforcement agency, the Milwaukee Police Department (MPD) is primarily responsible for mitigating crime and disorder in the city. MPD remains steadfast in its commitment to constitutional policing, and employing community-oriented, problem-oriented and intelligence-led initiatives.",
+    "conflict_probability": 0.06,
+    "verdict": "consistent",
+    "auto": true,
+    "model": "jev-1.13.0",
+    "input_tokens": 1247,
+    "seconds": 0.26
+  },
+  "glossary:Operating expenditures": {
+    "key": "dff199eb26d99654",
+    "kind": "glossary",
+    "cite": {
+      "doc": "summary",
+      "pdf_page": 126,
+      "printed_page": "116"
+    },
+    "statement": "Day-to-day costs other than pay and benefits, such as supplies, utilities and outside services.",
+    "passage": "To be a department where every member works with our community to help build sustainable healthy neighborhoods, free of crime, and maintained by positive relationships. BUDGET SUMMARY Change 2025 2026 2027 2027 2027 Proposed Actual Adopted Requested Proposed Versus Expenditures Budget Budget Budget 2026 Adopted 2027 Requested Personnel FTEs - Operations & Maintenance 2,443.76 2,324.95 2,352.95 2,349.45 24.50 -3.50 FTEs - Other 117.87 81.50 103.50 102.50 21.00 -1.00 Total Positions Authorized 2,668 2,526 2,586 2,585 59 -1 Expenditures Salaries and Wages $215,495,540 $190,364,638 $214,768,305 $214,743,752 $24,379,114 $-24,553 Fringe Benefits 80,987,282 91,375,026 103,088,787 103,077,001 11,701,975 -11,786 Operating Expenditures 22,449,229 25,055,571 24,880,000 24,631,372 -424,199 -248,628 Equipment 11,263,728 2,889,000 2,620,000 1,070,000 -1,819,000 -1,550,000 Special Funds 485,109 427,600 465,000 415,000 -12,600 -50,000 Total $330,680,888 $310,111,835 $345,822,092 $343,937,125 $33,825,290 $-1,884,967 Revenues Intergovernmental $1,134,738 $1,036,000 $1,300,000 $1,300,000 $264,000 $0 Charges for Services 7,324,512 7,198,000 8,024,000 8,224,000 1,026,000 200,000 Total $8,459,250 $8,234,000 $9,324,000 $9,524,000 $1,290,000 $200,000 SUMMARY OF SERVICES DELIVERED BY THIS DEPARTMENT As the City of Milwaukee's lead law enforcement agency, the Milwaukee Police Department (MPD) is primarily responsible for mitigating crime and disorder in the city. MPD remains steadfast in its commitment to constitutional policing, and employing community-oriented, problem-oriented and intelligence-led initiatives.",
+    "conflict_probability": 0.11,
+    "verdict": "consistent",
+    "auto": true,
+    "model": "jev-1.13.0",
+    "input_tokens": 1251,
+    "seconds": 0.16
+  },
+  "glossary:Equipment purchases": {
+    "key": "928222fef5c84d25",
+    "kind": "glossary",
+    "cite": {
+      "doc": "summary",
+      "pdf_page": 126,
+      "printed_page": "116"
+    },
+    "statement": "Buying or replacing equipment such as vehicles, computers or tools.",
+    "passage": "To be a department where every member works with our community to help build sustainable healthy neighborhoods, free of crime, and maintained by positive relationships. BUDGET SUMMARY Change 2025 2026 2027 2027 2027 Proposed Actual Adopted Requested Proposed Versus Expenditures Budget Budget Budget 2026 Adopted 2027 Requested Personnel FTEs - Operations & Maintenance 2,443.76 2,324.95 2,352.95 2,349.45 24.50 -3.50 FTEs - Other 117.87 81.50 103.50 102.50 21.00 -1.00 Total Positions Authorized 2,668 2,526 2,586 2,585 59 -1 Expenditures Salaries and Wages $215,495,540 $190,364,638 $214,768,305 $214,743,752 $24,379,114 $-24,553 Fringe Benefits 80,987,282 91,375,026 103,088,787 103,077,001 11,701,975 -11,786 Operating Expenditures 22,449,229 25,055,571 24,880,000 24,631,372 -424,199 -248,628 Equipment 11,263,728 2,889,000 2,620,000 1,070,000 -1,819,000 -1,550,000 Special Funds 485,109 427,600 465,000 415,000 -12,600 -50,000 Total $330,680,888 $310,111,835 $345,822,092 $343,937,125 $33,825,290 $-1,884,967 Revenues Intergovernmental $1,134,738 $1,036,000 $1,300,000 $1,300,000 $264,000 $0 Charges for Services 7,324,512 7,198,000 8,024,000 8,224,000 1,026,000 200,000 Total $8,459,250 $8,234,000 $9,324,000 $9,524,000 $1,290,000 $200,000 SUMMARY OF SERVICES DELIVERED BY THIS DEPARTMENT As the City of Milwaukee's lead law enforcement agency, the Milwaukee Police Department (MPD) is primarily responsible for mitigating crime and disorder in the city. MPD remains steadfast in its commitment to constitutional policing, and employing community-oriented, problem-oriented and intelligence-led initiatives.",
+    "conflict_probability": 0.06,
+    "verdict": "consistent",
+    "auto": true,
+    "model": "jev-1.13.0",
+    "input_tokens": 1244,
+    "seconds": 0.15
+  },
+  "glossary:Special funds": {
+    "key": "fcad03796546ec54",
+    "kind": "glossary",
+    "cite": {
+      "doc": "summary",
+      "pdf_page": 126,
+      "printed_page": "116"
+    },
+    "statement": "Money set aside in a department budget for specific programs or purposes.",
+    "passage": "To be a department where every member works with our community to help build sustainable healthy neighborhoods, free of crime, and maintained by positive relationships. BUDGET SUMMARY Change 2025 2026 2027 2027 2027 Proposed Actual Adopted Requested Proposed Versus Expenditures Budget Budget Budget 2026 Adopted 2027 Requested Personnel FTEs - Operations & Maintenance 2,443.76 2,324.95 2,352.95 2,349.45 24.50 -3.50 FTEs - Other 117.87 81.50 103.50 102.50 21.00 -1.00 Total Positions Authorized 2,668 2,526 2,586 2,585 59 -1 Expenditures Salaries and Wages $215,495,540 $190,364,638 $214,768,305 $214,743,752 $24,379,114 $-24,553 Fringe Benefits 80,987,282 91,375,026 103,088,787 103,077,001 11,701,975 -11,786 Operating Expenditures 22,449,229 25,055,571 24,880,000 24,631,372 -424,199 -248,628 Equipment 11,263,728 2,889,000 2,620,000 1,070,000 -1,819,000 -1,550,000 Special Funds 485,109 427,600 465,000 415,000 -12,600 -50,000 Total $330,680,888 $310,111,835 $345,822,092 $343,937,125 $33,825,290 $-1,884,967 Revenues Intergovernmental $1,134,738 $1,036,000 $1,300,000 $1,300,000 $264,000 $0 Charges for Services 7,324,512 7,198,000 8,024,000 8,224,000 1,026,000 200,000 Total $8,459,250 $8,234,000 $9,324,000 $9,524,000 $1,290,000 $200,000 SUMMARY OF SERVICES DELIVERED BY THIS DEPARTMENT As the City of Milwaukee's lead law enforcement agency, the Milwaukee Police Department (MPD) is primarily responsible for mitigating crime and disorder in the city. MPD remains steadfast in its commitment to constitutional policing, and employing community-oriented, problem-oriented and intelligence-led initiatives.",
+    "conflict_probability": 0.1,
+    "verdict": "consistent",
+    "auto": true,
+    "model": "jev-1.13.0",
+    "input_tokens": 1245,
+    "seconds": 0.16
+  },
+  "glossary:Special purpose accounts": {
+    "key": "3a9b92528e686b5c",
+    "kind": "glossary",
+    "cite": {
+      "doc": "summary",
+      "pdf_page": 154,
+      "printed_page": "144"
+    },
+    "statement": "Budget accounts for purposes outside any one department's budget, such as employee health care. The Common Council authorizes specific departments to spend from them.",
+    "passage": "These accounts may include funding for short term programs, programs that affect multiple departments, or programs that warrant distinction from departmental budgets. Every year the Common Council adopts a resolution that authorizes expenditure of funds from the various Special Purpose Accounts by specific departments or by Common Council resolution. The City of Milwaukee's 2027 proposed budget provides over $37.6 million of funding for miscellaneous special purpose accounts and total funding of over $178.9 million for all special purpose accounts.",
+    "conflict_probability": 0.11,
+    "verdict": "consistent",
+    "auto": true,
+    "model": "jev-1.13.0",
+    "input_tokens": 511,
+    "seconds": 0.16
+  },
+  "glossary:Capital improvements": {
+    "key": "ed104f1d3644f7da",
+    "kind": "glossary",
+    "cite": {
+      "doc": "summary",
+      "pdf_page": 184,
+      "printed_page": "174"
+    },
+    "statement": "Spending on long-lasting things like streets, buildings, bridges and major equipment, often paid for by borrowing.",
+    "passage": "C. CAPITAL IMPROVEMENTS MISSION: Support the regional economy and protect the environment and public health. DEPARTMENT MISSION AND RELATIONSHIP TO COMMUNITY GOALS The 2027 capital improvements budget represents the initial year of a six-year capital improvements plan. The budget and plan identify the city's capital funding needs and provide funding sources to support these needs. Capital improvements generally include projects to reconstruct, rehabilitate, or otherwise restore an existing system or facility to full functionality or add to its useful life. They may also include projects to construct a new or more expansive facility to meet increased demands or to enhance economic development through job creation, business formation, and housing production.",
+    "conflict_probability": 0.08,
+    "verdict": "consistent",
+    "auto": true,
+    "model": "jev-1.13.0",
+    "input_tokens": 545,
+    "seconds": 0.16
+  },
+  "glossary:General obligation borrowing": {
+    "key": "e7309f227a8bbe96",
+    "kind": "glossary",
+    "cite": {
+      "doc": "summary",
+      "pdf_page": 15,
+      "printed_page": "5"
+    },
+    "statement": "Borrowing the city repays from its general revenues, including property taxes.",
+    "passage": "In 2026, such reductions totaled just under $30 million. Capital Budget Highlights 2027 is the final year of a planned three-year surge in levy-supported general obligation borrowing. The first two years of this surge, along with significant cash financing of capital improvements in 2024, funded public safety radios, a new enterprise resource planning system, and the port cruise dock terminal.",
+    "conflict_probability": 0.13,
+    "verdict": "consistent",
+    "auto": true,
+    "model": "jev-1.13.0",
+    "input_tokens": 478,
+    "seconds": 0.17
+  },
+  "glossary:Debt service": {
+    "key": "18ce312d7d0cf750",
+    "kind": "glossary",
+    "cite": {
+      "doc": "summary",
+      "pdf_page": 15,
+      "printed_page": "5"
+    },
+    "statement": "Payments of principal and interest on money the city has borrowed.",
+    "passage": "The unassigned General Fund balance, a subset of the TSF, was $79.6 million at end of year 2025, and the 2027 proposed budget would transfer half of that amount, $39.8 million, to maintain services. The Public Debt Amortization Fund (PDAF) also continued to increase in 2025, enabling the City to again withdraw $6 million to fund debt service, $3 million more than was assumed in the request. The sum total of these two withdrawals on the gap was $42.8 million, making this category once again the largest bottom-line factor in closing the budget gap.",
+    "conflict_probability": 0.08,
+    "verdict": "consistent",
+    "auto": true,
+    "model": "jev-1.13.0",
+    "input_tokens": 531,
+    "seconds": 0.16
+  },
+  "glossary:Tax incremental district (TID)": {
+    "key": "def83fe44e0a985c",
+    "kind": "glossary",
+    "cite": {
+      "doc": "summary",
+      "pdf_page": 205,
+      "printed_page": "195"
+    },
+    "statement": "An area where new property tax growth is set aside to pay for development there for a period of years.",
+    "passage": "ECONOMIC DEVELOPMENT FUND MISSION: Provide expenditure authority for excess Tax Incremental District (TID) revenue. BUDGET SUMMARY Change 2025 2026 2027 2027 2027 Proposed Actual Adopted Requested Proposed Versus Expenditures Budget Budget Budget 2026 Adopted 2027 Requested Business Improvement Districts $0 $0 $0 $0 Excess TID Revenue 10,745,521 15,000,000 -15,000,000 0 Total $10,745,521 $15,000,000 $0 $0 $-15,000,000 $0 STRATEGY IMPLEMENTATION Business Improvement Districts (BIDs) are special assessment districts created at the petition of local commercial property owners.",
+    "conflict_probability": 0.09,
+    "verdict": "consistent",
+    "auto": true,
+    "model": "jev-1.13.0",
+    "input_tokens": 618,
+    "seconds": 0.15
+  },
+  "glossary:Contingent fund": {
+    "key": "0e0c60abcd2d0b0a",
+    "kind": "glossary",
+    "cite": {
+      "doc": "summary",
+      "pdf_page": 197,
+      "printed_page": "187"
+    },
+    "statement": "Money the Common Council holds back for emergencies that come up during the year.",
+    "passage": "F. COMMON COUNCIL CONTINGENT FUND MISSION: Provide budgetary authority and funding to pay for emergencies that arise during the year for which no provisions have been made elsewhere in the budget. SUMMARY OF EXPENDITURES Change 2025 2026 2027 2027 2027 Proposed Actual Adopted Requested Proposed Versus Expenditure Budget Budget Budget 2026 Adopted 2027 Requested Common Council Contingent Fund [4,998,805] $5,000,000 $5,000,000 $5,000,000 $0 $0 Total [4,998,805] $5,000,000 $5,000,000 $5,000,000 $0 $0 SOURCE OF FUNDS Change 2025 2026 2027 2027 2027 Proposed Actual Adopted Requested Proposed Versus Expenditure Budget Budget Budget 2026 Adopted 2027 Requested Property Tax Levy $5,000,000 $5,000,000 $5,000,000 $5,000,000 $0 $0 Total $5,000,000 $5,000,000 $5,000,000 $5,000,000 $0 $0 MISSION AND RELATIONSHIP TO COMMUNITY GOALS The Common Council Contingent Fund provides funding for emergency situations that require expenditures above budget authorizations. Requests must be approved by three-quarters of the Common Council before funds can be used.",
+    "conflict_probability": 0.08,
+    "verdict": "consistent",
+    "auto": true,
+    "model": "jev-1.13.0",
+    "input_tokens": 807,
+    "seconds": 0.15
+  },
+  "glossary:Special revenue fund": {
+    "key": "b4e53f7f44b53991",
+    "kind": "glossary",
+    "cite": {
+      "doc": "summary",
+      "pdf_page": 199,
+      "printed_page": "189"
+    },
+    "statement": "Budget sections paid for by revenue other than the city property tax levy, such as the Transportation Fund, Water Works and the Sewer Maintenance Fund.",
+    "passage": "Revenues other than the city property tax offset the appropriations in this section. Any property tax levies related to these special revenue funds are provided in other sections of the city's budget. 2027 PROPOSED PLAN AND EXECUTIVE BUDGET SUMMARY 189",
+    "conflict_probability": 0.09,
+    "verdict": "consistent",
+    "auto": true,
+    "model": "jev-1.13.0",
+    "input_tokens": 470,
+    "seconds": 0.27
+  },
+  "glossary:Employes' Retirement System": {
+    "key": "6698326aaa607d93",
+    "kind": "glossary",
+    "cite": {
+      "doc": "summary",
+      "pdf_page": 175,
+      "printed_page": "165"
+    },
+    "statement": "The city's pension system for its employees ('Employes' is the city's spelling).",
+    "passage": "1. Optimize the amount of tax levy funding needed to support the Employes' Retirement System consistent with the risk assumed by the investment policy. • Effectively manage the pension funds under its control. • Provide fiduciary standard of care as required by state law to its members and beneficiaries. The Employes' Retirement System (“ERS” or “the Fund”) operates a multiple employer cost-sharing defined benefit pension plan for employees who began working for the City of Milwaukee and related agencies before January 1, 2024. ERS contributes to the city's fiscal stability and capacity by effectively managing the pension funds under its control.",
+    "conflict_probability": 0.09,
+    "verdict": "consistent",
+    "auto": true,
+    "model": "jev-1.13.0",
+    "input_tokens": 532,
+    "seconds": 0.16
+  },
+  "glossary:Budgetary control unit": {
+    "key": "f39d0db7ddfebfd5",
+    "kind": "glossary",
+    "cite": {
+      "doc": "detailed",
+      "pdf_page": 3,
+      "printed_page": "110.1"
+    },
+    "statement": "The level at which the Common Council controls a department's spending in the line-item budget; a unit can contain several decision units.",
+    "passage": "BMD-2 CITY OF MILWAUKEE BUDGET 2025 2026 2027 2027 ACCOUNT NUMBER EXPENDITURE BUDGET PAY REQUESTED BUDGET PROPOSED BUDGET FUND ORG SBCL ACCOUNT DOLLARS UNITS DOLLARS LINE DESCRIPTION RANGE UNITS DOLLARS UNITS DOLLARS DEPARTMENT OF ADMINISTRATION BUDGETARY CONTROL UNIT (SUMMARY 1 BCU=8 DU) SALARIES & WAGES 9,663 30,000 Overtime Compensated* 30,000 10,000 10,892,230 10,100,279 All Other Salaries & Wages 10,937,573 10,491,580 0001 1510 R999 006000 10,901,893 10,130,279 NET SALARIES & WAGES TOTAL* 10,967,573 10,501,580 185 TOTAL NUMBER OF POSITIONS AUTHORIZED 179 172 112.36 O&M FTE'S 117.26 110.26 46.94 NON-O&M FTE'S 38.14 37.14 0001 1510 R999 006100 4,578,110 4,558,625 ESTIMATED EMPLOYEE FRINGE BENEFITS 4,935,406 4,725,711 (Involves Revenue Offset-No Transfers from this Account) OPERATING EXPENDITURES 0001 1510 R999 630100 86,146 21,400 General Office Expense 21,400 21,400 0001 1510 R999 630500 Tools & Machinery Parts 0001 1510 R999 631000 Construction Supplies 0001 1510 R999 631500 659 Energy 0001 1510 R999 632000 7,961 4,100 Other Operating Supplies 4,100 4,100 0001 1510 R999 632500 801 2,000 Facility Rental 2,000 2,000 DEPARTMENT OF ADMINISTRATION 110.1 3rd Run 9/14/26",
+    "conflict_probability": 0.12,
+    "verdict": "consistent",
+    "auto": true,
+    "model": "jev-1.13.0",
+    "input_tokens": 1093,
+    "seconds": 0.22
+  },
+  "glossary:Decision unit": {
+    "key": "bdb0d73af2fcfac0",
+    "kind": "glossary",
+    "cite": {
+      "doc": "detailed",
+      "pdf_page": 173,
+      "printed_page": "260.5"
+    },
+    "statement": "A division or office inside a department that has its own line-item budget.",
+    "passage": "BMD-2 CITY OF MILWAUKEE BUDGET 2025 2026 2027 2027 ACCOUNT NUMBER EXPENDITURE BUDGET PAY REQUESTED BUDGET PROPOSED BUDGET FUND ORG SBCL ACCOUNT DOLLARS UNITS DOLLARS LINE DESCRIPTION RANGE UNITS DOLLARS UNITS DOLLARS LIBRARY BRANCH LIBRARY SERVICES DECISION UNIT SALARIES & WAGES 222 Overtime Compensated Personnel Cost Adjustment Gross Salaries & Wages Total Reimbursable Service Deduction Capital Improvements Deduction Grants & Aids Deduction 0001 8612 R999 006000 1,069,582 NET SALARIES & WAGES TOTAL O&M FTE'S NON-O&M FTE'S 0001 8612 R999 006100 378,366 ESTIMATED EMPLOYEE FRINGE BENEFITS (Involves Revenue Offset-No Transfers from this Account) OPERATING EXPENDITURES 0001 8612 R999 630100 General Office Expense 0001 8612 R999 630500 Tools & Machinery Parts 0001 8612 R999 631000 Construction Supplies LIBRARY 260.6 3rd Run 9/14/26",
+    "conflict_probability": 0.13,
+    "verdict": "consistent",
+    "auto": true,
+    "model": "jev-1.13.0",
+    "input_tokens": 740,
+    "seconds": 0.23
+  },
+  "glossary:Clarification of intent": {
+    "key": "df7c6043bf4aec4c",
+    "kind": "glossary",
+    "cite": {
+      "doc": "summary",
+      "pdf_page": 222,
+      "printed_page": "212"
+    },
+    "statement": "Notes explaining how certain budget lines are meant to be used.",
+    "passage": "III. CLARIFICATION OF INTENT Employee Fringe Benefits Employee fringe benefit costs are allocated to operating and capital budgets on an estimated basis for informational purposes only. Such estimated expenditures are 100% appropriation offset for operating budgets and 100% revenue offset for the capital budget to avoid any impact on the city's tax levy.",
+    "conflict_probability": 0.12,
+    "verdict": "consistent",
+    "auto": true,
+    "model": "jev-1.13.0",
+    "input_tokens": 466,
+    "seconds": 0.14
+  },
+  "glossary:Fringe Benefit Offset": {
+    "key": "f7fab4f963e4d1bf",
+    "kind": "glossary",
+    "cite": {
+      "doc": "summary",
+      "pdf_page": 165,
+      "printed_page": "155"
+    },
+    "statement": "The budget uses this name for two different lines. On the spending side it is a negative line that removes employee benefit costs counted twice, once in special purpose accounts and again in department budgets, so the city does not levy for them twice. On the revenue side it is the payment other city funds (grants, enterprise funds, capital) make to the general fund for their employees' benefits.",
+    "passage": "FRINGE BENEFIT OFFSET BUDGET SUMMARY Change 2025 2026 2027 2027 2027 Proposed Actual Adopted Requested Proposed Versus Expenditures Budget Budget Budget 2026 Adopted 2027 Requested Fringe Benefit Offset $-195,390,769 $-225,321,709 $-244,666,955 $-240,573,987 $-15,252,278 $4,092,968 Total $-195,390,769 $-225,321,709 $-244,666,955 $-240,573,987 $-15,252,278 $4,092,968 Employee fringe benefit costs are appropriated in various special purpose accounts. In addition, department operating budgets include an estimated employee fringe benefit factor in order to reflect the total cost of department operations.",
+    "conflict_probability": 0.12,
+    "verdict": "consistent",
+    "auto": true,
+    "model": "jev-1.13.0",
+    "input_tokens": 720,
+    "seconds": 1.51
+  }
+}

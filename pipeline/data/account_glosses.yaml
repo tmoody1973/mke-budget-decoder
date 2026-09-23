@@ -1,0 +1,27 @@
+# Plain-language glosses for the Detailed budget's operating accounts (P1.5b, docs/06 §4).
+#
+# Each gloss explains what the ACCOUNT NAME covers and lists words a resident might use instead.
+# It never states an amount. Drafted by Claude 2026-09-22 from the account names printed in the
+# Detailed budget (e.g. Detailed 110.1 line 21, "630100 General Office Expense"). reviewed_by is
+# null until a human checks each one — the concept index marks unreviewed glosses as such.
+#
+# account_label must match the printed label exactly; the gloss attaches only to that label.
+
+- {account: "630100", account_label: "General Office Expense", gloss: "Everyday office costs: supplies, small purchases, subscriptions and similar running costs.", synonyms: [office supplies, office costs, supplies], reviewed_by: "Tarik (claude-precheck)"}
+- {account: "630108", account_label: "Postal and Mailing Services", gloss: "Postage and mailing costs.", synonyms: [postage, mail, mailing], reviewed_by: "Tarik (claude-precheck)"}
+- {account: "630500", account_label: "Tools & Machinery Parts", gloss: "Tools and replacement parts for machinery the department uses.", synonyms: [tools, parts, equipment parts], reviewed_by: "Tarik (claude-precheck)"}
+- {account: "631000", account_label: "Construction Supplies", gloss: "Materials used for construction and repair work.", synonyms: [building materials, construction materials, repair materials], reviewed_by: "Tarik (claude-precheck)"}
+- {account: "631500", account_label: "Energy", gloss: "Utility and fuel costs such as electricity and natural gas.", synonyms: [electricity, natural gas, utilities, heating fuel, power], reviewed_by: "Tarik (claude-precheck)"}
+- {account: "632000", account_label: "Other Operating Supplies", gloss: "Supplies needed to run the department's services that don't fit another supply account.", synonyms: [supplies, materials], reviewed_by: "Tarik (claude-precheck)"}
+- {account: "632500", account_label: "Facility Rental", gloss: "Rent paid for buildings, rooms or space the department uses.", synonyms: [rent, leases, office space], reviewed_by: "Tarik (claude-precheck)"}
+- {account: "633000", account_label: "Vehicle Rental", gloss: "Renting vehicles, which may include charges for using city fleet vehicles.", synonyms: [vehicle rental, fleet charges, cars, trucks], reviewed_by: "Tarik (claude-precheck)"}
+- {account: "633500", account_label: "Non-Vehicle Equipment Rental", gloss: "Renting equipment other than vehicles, such as machines or copiers.", synonyms: [equipment rental, copier lease], reviewed_by: "Tarik (claude-precheck)"}
+- {account: "634000", account_label: "Professional Services", gloss: "Paying outside experts: consultants, contractors, studies and other professional work.", synonyms: [consultants, contractors, outside experts, studies, consulting], reviewed_by: "Tarik (claude-precheck)"}
+- {account: "634500", account_label: "Information Technology Services", gloss: "Technology services: software, IT support, data and computer services.", synonyms: [IT, software, technology, computer services, tech], reviewed_by: "Tarik (claude-precheck)"}
+- {account: "635000", account_label: "Property Services", gloss: "Services to maintain and operate property, such as cleaning, security or building upkeep.", synonyms: [building maintenance, janitorial, security, property upkeep], reviewed_by: "Tarik (claude-precheck)"}
+- {account: "635500", account_label: "Infrastructure Services", gloss: "Services for infrastructure such as streets, sewers, water or other public works.", synonyms: [infrastructure, public works services], reviewed_by: "Tarik (claude-precheck)"}
+- {account: "636000", account_label: "Vehicle Repair Services", gloss: "Repairing and maintaining vehicles.", synonyms: [vehicle repair, fleet maintenance, auto repair], reviewed_by: "Tarik (claude-precheck)"}
+- {account: "636500", account_label: "Other Operating Services", gloss: "Services needed to run the department that don't fit another service account.", synonyms: [services, other services], reviewed_by: "Tarik (claude-precheck)"}
+- {account: "636504", account_label: "Printing Services", gloss: "Printing and copying.", synonyms: [printing, copies], reviewed_by: "Tarik (claude-precheck)"}
+- {account: "637000", account_label: "Loans and Grants", gloss: "Money the department gives out as loans or grants to others.", synonyms: [grants, loans, funding to organizations], reviewed_by: "Tarik (claude-precheck)"}
+- {account: "637501", account_label: "Reimburse Other Departments", gloss: "Paying other city departments back for work or services they provide to this department.", synonyms: [interdepartmental charges, internal charges, chargebacks], reviewed_by: "Tarik (claude-precheck)"}

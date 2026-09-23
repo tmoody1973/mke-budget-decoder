@@ -1,0 +1,71 @@
+# Verified arithmetic inconsistencies INSIDE the official 2027 Proposed budget documents.
+#
+# Ported mechanism from mke-budget-commons/crosswalks/source_inconsistencies.yml:
+# an entry only excuses a failing check while BOTH the printed value and the extracted
+# value still equal the numbers recorded here. If the parser's output changes, the check
+# fails again instead of staying hidden. Every entry was confirmed by hand on the page.
+
+- id: transportation-parking-du-total-omits-lines
+  doc: detailed
+  check: bcu_total_equals_unit_totals
+  section: "510"
+  column: adopted_2026
+  printed: 39131093        # 510.3 line 2 BUDGETARY CONTROL UNIT TOTAL (1BCU=2DU)
+  extracted: 38319651      # 510.8 line 19 Parking DU total 31,376,067 + 510.11 line 14 Streetcar 6,943,584
+  note: >-
+    BCU total printed on 510.3 line 2; Parking total on 510.8 line 19; Streetcar total on 510.11 line 14.
+    The Parking decision unit lists DEPOSIT TO RETAINED EARNINGS $811,442 (510.8 line 12)
+    but its printed 2026 total equals the O&M subtotal alone (31,376,067). The BCU total
+    includes the $811,442. In 2025 and 2027-requested the same unit total does include its
+    transfer/deposit lines, so the document is internally inconsistent.
+
+- id: transportation-parking-du-total-omits-transfer
+  doc: detailed
+  check: bcu_total_equals_unit_totals
+  section: "510"
+  column: proposed_2027
+  printed: 50410300        # 510.3 line 2
+  extracted: 44410300      # 36,699,370 (510.8 line 19) + 7,710,930 (510.11 line 14)
+  note: >-
+    BCU total printed on 510.3 line 2; Parking total on 510.8 line 19; Streetcar total on 510.11 line 14.
+    The Parking decision unit lists TRANSFER TO CAPITAL FUND $6,000,000 (510.8 line 16)
+    but its printed proposed total (36,699,370 = O&M 33,908,268 + deposit 2,791,102)
+    leaves it out. The BCU total includes it.
+
+# --- Summary book: department tables whose printed Total differs from their printed rows ---
+# `section` = department slug, `column` = table column. extracted = sum of the printed rows.
+- {id: dcd-services-grant, doc: summary, check: services_rows_equal_total, section: city-development, column: grant, printed: 1037055, extracted: 1037056, note: "Summary p.48: service rows sum $1 above the printed Total (rounding)."}
+- {id: council-services-operating, doc: summary, check: services_rows_equal_total, section: common-council-city-clerk, column: operating, printed: 13954238, extracted: 13954239, note: "Summary p.61: rows sum $1 above the printed Total (rounding)."}
+- {id: dce-services-grant, doc: summary, check: services_rows_equal_total, section: compliance-engagement, column: grant, printed: 215000, extracted: 315000, note: "Summary p.67-68: ADA Compliance/Equal Rights Compliance prints $100,000 in the Grant Budget column (x 455-492, verified on the page) and Contract Compliance $215,000, but the printed Total grant is $215,000. The Total leaves out the $100,000."}
+- {id: comptroller-services-operating, doc: summary, check: services_rows_equal_total, section: comptroller, column: operating, printed: 6899694, extracted: 6896694, note: "Summary p.71: the four service rows (1,083,086 + 4,442,761 + 329,261 + 1,041,586, each verified on the page) sum to 6,896,694; the printed Total is 6,899,694 ($3,000 more)."}
+- {id: dpw-isd-services-operating, doc: summary, check: services_rows_equal_total, section: dpw-infrastructure, column: operating, printed: 54403862, extracted: 54403863, note: "Summary p.127: rows sum $1 above the printed Total (rounding)."}
+- {id: election-services-operating, doc: summary, check: services_rows_equal_total, section: election-commission, column: operating, printed: 3496354, extracted: 3496355, note: "Summary p.75: rows sum $1 above the printed Total (rounding)."}
+- {id: library-services-operating, doc: summary, check: services_rows_equal_total, section: library, column: operating, printed: 35142226, extracted: 35142227, note: "Summary p.101: rows sum $1 above the printed Total (rounding)."}
+- {id: mayor-services-operating, doc: summary, check: services_rows_equal_total, section: mayor, column: operating, printed: 2256261, extracted: 2256260, note: "Summary p.106: rows sum $1 below the printed Total (rounding)."}
+- {id: police-position-changes-non-om, doc: summary, check: position_changes_rows_equal_total, section: police, column: non_om_ftes, printed: "21.0", extracted: "20.96", note: "Summary p.120: the Totals row prints FTEs to one decimal (21.0); the rows sum to 20.96."}
+
+# --- Detailed book: a unit's printed category total ≠ its printed lines (every line verified present) ---
+# section = "<prefix>:<first page of the unit>", column = stage.
+- {id: city-attorney-operating-2025, doc: detailed, check: unit_operating, section: "130:130.1", column: actual_2025, printed: 405622, extracted: 398855, note: "Detailed 130.3-130.4: all eight 2025 operating lines read and verified on the page sum to 398,855; the printed OPERATING EXPENDITURES TOTAL* is 405,622. The 2026/2027 columns on the same lines add up exactly."}
+- {id: city-attorney-equipment-2025, doc: detailed, check: unit_equipment, section: "130:130.1", column: actual_2025, printed: 49788, extracted: 24788, note: "Detailed 130.4: 2025 subtotals 8,394 (Additional) + 16,394 (Replacement) = 24,788; the printed EQUIPMENT PURCHASES TOTAL* is 49,788. Other columns reconcile."}
+- {id: fire-support-operating-2025, doc: detailed, check: unit_operating, section: "240:240.8", column: actual_2025, printed: 4459530, extracted: 4459531, note: "Detailed 240.11 line 19: Fire Support Services Bureau 2025 operating lines sum $1 above the printed OPERATING EXPENDITURES TOTAL (rounding)."}
+- {id: port-special-2025, doc: detailed, check: unit_special, section: "310:310.1", column: actual_2025, printed: 3454645, extracted: 4116762, note: "Detailed 310.4-310.5: the seven 2025 special-fund lines sum to 4,116,762; the printed SPECIAL FUNDS TOTAL is 3,454,645. The difference, 662,117, equals 'Debt Service Payment - RACM Loan' (662,116) + 'Lease Payment Transfer' (1), printed on 310.4 lines 21-22 (lines 23-26 and a page break come before the total on 310.5). The 2026-2027 columns include both lines."}
+- {id: der-replacement-subtotal-blank, doc: detailed, check: unit_equipment, section: "220:220.11", column: requested_2027, printed: 500, extracted: 250, note: "Detailed 220.15: 'Replacement Equipment' prints 250 but its 'Subtotal - Replacement Equipment' line (line 9) is printed blank; the EQUIPMENT PURCHASES TOTAL (500) counts the 250. Verified on the raw page."}
+- {id: der-replacement-subtotal-blank-proposed, doc: detailed, check: unit_equipment, section: "220:220.11", column: proposed_2027, printed: 500, extracted: 250, note: "Detailed 220.15, same line as above, proposed column."}
+
+# --- Summary book: position-change listing vs p.13 (scope, not arithmetic) ---
+- {id: dcd-position-listing-scope, doc: summary, check: position_changes_vs_p13, section: city-development, column: positions, printed: -10, extracted: -3, note: "Summary p.55 lists 'Specific ADDITIONAL positions (or eliminations)' totalling -3 (all rows verified on the page); p.13 shows City Development 103 -> 93 (-10). The listing is not an itemization of every change; both agree internally and with the Detailed book's position count (93)."}
+
+# --- Summary book: printed change columns that don't equal the computed change (found by an
+#     independent bbox cross-check review, 2026-09-23; confirmed by test_change_columns) ---
+- {id: city-attorney-positions-change-vs-requested, doc: summary, check: change_column, section: "city-attorney:positions", column: change_vs_requested, printed: "0", extracted: "-1", note: "Summary p.43: Total Positions Authorized 65 requested -> 64 proposed, but the 'vs 2027 Requested' column prints 0."}
+- {id: muni-court-revenue-total-change-vs-requested, doc: summary, check: change_column, section: "municipal-court:rev_total", column: change_vs_requested, printed: "0", extracted: "25000", note: "Summary p.108: revenue Total 2,971,000 requested -> 2,996,000 proposed; 'vs 2027 Requested' prints $0. The Charges for Services row on the same page correctly shows +$25,000."}
+- {id: transportation-transfer-change-vs-requested-blank, doc: summary, check: change_column, section: "transportation-fund:transfer_to_capital_fund", column: change_vs_requested, printed: "None", extracted: "6000000", note: "Summary p.190: 'Transfer to Capital Fund' 0 requested -> 6,000,000 proposed; its 'vs 2027 Requested' cell is blank. Same root cause as Detailed 510.8 (the transfer is left out of totals)."}
+- {id: transportation-total-operating-change-vs-requested, doc: summary, check: change_column, section: "transportation-fund:total_operating", column: change_vs_requested, printed: "-1643700", extracted: "4356300", note: "Summary p.190: Total Operating 46,054,000 requested -> 50,410,300 proposed = +4,356,300; the page prints -1,643,700 (the change without the 6,000,000 transfer). The revenue side of the same page prints +4,356,300."}
+- {id: transportation-total-budget-change-vs-requested, doc: summary, check: change_column, section: "transportation-fund:total_budget", column: change_vs_requested, printed: "-1667700", extracted: "4332300", note: "Summary p.190: Total Budget 55,883,000 requested -> 60,215,300 proposed = +4,332,300; the page prints -1,667,700."}
+
+# --- Suspected, not arithmetic: flagged for the Budget office; not excused by any test, not displayed ---
+- {id: fire-support-fringe-2025-suspected, doc: detailed, check: suspected, section: "240:240.10", column: actual_2025, printed: 4459530, extracted: null, note: "Detailed 240.10 line 24: Fire Support Services 'Estimated Employee Fringe Benefits' 2025 prints 4,459,530, identical to the unit's 2025 OPERATING EXPENDITURES TOTAL on 240.11 line 19; 2026 is 2,362,034. Probably a copy error in the document. Memo line; ask the Budget office before showing it."}
+- {id: water-works-2026-adopted-differs-by-page, doc: summary, check: suspected, section: water-works, column: adopted_2026, printed: 217091036, extracted: 216910988, note: "The 180,048 sits in the 2026 Operating expenditure authorization: Summary p.198 (PDF 208) prints Operating 167,801,036, but the p.197 expenditure Total is 167,620,988, which (with the 49,290,000 capital budget) agrees with p.7 and p.9. So p.198 prints 2026 Total Revenues / Authorizations 217,091,036 (change +11,818,654), as does the Detailed book's Water Works recap of authorizations; Summary p.7 and p.9 (PDF 17, 19) print 216,910,988 (change +11,998,702). Difference 180,048. 2027 requested and proposed agree everywhere. Keep each table as printed; flag the difference wherever both 2026 figures can appear. Found in the 2026-09-23 pre-check."}
+- {id: capital-narrative-million-typo, doc: summary, check: suspected, section: capital-improvements, column: proposed_2027, printed: 316607345, extracted: 316607345, note: "Summary p.174 (PDF 184) narrative: 'totals $316,607,345 million' ('million' after a full dollar figure). The table value 316,607,345 (p.180) is right. Never quote this sentence as written. Found in the 2026-09-23 pre-check."}
+- {id: contingent-fund-2025-bracketed, doc: summary, check: suspected, section: contingent-fund, column: actual_2025, printed: 4998805, extracted: null, note: "Summary p.187 (PDF 197) and Detailed 500.1 line 8 (PDF 379) print the 2025 actual as [4,998,805], in brackets. Stored as 4,998,805 with the row flag printed_bracketed:actual_2025. Neither book defines the brackets; Detailed 500.1 lines 23-24 note: Expenditure experience represents transfers and expenditures authorized by resolution. Display as printed, with that note (budget fact contingent-fund-2025-bracketed); do not interpret the brackets. Found in the 2026-09-23 round-2 review."}

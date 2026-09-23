@@ -1,0 +1,36 @@
+# Reconciliation gates deploy (CLAUDE.md principle 6): a failing golden, structural or
+# cross-document check fails this workflow. Not yet proven red/green — the repo has no remote.
+name: ci
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  pipeline:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: pipeline
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - run: sudo apt-get update && sudo apt-get install -y poppler-utils   # pdftotext for the chunker
+      - run: uv sync --locked
+      - run: uv run python -m extract.all       # rebuild every dataset from the two PDFs
+      - run: uv run pytest                      # golden + structural + cross-doc + unit
+      - run: git diff --exit-code -- ../data/processed   # committed data must match a fresh rebuild
+
+  app:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm typecheck
+      - run: pnpm test
+      - run: pnpm build
