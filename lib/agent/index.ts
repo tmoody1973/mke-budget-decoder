@@ -4,20 +4,23 @@ import { Agent } from '@mastra/core/agent'
 import { Mastra } from '@mastra/core'
 
 import { systemPrompt } from './system-prompt'
-import { calculate, getBudgetOverview, getDepartments } from './tools'
+import { calculate, getBudgetFacts, getBudgetOverview, getDepartmentBreakdown, getDepartments, getHearingCalendar, lookupGlossary, searchBudgetText } from './tools'
 
-// ponytail: P3.0 spike has 3 tools; the prompt names more (facts, glossary, search, calendar, scope picker).
-// Drop this note as each one is built.
-const SPIKE_TOOLS = `<available_tools>
-This build has only getBudgetOverview, getDepartments and calculate. The budget-facts, glossary, text-search and calendar tools and the scope picker are not built yet: if a question needs one, say that part is not available in this preview and answer what you can. For hearings and deadlines, point to the "Have your say" section on the Overview page.
-</available_tools>`
+// What each tool is called in the prompt's plain words (system-prompt.ts speaks of "the budget-facts
+// tool", "the glossary tool" and so on).
+const TOOLS = `<tools>
+- Headline totals, levy and tax rate: getBudgetOverview. Departments and their four stages: getDepartments. What a department spends on (salaries, benefits, positions): getDepartmentBreakdown.
+- The budget-facts tool: getBudgetFacts. The glossary tool: lookupGlossary. The text-search tool: searchBudgetText. The calendar tool: getHearingCalendar. Arithmetic: calculate.
+- For "why" questions, programs, capital projects, new buildings, streets, parking or state law, call searchBudgetText (and getBudgetFacts) before saying the documents don't cover something.
+- Never name these tools, mention "tools", or call anything a preview in your answer. If a lookup finds nothing, say the budget documents don't appear to cover it and suggest where to ask.
+</tools>`
 
 const budgetGuide = new Agent({
   id: 'budgetGuide',
   name: 'Milwaukee Budget Decoder',
-  instructions: `${systemPrompt('tool-render')}\n\n${SPIKE_TOOLS}`,
+  instructions: `${systemPrompt('tool-render')}\n\n${TOOLS}`,
   model: 'anthropic/claude-sonnet-5',
-  tools: { getBudgetOverview, getDepartments, calculate },
+  tools: { getBudgetOverview, getDepartments, getDepartmentBreakdown, searchBudgetText, getBudgetFacts, lookupGlossary, getHearingCalendar, calculate },
 })
 
 export const mastra = new Mastra({ agents: { budgetGuide } })

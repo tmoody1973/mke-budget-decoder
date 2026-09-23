@@ -227,3 +227,51 @@ export function DeptSnapshot({ rows }: { rows: SnapshotRow[] }) {
     </div>
   )
 }
+
+export type BreakdownLine = Numbered & { metric: string; label: string; unit: 'dollars' | 'count'
+  adopted2026: number | null; requested2027: number | null; proposed2027: number | null }
+
+const countFmt = (v: number) => v.toLocaleString('en-US', { maximumFractionDigits: 2 })
+
+/** What one department spends on (its Summary table). Dollars in millions, positions as counts;
+ *  below 28rem of width the requested column drops so the rest fits. */
+export function DeptBreakdown({ lines }: { lines: BreakdownLine[] }) {
+  const wide = 'hidden @md:table-cell'
+  const fmt = (l: BreakdownLine, v: number | null) => (v === null ? '—' : l.unit === 'dollars' ? millions(v) : countFmt(v))
+  return (
+    <div className="@container overflow-x-auto">
+      <table className={table}>
+        <caption className="sr-only">Department spending by type and positions: 2026 adopted, 2027 requested where there is room, 2027 proposed and the change</caption>
+        <thead>
+          <tr><td colSpan={5} className="pb-1 text-right text-xs text-ink-soft">Dollars in millions; positions as counts</td></tr>
+          <tr className="border-y-2 border-ink text-left text-xs font-semibold uppercase tracking-normal text-ink">
+            <th scope="col" className="py-2 pr-2 font-semibold">Item</th>
+            <th scope="col" className="py-2 pl-2 text-right font-semibold">2026<br />adopted</th>
+            <th scope="col" className={`${wide} py-2 pl-2 text-right font-semibold`}>2027<br />requested</th>
+            <th scope="col" className="py-2 pl-2 text-right font-semibold">2027<br />proposed</th>
+            <th scope="col" className="py-2 pl-2 text-right font-semibold">Change</th>
+          </tr>
+        </thead>
+        <tbody>
+          {lines.map((l) => {
+            const change = l.adopted2026 === null || l.proposed2027 === null ? null : l.proposed2027 - l.adopted2026
+            const total = l.metric === 'total_expenditures'
+            return (
+              <tr key={l.metric} id={l.id} className={`row-target align-top ${total ? 'border-y-2 border-ink' : 'border-b border-rule'}`}>
+                <th scope="row" className={`${label} ${total ? 'font-semibold' : ''}`}>
+                  <Tail label={l.label}><Mark n={l.n} q={[l.adopted2026, l.proposed2027].filter((v): v is number => v !== null)} /></Tail>
+                </th>
+                <td className="py-3 pl-2 text-right text-ink-soft">{fmt(l, l.adopted2026)}</td>
+                <td className={`${wide} py-3 pl-2 text-right text-ink-soft`}>{fmt(l, l.requested2027)}</td>
+                <td className="py-3 pl-2 text-right font-semibold">{fmt(l, l.proposed2027)}</td>
+                <td className="py-3 pl-2 text-right text-ink-soft">
+                  {change === null ? '—' : l.unit === 'dollars' ? signedMillions(change) : `${change > 0 ? '+' : change < 0 ? '−' : ''}${countFmt(Math.abs(change))}`}
+                </td>
+              </tr>
+            )
+          })}
+        </tbody>
+      </table>
+    </div>
+  )
+}

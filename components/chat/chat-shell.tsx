@@ -6,6 +6,7 @@ import { CopilotChat, CopilotKit, useAgent, useCopilotKit } from '@copilotkit/re
 import { X } from 'lucide-react'
 import { createContext, useCallback, useContext, useMemo, useState } from 'react'
 
+import { TextRenderers } from './text-renderers'
 import { Renderers } from './tool-renderers'
 
 const AGENT = 'budgetGuide'
@@ -33,6 +34,7 @@ function Panel({ children }: { children: React.ReactNode }) {
   return (
     <AskContext.Provider value={value}>
       <Renderers />
+      <TextRenderers />
       <div className="flex min-h-full flex-1">
         <div className="flex min-w-0 flex-1 flex-col">{children}</div>
         {/* Kept mounted while closed, so the conversation survives closing the panel. */}
