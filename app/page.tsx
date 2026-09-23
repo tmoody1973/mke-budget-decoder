@@ -1,6 +1,6 @@
 // Overview dashboard: Front-Page Broadsheet layout (.impeccable/surfaces/app-page-tsx.md, D15 order).
 import { AskedVsProposed, BiggestChanges, RevenueMix, SectionBudgets } from '@/components/genui/budget-tables'
-import { BoxScore, BudgetTreemap, LevyVsRate, Movers, ShowTable } from '@/components/genui/charts'
+import { BoxScore, BudgetTreemap, headlineScores, LevyVsRate, Movers, ShowTable } from '@/components/genui/charts'
 import { Mark, NoteMark, SourcesList, sourceRegistry } from '@/components/genui/sources'
 import { InTheNews } from '@/components/civic/in-the-news'
 import { TakePart } from '@/components/civic/take-part'
@@ -14,7 +14,7 @@ import {
 } from '@/lib/db/overview'
 import { getTopicFigures } from '@/lib/db/news'
 import type { Cite } from '@/lib/db/schema'
-import { bigDollars, pct } from '@/lib/format'
+import { bigDollars } from '@/lib/format'
 
 // Rendered per request: the page reads the database, and CI builds without one.
 export const dynamic = 'force-dynamic'
@@ -41,21 +41,8 @@ export default async function Overview() {
   const src = sourceRegistry()
   const intro = src.mark(h.allFunds.cite, { id: 'intro', label: 'the summary at the top' })
   const calendar = src.mark(CALENDAR, { id: 'intro', label: 'the summary at the top' })
-  const scores = [
-    { id: 'score-all', label: 'All city funds', a: h.allFunds.adopted2026, p: h.allFunds.proposed2027, cite: h.allFunds.cite },
-    { id: 'score-gcp', label: 'General city purposes', a: h.gcp.adopted2026, p: h.gcp.proposed2027, cite: h.gcp.cite },
-    { id: 'score-levy', label: 'City property tax levy', a: h.levy.adopted2026, p: h.levy.proposed2027, cite: h.levy.cite },
-  ].map((s) => ({
-    id: s.id, label: s.label, value: bigDollars(s.p), was: bigDollars(s.a),
-    change: `${s.p >= s.a ? 'Up' : 'Down'} ${pct(s.a, s.p)?.replace(/^[+−]/, '')}`,
-    n: src.mark(s.cite, { id: s.id, label: s.label.toLowerCase() }), q: [s.a, s.p] as (number | string)[],
-  }))
+  const scores = headlineScores(h, src)
   const rateDown = Number(h.rate.r2027) < Number(h.rate.r2026)
-  scores.push({
-    id: 'score-rate', label: 'City tax rate per $1,000 of assessed value', value: `$${h.rate.r2027}`, was: `$${h.rate.r2026}`,
-    change: `${rateDown ? 'Down' : 'Up'} $${Math.abs(Number(h.rate.r2027) - Number(h.rate.r2026)).toFixed(2)}`,
-    n: src.mark(h.rate.cite, { id: 'score-rate', label: 'the tax rate' }), q: [h.rate.r2026, h.rate.r2027],
-  })
   const sections = sectionRows.map((r) => ({ ...r, id: `sec-${r.section}`, n: src.mark(r.cite, { id: `sec-${r.section}`, label: `section ${r.section}` }) }))
   const levyGcp = mixRows.find((r) => r.key === 'levy')!
   const gcpTotal = mixRows.reduce((x, r) => x + r.proposed2027, 0)
@@ -76,7 +63,7 @@ export default async function Overview() {
   const levyUp = h.levy.proposed2027 > h.levy.adopted2026
   // News topics sit before "Have your say", so their marks are numbered first.
   const topics = TOPICS.map((t) => ({
-    id: t.id, title: t.title,
+    id: t.id, title: t.title, question: t.question,
     figures: topicFigures[t.id].map((f) => ({ ...f, n: src.mark(f.cite, { id: f.id, label: f.label.split(',')[0].toLowerCase() }) })),
     pages: t.pages.map((p) => ({ n: src.mark(p.cite, { id: `topic-${t.id}`, label: `${t.title.toLowerCase()} coverage` }), label: p.label, printed: p.cite.printed_page })),
     articles: ARTICLES.filter((a) => a.topics.includes(t.id)).sort((a, b) => b.date.localeCompare(a.date) || a.outlet.localeCompare(b.outlet)),

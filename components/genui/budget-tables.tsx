@@ -163,7 +163,7 @@ function ChangeGroup({ title, list }: { title: string; list: (DeptRow & { change
   return (
     <table className={table}>
       <caption className="pb-2 text-left text-base font-semibold text-ink">{title}</caption>
-      <Head cols={['Department', '2026 adopted to<br>2027 proposed', 'Percent']} />
+      <Head cols={['Department', 'Change from<br>2026', 'Percent']} />
       <tbody>
         {list.map((r) => (
           <tr key={r.slug} className="border-b border-rule">
@@ -187,5 +187,30 @@ export function BiggestChanges({ rows, n = 5 }: { rows: DeptRow[]; n?: number })
       <ChangeGroup title="Largest proposed increases" list={up} />
       <div className="mt-6"><ChangeGroup title="Largest proposed decreases" list={down} /></div>
     </>
+  )
+}
+
+export type SnapshotRow = DeptRow & { actual2025: number | null }
+
+/** One or a few departments across the four stages the documents contain (docs/03 DeptSnapshot). */
+export function DeptSnapshot({ rows }: { rows: SnapshotRow[] }) {
+  return (
+    <table className={table}>
+      <caption className="sr-only">Department budgets: 2025 actual, 2026 adopted, 2027 requested and 2027 proposed</caption>
+      <Head cols={['Department', '2025<br>actual', '2026<br>adopted', '2027<br>requested', '2027<br>proposed']} />
+      <tbody>
+        {rows.map((r) => (
+          <tr key={r.slug} id={r.id} className="row-target border-b border-rule align-top">
+            <th scope="row" className={label}><abbr title={r.name} className="no-underline">
+              <Tail label={r.shortName ?? r.name}><Mark n={r.n} q={[r.actual2025 ?? '', r.adopted2026, r.requested2027, r.proposed2027].filter((v) => v !== '')} /></Tail>
+            </abbr></th>
+            <td className={`${num} text-ink-soft`}>{r.actual2025 === null ? '—' : millions(r.actual2025)}</td>
+            <td className={`${num} text-ink-soft`}>{millions(r.adopted2026)}</td>
+            <td className={`${num} text-ink-soft`}>{millions(r.requested2027)}</td>
+            <td className={`${num} font-semibold`}>{millions(r.proposed2027)}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
   )
 }

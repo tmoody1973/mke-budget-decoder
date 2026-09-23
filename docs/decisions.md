@@ -193,3 +193,22 @@
 **How we'll know if this was right.** People share the picture (visible as visits from social links), nobody asks us to take one down for privacy, and nobody mistakes it for a real tax bill.
 
 **What actually happened.**
+
+## D19 — The chat lives in a panel beside the dashboard, not on its own page
+
+**Decision.** The chat opens as a right-hand panel next to the Overview on screens 1280 px and wider, and full screen on phones. A header button opens it, and each news topic has an "Ask about …" link that opens it with a prepared question. The separate `/ask` page is gone.
+
+**Why this came up.** Tarik shared a three-column app layout (navigation, data, AI commentary) and asked whether the decoder should use it. People ask about the number they are looking at, so the chat is most useful next to the numbers, not on another page.
+
+**Options.**
+1. *Full three-column app shell* (left navigation, center, right chat). Familiar from workspace tools; the left column spends ~15% of the width on three links, for visitors who mostly come once.
+2. *Right panel only, beside the existing page* (chosen). Keeps the page intact; the panel squeezes the dashboard when open.
+3. *Chat on its own `/ask` page.* No layout risk; the visitor loses sight of the figure they asked about.
+
+**What we chose and why.** Option 2 (Tarik chose the panel; Claude recommended it and chose to build it from CopilotKit's plain chat box in our own column, because the ready-made sidebar is a fixed overlay with its own floating button). The panel starts closed so a laptop shows the full dashboard until the visitor asks.
+
+**What we gave up.** With the panel open on a 1280 px laptop the dashboard is 864 px wide: headline figures wrap to two lines and the treemap gets tighter. The chat still uses CopilotKit's default look (rounded input, speech bubbles) until a styling pass.
+
+**How we'll know if this was right.** Visitors who open the chat do it from an "Ask about …" link or the header button and keep reading the page afterward; no reports of the panel hiding the figures they wanted.
+
+**What actually happened.**

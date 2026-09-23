@@ -1,13 +1,14 @@
 // "What's in the news, and what the budget says" (docs/09 step 2). Each topic pairs the budget's own
 // cited figures and pages with the coverage about it. Articles are headline, outlet, date and link
 // only; no figure here comes from an article (DESIGN.md ruled blocks, no cards).
+import { AskLink } from '@/components/chat/chat-shell'
 import { Mark } from '@/components/genui/sources'
 import type { Article } from '@/lib/civic/news'
 import type { TopicFigure } from '@/lib/db/news'
 import { bigDollars, pct } from '@/lib/format'
 
 export type NewsTopic = {
-  id: string; title: string
+  id: string; title: string; question: string
   figures: (TopicFigure & { n: number })[]
   pages: { n: number; label: string; printed: string }[]
   articles: Article[]
@@ -49,6 +50,7 @@ export function InTheNews({ topics }: { topics: NewsTopic[] }) {
               ))}.
             </p>
           )}
+          <p className="mt-3"><AskLink question={t.question}>Ask about {t.title.toLowerCase()}</AskLink></p>
           <h4 className="mt-4 text-xs font-semibold uppercase tracking-[0.06em] text-ink">Coverage</h4>
           <ul className="mt-1 space-y-2">
             {t.articles.map((a) => (

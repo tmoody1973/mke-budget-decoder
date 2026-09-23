@@ -36,14 +36,14 @@ export const ARTICLES: Article[] = [
 const summary = (pdf_page: number, printed_page: string): Cite => ({ doc: 'summary', pdf_page, printed_page })
 
 /** Topics in the order the coverage leads with them. `pages` are where the budget itself discusses the topic. */
-export const TOPICS: { id: TopicId; title: string; pages: { cite: Cite; label: string }[] }[] = [
-  { id: 'roads', title: 'Roads', pages: [
+export const TOPICS: { id: TopicId; title: string; question: string; pages: { cite: Cite; label: string }[] }[] = [
+  { id: 'roads', title: 'Roads', question: "What does the Mayor's proposed budget do for roads and streets?", pages: [
     { cite: summary(138, '128'), label: 'street, bridge and alley programs' },
     { cite: summary(184, '174'), label: 'street spending since 2019' },
   ] },
-  { id: 'parking', title: 'Parking', pages: [{ cite: summary(202, '192'), label: 'Parking Services' }] },
-  { id: 'taxes-fees', title: 'Taxes and fees', pages: [] },
-  { id: 'public-safety', title: 'Public safety', pages: [] },
-  { id: 'buildings', title: 'New buildings', pages: [] },
-  { id: 'gap', title: 'The budget gap', pages: [{ cite: summary(11, '1'), label: 'why the city faces a gap each year' }] },
+  { id: 'parking', title: 'Parking', question: "What does the proposed budget change about parking?", pages: [{ cite: summary(202, '192'), label: 'Parking Services' }] },
+  { id: 'taxes-fees', title: 'Taxes and fees', question: "How would city property taxes and fees change under the proposed budget?", pages: [] },
+  { id: 'public-safety', title: 'Public safety', question: "How would police and fire budgets change under the proposal?", pages: [] },
+  { id: 'buildings', title: 'New buildings', question: "What new buildings are in the proposed 2027 budget?", pages: [] },
+  { id: 'gap', title: 'The budget gap', question: "Why does the city face a budget gap?", pages: [{ cite: summary(11, '1'), label: 'why the city faces a gap each year' }] },
 ]
