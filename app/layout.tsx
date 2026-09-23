@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Libre_Franklin } from "next/font/google";
 import Link from "next/link";
+
+import { SourceDrawer } from "@/components/source-drawer/source-drawer";
 import "./globals.css";
 
 // Franklin Gothic is the face of American statistical almanacs; Libre Franklin is its open revival.
@@ -27,6 +29,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           </nav>
         </header>
         {children}
+        <SourceDrawer />
       </body>
     </html>
   );

@@ -40,13 +40,13 @@ export default async function Overview() {
   ].map((s) => ({
     id: s.id, label: s.label, value: bigDollars(s.p), was: bigDollars(s.a),
     change: `${s.p >= s.a ? 'Up' : 'Down'} ${pct(s.a, s.p)?.replace(/^[+−]/, '')}`,
-    n: src.mark(s.cite, { id: s.id, label: s.label.toLowerCase() }),
+    n: src.mark(s.cite, { id: s.id, label: s.label.toLowerCase() }), q: [s.a, s.p] as (number | string)[],
   }))
   const rateDown = Number(h.rate.r2027) < Number(h.rate.r2026)
   scores.push({
     id: 'score-rate', label: 'City tax rate per $1,000 of assessed value', value: `$${h.rate.r2027}`, was: `$${h.rate.r2026}`,
     change: `${rateDown ? 'Down' : 'Up'} $${Math.abs(Number(h.rate.r2027) - Number(h.rate.r2026)).toFixed(2)}`,
-    n: src.mark(h.rate.cite, { id: 'score-rate', label: 'the tax rate' }),
+    n: src.mark(h.rate.cite, { id: 'score-rate', label: 'the tax rate' }), q: [h.rate.r2026, h.rate.r2027],
   })
   const sections = sectionRows.map((r) => ({ ...r, id: `sec-${r.section}`, n: src.mark(r.cite, { id: `sec-${r.section}`, label: `section ${r.section}` }) }))
   const levyGcp = mixRows.find((r) => r.key === 'levy')!
@@ -83,7 +83,7 @@ export default async function Overview() {
           </h1>
           <p id="intro" className="row-target tabular -mx-1 mt-3 max-w-[78ch] px-1 text-lg leading-relaxed text-ink">
             The Mayor proposes {bigDollars(h.allFunds.proposed2027)} across all city funds, including{' '}
-            {bigDollars(h.gcp.proposed2027)} for general city purposes.<Mark n={intro} /> It is a proposal: the Common Council can
+            {bigDollars(h.gcp.proposed2027)} for general city purposes.<Mark n={intro} q={[h.allFunds.proposed2027, h.gcp.proposed2027]} /> It is a proposal: the Common Council can
             change it before adopting the budget in November.<Mark n={calendar} />
           </p>
         </div>
@@ -118,8 +118,8 @@ export default async function Overview() {
           <section aria-labelledby="revenue">
             <PanelTitle id="revenue">Where the general city money comes from</PanelTitle>
             <p id="revenue-lead" className="row-target tabular -mx-1 mt-2 px-1 text-sm leading-relaxed text-ink">
-              {bigDollars(gcpTotal)} in all, largest source first.<Mark n={revGcpMark} /> Property tax supplies{' '}
-              {bigDollars(levyGcp.proposed2027)} ({((levyGcp.proposed2027 / gcpTotal) * 100).toFixed(1)}%) of it.<Mark n={revLevyMark} />
+              {bigDollars(gcpTotal)} in all, largest source first.<Mark n={revGcpMark} q={[gcpTotal]} /> Property tax supplies{' '}
+              {bigDollars(levyGcp.proposed2027)} ({((levyGcp.proposed2027 / gcpTotal) * 100).toFixed(1)}%) of it.<Mark n={revLevyMark} q={[levyGcp.proposed2027]} />
             </p>
             <RevenueMix rows={mix} />
           </section>
@@ -140,7 +140,7 @@ export default async function Overview() {
           <PanelTitle id="taxes">Are my property taxes going up?</PanelTitle>
           <p id="taxes-lead" className="row-target tabular -mx-1 mt-2 px-1 leading-relaxed text-ink">
             Under the Mayor’s proposal, the city’s property tax levy would {levyUp ? 'rise' : 'fall'} while the tax rate
-            would {rateDown ? 'fall' : 'rise'}{levyUp && rateDown ? ', because the total assessed value of property in the city grew' : ''}.<Mark n={levyMark} />{' '}
+            would {rateDown ? 'fall' : 'rise'}{levyUp && rateDown ? ', because the total assessed value of property in the city grew' : ''}.<Mark n={levyMark} q={[h.levy.adopted2026, h.levy.proposed2027, h.rate.r2026, h.rate.r2027]} />{' '}
             Whether the city’s share of your bill rises depends on how your home’s assessment changed compared with the citywide
             change. School, county, sewerage district and technical college taxes on the same bill are set separately.
           </p>
@@ -157,12 +157,12 @@ export default async function Overview() {
               </thead>
               <tbody>
                 <tr className="border-b border-rule">
-                  <th scope="row" className="py-3 pr-2 text-left font-normal">Property tax levy<Mark n={levyMark} /></th>
+                  <th scope="row" className="py-3 pr-2 text-left font-normal">Property tax levy<Mark n={levyMark} q={[h.levy.adopted2026, h.levy.proposed2027]} /></th>
                   <td className="py-3 pl-2 text-right sm:pl-4">{bigDollars(h.levy.adopted2026)}</td>
                   <td className="py-3 pl-2 text-right font-semibold sm:pl-4">{bigDollars(h.levy.proposed2027)}</td>
                 </tr>
                 <tr className="border-b border-rule">
-                  <th scope="row" className="py-3 pr-2 text-left font-normal">Tax rate per $1,000<Mark n={levyMark} /></th>
+                  <th scope="row" className="py-3 pr-2 text-left font-normal">Tax rate per $1,000<Mark n={levyMark} q={[h.rate.r2026, h.rate.r2027]} /></th>
                   <td className="py-3 pl-2 text-right sm:pl-4">${h.rate.r2026}</td>
                   <td className="py-3 pl-2 text-right font-semibold sm:pl-4">${h.rate.r2027}</td>
                 </tr>
