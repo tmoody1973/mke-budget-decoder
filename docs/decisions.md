@@ -11,3 +11,24 @@
 | D6 | No accounts in v1; Boards shared by URL | Lower friction for residents; no personal data stored | Users ask to save many boards |
 | D7 | Explore ships before Ask | Useful during hearings even if the agent slips | — |
 | D8 | Every table keyed by budget_version | Adopted budget arrives in November | — |
+
+---
+
+## D10 — Column positions are read from each page, not checked against one fixed ruler
+
+**Decision.** The Detailed-budget parser finds each page's columns from that page's own header row and places a number under the header it sits beneath. The ±2-point "every page must match the spec" rule from docs/02 §3 is kept as a warning, not a hard stop.
+
+**Why this came up.** The spec said column positions are identical on every page to within 2 points (a point is 1/72 of an inch). On the real 2027 Proposed PDF that's true for 420 of 450 pages. The other 30 are Emergency Communications (off by up to 7.9 pt), Police (5.3 pt) and the DPW summary (2.0 pt). Those pages are slightly stretched sideways, not just shifted. And City Treasurer prints its position counts centered under the header instead of right-aligned. If we got this wrong, a number could land in the wrong year's column. That's the worst kind of error for this project, because it looks right.
+
+**Options.**
+1. *Enforce ±2 pt and stop on failure* (the spec). Honest, but the pipeline can't run at all on 30 real pages.
+2. *Use fixed column positions with a wider tolerance.* Runs, but on a stretched page a number near a boundary can be put in the neighbouring column without any error.
+3. *Read the columns from each page's own headers* and accept a number only if it sits under a header. Stop loudly if a page has the wrong number of headers, headers out of order, or drift over 10 pt.
+
+**What we chose and why.** Option 3 (Claude, during P1.3; Tarik to confirm). Every number either lines up with a column on its own page or is reported. On the real book, 0 numbers failed to line up and 0 words were left unattached. Pages over 2 pt are listed by a test, so a new stretched page gets noticed.
+
+**What we gave up.** The simple "every page is identical" guarantee. A page that's stretched *and* has a number that sits halfway between two columns would still go to the nearer one. Nothing stops that except the reconciliation sums (P1.8).
+
+**How we'll know if this was right.** The P1.8 reconciliation suite: every decision unit's lines add up to its printed totals, in every year column, including on the 30 stretched pages. A wrong-column number would show up there as a mismatch.
+
+**What actually happened.**
