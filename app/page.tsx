@@ -8,6 +8,7 @@ import { ReceiptBand } from '@/components/receipt/receipt-band'
 import { ReceiptFinder } from '@/components/receipt/receipt-finder'
 import { EVENTS } from '@/lib/civic/events'
 import { ARTICLES, TOPICS } from '@/lib/civic/news'
+import { OVERVIEW_SECTIONS } from '@/lib/site-nav'
 import { BUDGET_VERSION, getDb } from '@/lib/db/client'
 import {
   getBudgetFact, getDepartmentTotals, getGcpReconciliation, getHeadline, getRevenueMix, getSectionBudgets,
@@ -20,10 +21,6 @@ import { bigDollars } from '@/lib/format'
 export const dynamic = 'force-dynamic'
 
 const CALENDAR: Cite = { doc: 'summary', pdf_page: 4, printed_page: 'front matter' }
-const JUMPS = [
-  ['#revenue', 'Where it comes from'], ['#departments', 'Departments'], ['#changes', 'Biggest changes'], ['#taxes', 'Your property taxes'],
-  ['#news', 'In the news'], ['#take-part', 'Have your say'],
-]
 
 const PanelTitle = ({ id, children }: { id: string; children: React.ReactNode }) => (
   <h2 id={id} className="scroll-mt-6 border-t-2 border-ink pt-3 text-xl font-bold tracking-[-0.01em] text-ink">{children}</h2>
@@ -92,7 +89,7 @@ export default async function Overview() {
         </div>
         <nav aria-label="Jump to" className="mt-3">
           <ul className="flex flex-wrap gap-x-5 gap-y-2 text-sm">
-            {JUMPS.map(([href, label]) => <li key={href}><a href={href} className="font-semibold text-ref underline underline-offset-4">{label}</a></li>)}
+            {OVERVIEW_SECTIONS.map(([href, label]) => <li key={href}><a href={href} className="font-semibold text-ref underline underline-offset-4">{label}</a></li>)}
           </ul>
         </nav>
       </header>

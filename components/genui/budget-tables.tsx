@@ -192,25 +192,38 @@ export function BiggestChanges({ rows, n = 5 }: { rows: DeptRow[]; n?: number })
 
 export type SnapshotRow = DeptRow & { actual2025: number | null }
 
-/** One or a few departments across the four stages the documents contain (docs/03 DeptSnapshot). */
+/** One or a few departments across the budget stages (docs/03 DeptSnapshot). Sized by its container,
+ *  not the screen: below 28rem (a phone, the chat panel) it drops 2025 actual so the rest fits. */
 export function DeptSnapshot({ rows }: { rows: SnapshotRow[] }) {
+  const wide = 'hidden @md:table-cell'
   return (
-    <table className={table}>
-      <caption className="sr-only">Department budgets: 2025 actual, 2026 adopted, 2027 requested and 2027 proposed</caption>
-      <Head cols={['Department', '2025<br>actual', '2026<br>adopted', '2027<br>requested', '2027<br>proposed']} />
-      <tbody>
-        {rows.map((r) => (
-          <tr key={r.slug} id={r.id} className="row-target border-b border-rule align-top">
-            <th scope="row" className={label}><abbr title={r.name} className="no-underline">
-              <Tail label={r.shortName ?? r.name}><Mark n={r.n} q={[r.actual2025 ?? '', r.adopted2026, r.requested2027, r.proposed2027].filter((v) => v !== '')} /></Tail>
-            </abbr></th>
-            <td className={`${num} text-ink-soft`}>{r.actual2025 === null ? '—' : millions(r.actual2025)}</td>
-            <td className={`${num} text-ink-soft`}>{millions(r.adopted2026)}</td>
-            <td className={`${num} text-ink-soft`}>{millions(r.requested2027)}</td>
-            <td className={`${num} font-semibold`}>{millions(r.proposed2027)}</td>
+    <div className="@container overflow-x-auto">
+      <table className={table}>
+        <caption className="sr-only">Department budgets by stage: 2026 adopted, 2027 requested and 2027 proposed, with 2025 actual where there is room</caption>
+        <thead>
+          <tr><td colSpan={5} className="pb-1 text-right text-xs text-ink-soft">Millions of dollars</td></tr>
+          <tr className="border-y-2 border-ink text-left text-xs font-semibold uppercase tracking-normal text-ink">
+            <th scope="col" className="py-2 pr-2 font-semibold">Department</th>
+            <th scope="col" className={`${wide} py-2 pl-2 text-right font-semibold`}>2025<br />actual</th>
+            <th scope="col" className="py-2 pl-2 text-right font-semibold">2026<br />adopted</th>
+            <th scope="col" className="py-2 pl-2 text-right font-semibold">2027<br />requested</th>
+            <th scope="col" className="py-2 pl-2 text-right font-semibold">2027<br />proposed</th>
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {rows.map((r) => (
+            <tr key={r.slug} id={r.id} className="row-target border-b border-rule align-top">
+              <th scope="row" className={label}><abbr title={r.name} className="no-underline">
+                <Tail label={r.shortName ?? r.name}><Mark n={r.n} q={[r.actual2025 ?? '', r.adopted2026, r.requested2027, r.proposed2027].filter((v) => v !== '')} /></Tail>
+              </abbr></th>
+              <td className={`${wide} py-3 pl-2 text-right text-ink-soft`}>{r.actual2025 === null ? '—' : millions(r.actual2025)}</td>
+              <td className="py-3 pl-2 text-right text-ink-soft">{millions(r.adopted2026)}</td>
+              <td className="py-3 pl-2 text-right text-ink-soft">{millions(r.requested2027)}</td>
+              <td className="py-3 pl-2 text-right font-semibold">{millions(r.proposed2027)}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   )
 }
