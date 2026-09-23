@@ -3,6 +3,7 @@ import { AskedVsProposed, BiggestChanges, RevenueMix, SectionBudgets } from '@/c
 import { BoxScore, BudgetTreemap, LevyVsRate, Movers, ShowTable } from '@/components/genui/charts'
 import { Mark, NoteMark, SourcesList, sourceRegistry } from '@/components/genui/sources'
 import { TakePart } from '@/components/civic/take-part'
+import { ReceiptBand } from '@/components/receipt/receipt-band'
 import { ReceiptFinder } from '@/components/receipt/receipt-finder'
 import { EVENTS } from '@/lib/civic/events'
 import { BUDGET_VERSION, getDb } from '@/lib/db/client'
@@ -175,8 +176,10 @@ export default async function Overview() {
           </ShowTable>
         </div>
         <div className="lg:col-span-7 lg:border-l lg:border-rule lg:pl-8">
-          <h3 className="border-t-2 border-ink pt-3 text-xl font-bold text-ink">Look up your city receipt</h3>
-          <div className="mt-4"><ReceiptFinder /></div>
+          <ReceiptBand>
+            <h3 className="text-xl font-bold text-ink">Look up your city receipt</h3>
+            <div className="mt-4"><ReceiptFinder /></div>
+          </ReceiptBand>
         </div>
       </section>
 

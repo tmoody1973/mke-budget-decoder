@@ -17,6 +17,8 @@
   --color-paper: var(--paper);
   --color-mark: var(--mark);
   --color-fund: var(--fund);
+  --color-band: var(--band);
+  --color-receipt: var(--receipt);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -64,6 +66,8 @@
   --rule: oklch(0.9 0.012 262);     /* pale rule gray (~#D9DEE7) */
   --mark: oklch(0.95 0.035 255);    /* footnote highlight wash */
   --fund: oklch(0.88 0.045 255);    /* self-funded budget sections in charts (ink text on it) */
+  --band: oklch(0.84 0.15 80);      /* marigold frame around the City Receipt only (~#FDBE45); ink on it ~8:1 */
+  --receipt: oklch(0.985 0.012 90); /* warm receipt paper (~#FDFAF1); the image route keeps hex twins */
   --background: var(--paper);
   --foreground: var(--ink);
   --card: oklch(1 0 0);
@@ -169,3 +173,9 @@ a { text-underline-offset: 0.2em; text-decoration-thickness: 1px; }
 
 /* Source drawer: cited figures highlighted over the PDF page (the text layer's own text stays transparent). */
 .pdf-page .textLayer mark { color: transparent; background: color-mix(in oklch, var(--ref) 30%, transparent); outline: 2px solid var(--ref); outline-offset: 1px; }
+
+/* Torn receipt edges above and below the receipt sheet (DESIGN.md, City Receipt exception).
+   The fill matches --receipt; SVG data URIs cannot read CSS variables. */
+.torn-top, .torn-bottom { height: 8px; background-repeat: repeat-x; background-size: 16px 8px; }
+.torn-top { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='8'%3E%3Cpath d='M0 8 L8 0 L16 8 Z' fill='%23fdfaf1'/%3E%3C/svg%3E"); }
+.torn-bottom { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='8'%3E%3Cpath d='M0 0 L8 8 L16 0 Z' fill='%23fdfaf1'/%3E%3C/svg%3E"); }
