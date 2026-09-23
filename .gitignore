@@ -60,3 +60,4 @@ __pycache__/
 /.impeccable/mocks/
 /.impeccable/config.local.json
 /.impeccable/questions/
+evals/results/

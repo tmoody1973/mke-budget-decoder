@@ -5,7 +5,12 @@ import { z } from 'zod'
 
 import { BUDGET_VERSION, getDb } from '@/lib/db/client'
 import { EVENTS } from '@/lib/civic/events'
-import { findBudgetFacts, getDepartmentBreakdown as breakdown, lookupGlossary as glossary } from '@/lib/db/chat'
+import {
+  findBudgetFacts, getBudgetSections as sections, getDepartmentBreakdown as breakdown, getPerformanceMeasures as measures,
+  getPositionChanges as positions, getRevenues as revenues, lookupGlossary as glossary, searchBudgetLines as lines,
+} from '@/lib/db/chat'
+import { getReceiptRates } from '@/lib/db/receipt'
+import { receiptFromBody } from '@/lib/receipt-request'
 import { getBudgetFact, getDepartmentTotals, getHeadline } from '@/lib/db/overview'
 import { searchBudgetText as search } from '@/lib/db/search'
 
@@ -90,4 +95,69 @@ export const getHearingCalendar = createTool({
     const deadlines = await getBudgetFact(getDb(), BUDGET_VERSION, 'legal-deadlines')
     return { events: EVENTS, deadlines: { statement: deadlines.statement, cite: deadlines.cite } }
   },
+})
+
+export const getBudgetSections = createTool({
+  id: 'getBudgetSections',
+  description:
+    'Every budget section for 2026 adopted and 2027 proposed (Summary p.7): general city purposes, pensions, capital improvements, city debt (borrowing costs), contingent fund, Transportation Fund, grants, Water Works, sewer and others, with each section\'s property tax levy and its share of the tax rate per $1,000 of assessed value. Use it for "where does my property tax go", levy splits, capital budget and debt totals, and Water Works. Renders as a cited table.',
+  inputSchema: z.object({}),
+  execute: async () => ({ sections: await sections(getDb(), BUDGET_VERSION) }),
+})
+
+export const getRevenues = createTool({
+  id: 'getRevenues',
+  description:
+    'Revenue by fund, four stages (2026 adopted, 2027 requested, 2027 proposed): "general" = general city purposes sources, their total (requested vs proposed) and the Tax Stabilization Fund withdrawal (reserves); "transportation-fund" = parking citations, permits, meters, towing, streetcar, scooters (p.190); "sewer-maintenance-fund"; "employee-retirement". Renders as a cited table.',
+  inputSchema: z.object({ fund: z.enum(['general', 'transportation-fund', 'sewer-maintenance-fund', 'employee-retirement']) }),
+  execute: async ({ fund }) => ({ fund, rows: await revenues(getDb(), BUDGET_VERSION, fund) }),
+})
+
+export const getCityFees = createTool({
+  id: 'getCityFees',
+  description: 'City fees a household pays, 2026 and 2027 proposed: solid waste (garbage) per home, extra garbage cart, snow and ice and street lighting per foot of frontage, average household sewer and stormwater (p.159, 203). Renders as a cited table.',
+  inputSchema: z.object({}),
+  execute: async () => ({ fees: (await getReceiptRates(getDb(), BUDGET_VERSION)).fees }),
+})
+
+export const estimateCityCharges = createTool({
+  id: 'estimateCityCharges',
+  description:
+    'Estimate what the city charges one home under the 2026 budget and the 2027 proposal from an assessed value the person gives (the same math as Your City Receipt): city property tax, garbage, snow and ice, street lighting (40 ft frontage assumed), sewer and stormwater, and where the property tax goes. view "renter" gives one unit\'s share of the building, paid by the owner. For an address lookup, point the person to Your City Receipt. Renders as a cited receipt.',
+  inputSchema: z.object({
+    assessed2026: z.number().int().positive().describe('2026 assessed value in whole dollars'),
+    assessed2025: z.number().int().positive().optional().describe('2025 assessed value, if the person gave it'),
+    units: z.number().int().min(1).max(999).default(1).describe('Homes in the building'),
+    view: z.enum(['owner', 'renter']).default('owner'),
+  }),
+  execute: async ({ assessed2026, assessed2025, units, view }) => {
+    const r = await receiptFromBody({ assessed2026, assessed2025, units, buildingUnits: units, view })
+    return 'error' in r ? { error: r.error } : { receipt: r.receipt }
+  },
+})
+
+export const getPositionChanges = createTool({
+  id: 'getPositionChanges',
+  description: 'A department\'s position changes as its Summary page lists them: title, number of positions added or eliminated, and the document\'s own reason (for example "Elimination of funded vacant positions"). Use it for layoffs, vacancies, 911 dispatchers, grant-funded or ARPA positions. Quote reasons exactly; never call an elimination a layoff unless the reason says so. Renders as a cited table.',
+  inputSchema: z.object({ slug: z.string().describe('Department slug, e.g. "emergency-communications", "police"') }),
+  execute: async ({ slug }) => {
+    const [changes, b] = await Promise.all([positions(getDb(), BUDGET_VERSION, slug), breakdown(getDb(), BUDGET_VERSION, slug)])
+    const total = b?.rows.find((r) => r.metric === 'positions')
+    return { slug, totalPositions: total ? { adopted2026: total.adopted2026, proposed2027: total.proposed2027, cite: b!.cite } : null, changes }
+  },
+})
+
+export const getPerformanceMeasures = createTool({
+  id: 'getPerformanceMeasures',
+  description: 'A department\'s performance measures exactly as printed, with their column labels (usually 2025 actual, 2026 projected, 2027 planned). Do not call a change better or worse unless the document does. Renders as a cited table.',
+  inputSchema: z.object({ slug: z.string() }),
+  execute: async ({ slug }) => ({ slug, measures: await measures(getDb(), BUDGET_VERSION, slug) }),
+})
+
+export const searchBudgetLines = createTool({
+  id: 'searchBudgetLines',
+  description:
+    'Detailed budget line items (the line-by-line books): search by words in the line description ("overtime", "professional services", "information technology", "consultant") or by an account number ("634000"). Without a department it totals the matching lines by department. Scope: the Detailed budget\'s department line items. Renders as a cited table.',
+  inputSchema: z.object({ query: z.string().min(3), slug: z.string().optional().describe('Limit to one department') }),
+  execute: async ({ query, slug }) => ({ query, ...(await lines(getDb(), BUDGET_VERSION, query, slug)) }),
 })
