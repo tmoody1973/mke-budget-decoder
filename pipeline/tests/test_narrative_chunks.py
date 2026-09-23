@@ -53,3 +53,9 @@ def test_crosswalk(chunks):
     cw = {d["dept"]: d for d in json.loads((PROCESSED / "dept_crosswalk.json").read_text())}
     assert cw["administration"]["org_codes"][0] == "1510" or "1510" in cw["administration"]["org_codes"]
     assert cw["police"]["detailed_page_prefix"] == ["300"] and cw["police"]["summary_printed_pages"] == [116, 120]
+
+
+def test_chunk_ids_are_unique(chunks):
+    """ids are primary keys in Postgres; a repeat would point search results at the wrong passage."""
+    ids = [c["id"] for c in chunks]
+    assert len(ids) == len(set(ids))

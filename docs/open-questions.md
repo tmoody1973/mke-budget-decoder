@@ -37,3 +37,9 @@ Stored as printed, flagged on the row; none of these are "fixed" by the parser.
 - **docs/02 §2 says KPI year labels are "2024 Actual | 2025 Projected | 2026 Planned".** That's Police's labeling; Administration, Fire, City Attorney and others print 2025 / 2026 / 2027 (some as "Indicators"). The pipeline keeps labels as printed, which is right. The spec should say "varies by department".
 - **Brackets in the Contingent Fund's 2025 actual** (`[4,998,805]`, Summary p.187): the page doesn't say what brackets mean. Stored with a `printed_bracketed` flag. Ask the Budget office before the app displays it (possibly: spent by transfer to other accounts).
 - **Fire Support Services 2025 fringe** (Detailed 240.10 line 24) prints the unit's 2025 operating total. Suspected copy error; logged as `suspected` in source_inconsistencies.yaml, not displayed.
+
+## 2026-09-23 — P1.10
+
+- **Embeddings not loaded.** `chunks.embedding` and `concepts.embedding` are NULL: no Voyage AI key in `.env.local` yet. Full-text search (`tsv`) works now (tested). Needed: a `VOYAGE_API_KEY`, and confirmation of the Voyage model (the schema assumes 1,024 dimensions). Cost for ~2,500 short texts should be well under a dollar, but check current Voyage pricing before running.
+- **Row ids are not stable across reloads** (D14). Anything outside the database (Boards, share links) must refer to rows by citation, not by id.
+- **pg warns that `sslmode=require` will change meaning in pg v9.** Current behaviour is `verify-full` (strict). Setting `sslmode=verify-full` explicitly in DATABASE_URL keeps it and silences the warning; not changed yet because it's the credentials file.

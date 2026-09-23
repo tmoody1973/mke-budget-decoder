@@ -95,3 +95,24 @@
 **How we'll know if this was right.** In November, the Adopted budget load should produce either zero new cross-check failures or failures that are real extraction bugs, not new layout noise.
 
 **What actually happened.**
+
+---
+
+## D14 — The database is reloaded as a whole, one budget version at a time, inside one transaction
+
+**Decision.** `pnpm db:load` (scripts/load.ts) deletes every row belonging to the budget version and inserts the extracted data fresh, all inside one database transaction. It reads the committed data files directly, and Drizzle's typed schema checks every row on the way in.
+
+**Why this came up.** The data is rebuilt from the PDFs whenever the parser improves (the review fixes changed several tables). A loader that updates rows in place has to know which rows changed, and can leave stale rows behind when a row disappears (e.g. a page footer that used to be stored as a row, B5).
+
+**Options.**
+1. *Update in place (upsert).* Keeps row ids stable, but needs a natural key for every table and still needs a separate delete pass for vanished rows.
+2. *Delete-and-reload the version in one transaction.* Simple and always matches the files exactly. Ids change on every load.
+3. *Load into a new version each time and switch a pointer.* Keeps history, but adds version bookkeeping we don't need before November.
+
+**What we chose and why.** Option 2 (Claude). The first real run proved the safety property: a duplicate chunk id failed the load on the last table, and the database was left untouched. The same run found a real chunker bug. A second full load was verified to create no duplicates.
+
+**What we gave up.** Row ids aren't stable across loads, so nothing outside the database should store them. Shared Boards (P4) must reference rows by citation (page + line) or by natural keys, not by id. A reload takes ~10 seconds, during which readers see the old data (the transaction hides the partial state).
+
+**How we'll know if this was right.** When the Adopted budget arrives in November it loads as a second version beside Proposed without touching Proposed's rows, and `lib/db/load.test.ts` passes for both.
+
+**What actually happened.**

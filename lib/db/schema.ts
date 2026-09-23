@@ -122,10 +122,15 @@ export const deptSummary = pgTable('dept_summary', {
   // total_expenditures, rev_<category>, rev_total
   metric: text('metric').notNull(),
   label: text('label').notNull(), // as printed
+  groupName: text('group_name'), // printed block/group: personnel | expenditures | revenues | source of funds | …
   actual2025: numeric('actual_2025', { precision: 14, scale: 2 }),
   adopted2026: numeric('adopted_2026', { precision: 14, scale: 2 }),
   requested2027: numeric('requested_2027', { precision: 14, scale: 2 }),
   proposed2027: numeric('proposed_2027', { precision: 14, scale: 2 }),
+  changeVsAdopted: numeric('change_vs_adopted', { precision: 14, scale: 2 }), // as printed (may disagree: source_inconsistencies)
+  changeVsRequested: numeric('change_vs_requested', { precision: 14, scale: 2 }),
+  flags: text('flags').array().notNull().default(sql`'{}'::text[]`), // e.g. printed_bracketed:actual_2025 (Summary p.187)
+  labelWrapped: boolean('label_wrapped').notNull().default(false),
   cite: cite(),
 })
 
@@ -147,9 +152,11 @@ export const kpis = pgTable('kpis', {
   budgetVersionId: versionId(),
   deptId: deptId().notNull(),
   measure: text('measure').notNull(),
+  groupName: text('group_name'), // parent measure when sub-measures were printed as bullets (Fire p.92)
   colLabels: text('col_labels').array().notNull(), // as printed: 2024 Actual | 2025 Projected | 2026 Planned
   values: text('values').array().notNull(), // as printed, not coerced
   footnote: text('footnote'),
+  flags: text('flags').array().notNull().default(sql`'{}'::text[]`),
   cite: cite(),
 })
 
@@ -161,6 +168,8 @@ export const positionChanges = pgTable('position_changes', {
   omFtes: fte('om_ftes'),
   nonOmFtes: fte('non_om_ftes'),
   title: text('title').notNull(),
+  section: text('section'), // heading printed inside the table (DPW-ISD 'Transportation Infrastructure')
+  groupName: text('group_name'),
   reason: text('reason'),
   reasonCategory: text('reason_category', {
     enum: [
@@ -175,6 +184,7 @@ export const positionChanges = pgTable('position_changes', {
     ],
   }),
   isTotal: boolean('is_total').notNull().default(false),
+  mergedWithPrevious: boolean('merged_with_previous').notNull().default(false),
   cite: cite(),
 })
 
@@ -182,11 +192,14 @@ export const capitalProjects = pgTable('capital_projects', {
   id: serial('id').primaryKey(),
   budgetVersionId: versionId(),
   deptId: deptId(),
-  name: text('name').notNull(),
+  name: text('name'), // null when the document prints no name (a sentence, not a bullet) — never invented
   amount: money('amount'),
+  amountText: text('amount_text'), // as printed, e.g. '($2.0 million)'
+  amountFromMillions: boolean('amount_from_millions').notNull().default(false),
   description: text('description'),
   category: text('category'),
   placeTags: text('place_tags').array().notNull().default(sql`'{}'::text[]`),
+  pdfPages: integer('pdf_pages').array().notNull().default(sql`'{}'::int[]`), // item may cross a page break
   cite: cite(),
 })
 
@@ -216,10 +229,14 @@ export const lineItems = pgTable(
     requested2027: money('requested_2027'),
     proposed2027Units: fte('proposed_2027_units'),
     proposed2027: money('proposed_2027'),
+    section: text('section').notNull(), // Detailed page-id prefix, e.g. '300'
     isSubtotal: boolean('is_subtotal').notNull().default(false),
+    isUnitTotal: boolean('is_unit_total').notNull().default(false),
     isPosition: boolean('is_position').notNull().default(false),
     isDeduction: boolean('is_deduction').notNull().default(false),
     footnoteFlag: boolean('footnote_flag').notNull().default(false),
+    footnoteCodes: text('footnote_codes').array().notNull().default(sql`'{}'::text[]`),
+    flags: text('flags').array().notNull().default(sql`'{}'::text[]`),
     note: text('note'),
     cite: cite(),
   },
@@ -254,6 +271,9 @@ export const positionLines = pgTable(
 export const revenues = pgTable('revenues', {
   id: serial('id').primaryKey(),
   budgetVersionId: versionId(),
+  source: text('source', { enum: ['summary', 'detailed'] }).notNull(),
+  isTotal: boolean('is_total').notNull().default(false),
+  account: text('account'),
   fund: text('fund'),
   deptId: deptId(),
   category: text('category'),
@@ -271,9 +291,13 @@ export const positionsSummary = pgTable('positions_summary', {
   budgetVersionId: versionId(),
   deptId: deptId(), // null for the printed total row
   label: text('label').notNull(),
+  groupName: text('group_name'),
+  isDivisionSubtotal: boolean('is_division_subtotal').notNull().default(false), // DPW '(1,608)' is a subtotal, not negative
   adopted2026: integer('adopted_2026'),
   requested2027: integer('requested_2027'),
   proposed2027: integer('proposed_2027'),
+  changeVsAdopted: integer('change_vs_adopted'),
+  changeVsRequested: integer('change_vs_requested'),
   cite: cite(),
 })
 
@@ -283,6 +307,11 @@ export const glossary = pgTable('glossary', {
   term: text('term').notNull(),
   plainDefinition: text('plain_definition').notNull(),
   whyItMatters: text('why_it_matters'),
+  citeText: text('cite_text'),
+  aliases: text('aliases').array().notNull().default(sql`'{}'::text[]`),
+  definitionSource: text('definition_source'), // 'ours' = the document never defines the term
+  alsoCite: jsonb('also_cite'),
+  reviewedBy: text('reviewed_by'),
   cite: cite(),
 })
 
@@ -294,6 +323,7 @@ export const chunks = pgTable(
     docId: integer('doc_id').references(() => documents.id),
     deptId: deptId(),
     region: text('region'),
+    kind: text('kind', { enum: ['narrative', 'table_card', 'chart_card'] }).notNull().default('narrative'),
     sectionType: text('section_type').notNull(),
     heading: text('heading'),
     ordinal: smallint('ordinal'),
@@ -327,6 +357,7 @@ export const concepts = pgTable(
     label: text('label').notNull(), // as printed
     code: text('code'),
     deptIds: integer('dept_ids').array().notNull().default(sql`'{}'::int[]`),
+    occurrences: integer('occurrences'),
     gloss: text('gloss'),
     glossReviewed: boolean('gloss_reviewed').notNull().default(false),
     embedding: vector('embedding', { dimensions: EMBEDDING_DIMS }),
@@ -350,6 +381,9 @@ export const fees = pgTable('fees', {
   pctChange: numeric('pct_change', { precision: 6, scale: 2 }),
   revenue2027: money('revenue_2027'),
   isDerived: boolean('is_derived').notNull().default(false),
+  sourceText: text('source_text'),
+  narrativeRevenue: text('narrative_revenue'),
+  reviewedBy: text('reviewed_by'),
   cite: cite(),
 })
 
@@ -361,6 +395,40 @@ export const budgetFacts = pgTable('budget_facts', {
   value: numeric('value', { precision: 16, scale: 2 }),
   unit: text('unit'),
   reviewedBy: text('reviewed_by'), // null until a human reviews it
+  leadWith: text('lead_with'), // 'table' = show the table figure first (docs/06 §7)
+  tablePair: jsonb('table_pair'),
+  alsoCite: jsonb('also_cite'),
+  cite: cite(),
+})
+
+// Summary p.8-10 'Comparisons by Budget Sections'
+export const sectionComparisons = pgTable('section_comparisons', {
+  id: serial('id').primaryKey(),
+  budgetVersionId: versionId(),
+  section: text('section').notNull(),
+  groupPath: text('group_path').array().notNull().default(sql`'{}'::text[]`),
+  line: text('line').notNull(),
+  adopted2026: money('adopted_2026'),
+  requested2027: money('requested_2027'),
+  proposed2027: money('proposed_2027'),
+  changeVsAdopted: money('change_vs_adopted'),
+  changeVsRequested: money('change_vs_requested'),
+  cite: cite(),
+})
+
+// Summary p.14-16 estimated FTEs by department and funding
+export const fteSummary = pgTable('fte_summary', {
+  id: serial('id').primaryKey(),
+  budgetVersionId: versionId(),
+  funding: text('funding', { enum: ['om', 'non_om', 'all'] }).notNull(),
+  label: text('label').notNull(),
+  groupName: text('group_name'),
+  isDivisionSubtotal: boolean('is_division_subtotal').notNull().default(false),
+  adopted2026: fte('adopted_2026'),
+  requested2027: fte('requested_2027'),
+  proposed2027: fte('proposed_2027'),
+  changeVsAdopted: fte('change_vs_adopted'),
+  changeVsRequested: fte('change_vs_requested'),
   cite: cite(),
 })
 

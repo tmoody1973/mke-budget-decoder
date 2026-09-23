@@ -116,6 +116,7 @@ def region_for(title, pdf_page):
     return "department"
 
 _RANGES = None
+ISSUED_IDS: set = set()
 
 def slug_for_page(pdf_page):
     """departments.yaml slug whose Summary page range contains this page (None outside any)."""
@@ -148,8 +149,13 @@ def flush(buf, meta, chunks, max_words=320):
     if len(text.split()) < 8:
         return
     meta["ordinal"] += 1
+    base = f'{meta["region"]}:{meta["dept"] or "-"}:{meta["section_type"]}'
+    n = meta["ordinal"]
+    while f"{base}:{n}" in ISSUED_IDS:      # a region can recur (appendix / clarification / appendix,
+        n += 1                              # Summary p.211-214), restarting the ordinal: keep ids unique
+    ISSUED_IDS.add(f"{base}:{n}")
     c = Chunk(
-        id=f'{meta["region"]}:{meta["dept"] or "-"}:{meta["section_type"]}:{meta["ordinal"]}',
+        id=f"{base}:{n}",
         doc="summary", budget_version=BUDGET_VERSION,
         pdf_page=meta["start_page"], printed_page=meta["start_page"] - PAGE_OFFSET,
         page_end=meta["cur_page"] - PAGE_OFFSET,
@@ -178,6 +184,7 @@ def _emit(buf, meta, chunks):
     return flush(buf, meta, chunks, max_words=10**9)
 
 def run(pdf=SUMMARY_PDF, out=None):
+    ISSUED_IDS.clear()
     pages = pages_text(pdf)
     chunks, meta = [], {"ordinal": 0}
     buf, mode = [], None      # mode: 'narrative' | 'bullets' | 'table'
