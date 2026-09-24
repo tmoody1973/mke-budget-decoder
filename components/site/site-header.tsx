@@ -12,6 +12,7 @@ import { AskButton } from '@/components/chat/chat-shell'
 import { OVERVIEW_SECTIONS, PAGES } from '@/lib/site-nav'
 
 import { MadeWithLove } from './made-with-love'
+import { ThemeToggle } from './theme-toggle'
 
 export function SiteHeader() {
   const path = usePathname()
@@ -39,6 +40,7 @@ export function SiteHeader() {
         <span className="flex items-center gap-5">
           <span className="hidden items-center gap-5 text-sm md:flex">{PAGES.slice(1).map(([h, l]) => link(h, l, ''))}</span>
           <AskButton />
+          <ThemeToggle />
           <button type="button" onClick={() => setOpen(!open)} aria-expanded={open} aria-controls="site-menu"
             aria-label={open ? 'Close the menu' : 'Open the menu'} className="-mr-2 grid size-10 place-items-center text-ink md:hidden">
             {open ? <X aria-hidden className="size-5" /> : <Menu aria-hidden className="size-5" />}

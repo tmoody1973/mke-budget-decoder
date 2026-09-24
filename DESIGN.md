@@ -182,6 +182,13 @@ A near-monochrome navy-on-white almanac palette with a single blue reserved for 
 - **Receipt Paper** (`receipt`, about #FDFAF1): the warm sheet inside the marigold frame, with torn sawtooth edges top and bottom. All receipt content (text, marks, links, controls) sits on this paper, never directly on marigold, so contrast stays as on white paper.
 - The shareable image (`app/api/receipt/image`) is a 1080x1350 thermal-receipt picture in IBM Plex Mono with hex twins of these tokens. It never shows an address or assessed value.
 
+### Dark Theme (night edition)
+The same Blue Book table printed for night reading: deep navy paper (`oklch(0.2 0.025 262)`, ~#101621), soft white ink (`oklch(0.94 0.012 262)`), a lighter reference blue (`oklch(0.78 0.1 250)`). Chosen in the header (Match my device / Light / Dark); the default follows the device. Every token keeps its meaning; only values change, in `app/globals.css` (`:root.dark`, and the system setting when scripts are off). WCAG AA checked: ink 15.2:1, ink-soft 9.7:1, reference blue 9.1:1 on paper; tile text 5.1:1.
+- **Paper objects stay paper.** The City Receipt (marigold frame, cream sheet, navy ink) and the budget's own PDF pages keep the light tokens (`.paper-object`): they are documents on a dark desk, not panels to invert.
+- **Treemap tiles** use their own token (`--tile`): ink in light, a lit navy in dark, so a tax-rate section never becomes a white block.
+- **Forced colors** (Windows High Contrast): chart marks draw in the system text color and tiles and swatches are outlined, so the legend still distinguishes sections by shape.
+- **Browser surfaces** follow the theme: `color-scheme` for native controls and scrollbars, `theme-color` for the toolbar.
+
 ### Named Rules
 **The One Ink Rule.** Text and structural rules share the same navy. Hierarchy comes from weight, size and rule thickness, not from extra colors.
 

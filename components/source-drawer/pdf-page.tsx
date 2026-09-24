@@ -31,7 +31,7 @@ export default function PdfPage({ file, page, terms, onHits }: Props) {
   }
   const status = (text: string) => <p className="p-6 text-sm text-ink-soft">{text}</p>
   return (
-    <div ref={box} className="pdf-page w-full">
+    <div ref={box} className="pdf-page paper-object w-full">
       {width > 0 && (
         <Document file={file} loading={status('Loading the budget page…')} error={status('The budget page could not be loaded. Use the link above to open the PDF.')}>
           <Page pageNumber={page} width={width} customTextRenderer={render} renderAnnotationLayer={false}
