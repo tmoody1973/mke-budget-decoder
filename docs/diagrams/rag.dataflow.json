@@ -130,8 +130,8 @@
       "id": "passed",
       "from": "checks",
       "to": "tables",
-      "label": "passed rows",
-      "classification": "reconciled",
+      "label": "checked data",
+      "classification": "gates deploy",
       "variant": "emphasis"
     },
     {
