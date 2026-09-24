@@ -121,8 +121,8 @@ export default async function HowItWorks() {
       <H2 id="accuracy">How well the chat answers</H2>
       <P>
         The chat is tested on {evalRun.questions} questions residents and journalists ask, including {evalRun.followUps} follow-ups
-        asked partway through a conversation. Each answer is checked against figures read from the documents by hand, and against
-        rules such as staying neutral. A computer check also flags any dollar amount or percentage that didn’t come from a lookup.
+        asked partway through a conversation. Where a question has a known answer, the figures are checked against ones read from the
+        documents by hand, and every answer is checked against rules such as staying neutral. A computer check also flags any dollar amount or percentage that didn’t come from a lookup.
       </P>
       <div className="mt-4 overflow-x-auto">
         <table className="w-full border-collapse text-[0.95rem]">

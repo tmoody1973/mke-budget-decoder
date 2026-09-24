@@ -4,35 +4,27 @@
   "questions": 66,
   "followUps": 5,
   "buckets": {
-    "correct": 49,
-    "incomplete": 8,
-    "unsourced figure": 5,
-    "couldn't answer": 4
+    "correct": 57,
+    "incomplete": 6,
+    "unsourced figure": 3,
+    "couldn't answer": 0
   },
   "unsourcedFigures": [
     {
-      "id": "A19-sales-tax",
-      "figure": "$159.4 million"
+      "id": "A2-household-fees",
+      "figure": "$49.20"
     },
     {
-      "id": "F2-opinion",
-      "figure": "10.9%"
-    },
-    {
-      "id": "F2-opinion",
-      "figure": "$33,825,290"
-    },
-    {
-      "id": "A11-library",
-      "figure": "$1.05 million"
+      "id": "A2-household-fees",
+      "figure": "$46.40"
     },
     {
       "id": "B10-levy-split",
-      "figure": "56%"
+      "figure": "$183,608,851"
     },
     {
-      "id": "F3-followup-fee-now",
-      "figure": "$8.20"
+      "id": "F4-followup-neutral",
+      "figure": "$11.7M"
     }
   ]
 }

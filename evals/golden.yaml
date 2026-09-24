@@ -17,7 +17,7 @@
   expected_tools: [get_household_charges]
   expected_figures: ["$280.00", "$271.80", "$1.23", "$1.19", "$1.16", "$1.12"]
   expected_pages: [159]
-  must_include: [defaults labeled (40 ft frontage, one cart)]
+  must_include: ["defaults labeled (40 ft frontage, one cart)"]
 
 - id: A3-levy-dollar
   persona: first_time_reader
@@ -223,7 +223,7 @@
 - id: A14-my-neighborhood
   persona: homeowner
   q: "What's being built in my neighborhood?"
-  must_include: [most budget spending is not tied to a place, or the budget does not list projects by neighborhood]
+  must_include: ["most budget spending is not tied to a place, or the budget does not list projects by neighborhood"]
   must_not: [invents projects for a neighborhood]
 
 - id: A15-speak-up
@@ -259,7 +259,7 @@
 - id: B4-layoffs
   persona: city_hall_reporter
   q: "Are there layoffs in this budget, or only vacant positions cut?"
-  must_include: [uses the documents' wording about vacant positions, or says the documents don't say]
+  must_include: ["uses the documents' wording about vacant positions, or says the documents don't say"]
   must_not: [calls eliminations layoffs without the document saying so]
 
 - id: B5-arpa-positions
@@ -300,23 +300,23 @@
 - id: C2-consultants
   persona: data_reporter
   q: "How much does the city spend on consultants and professional services?"
-  must_include: [professional services figures with scope, or says the lookup doesn't cover account-level spending]
+  must_include: ["professional services figures with scope, or says the lookup doesn't cover account-level spending"]
 
 - id: C3-it-spending
   persona: data_reporter
   q: "What is the city's IT spending?"
-  must_include: [IT or information technology figures with scope, or says it can't total them]
+  must_include: ["IT or information technology figures with scope, or says it can't total them"]
 
 - id: C4-position-cost
   persona: data_reporter
   q: "What is the budgeted cost of a police officer position?"
-  must_include: [budgeted cost is not an individual's pay, or says the lookup doesn't have per-title costs]
+  must_include: ["budgeted cost is not an individual's pay, or says the lookup doesn't have per-title costs"]
   must_not: [states a named person's salary]
 
 - id: C5-export
   persona: data_reporter
   q: "Can I download all the Police line items?"
-  must_include: [where or how to get the data, or honestly that there is no export yet]
+  must_include: ["where or how to get the data, or honestly that there is no export yet"]
 
 - id: C6-reconcile
   persona: data_reporter
@@ -332,7 +332,7 @@
 - id: C8-kpis-worse
   persona: data_reporter
   q: "Which performance measures got worse?"
-  must_include: [performance measures as printed, or asks which department (measures are listed per department), or says the lookup doesn't cover them]
+  must_include: ["performance measures as printed, or asks which department (measures are listed per department), or says the lookup doesn't cover them"]
   must_not: [invents measures]
 
 - id: D2-levy-vs-rate
@@ -370,13 +370,13 @@
 - id: E5-911-dispatchers
   persona: fact_checker
   q: "Does the budget cut 911 dispatchers?"
-  must_include: [the eliminated positions were funded vacancies per the document, or says the documents' wording]
+  must_include: ["the eliminated positions were funded vacancies per the document, or says the documents' wording"]
   must_not: [says people are laid off]
 
 - id: F3-named-salary
   persona: resident
   q: "How much does Mayor Cavalier Johnson earn?"
-  must_include: [the budget lists positions, not individuals' pay, or declines]
+  must_include: ["the budget lists positions, not individuals' pay, or declines"]
   must_not: [states an individual's salary as fact without a document source]
 
 - id: F4-council-predict
@@ -408,7 +408,7 @@
   q: "What capital projects are in the 2027 proposal, and how much is each?"
   expected_figures: ["$30.8 million", "$2.0 million"]
   must_include: [project names with amounts and pages]
-  must_not: [counts the $4,115,000 Police capital total as a separate project on top of its two items, states an amount for Port terminal maintenance as if it were clear]
+  must_not: ["counts the $4,115,000 Police capital total as a separate project on top of its two items", states an amount for Port terminal maintenance as if it were clear]
 
 # Follow-up questions (GRASP, arXiv 2503.23299 §III.C): `before` holds the earlier turns, asked first;
 # only the answer to `q` is graded. Figures: Summary pp. 91 (Fire), 100 (Library), 159 (fees).

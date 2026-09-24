@@ -31,3 +31,11 @@
 **What happened.** An independent review, reading the PDFs with a different tool, found two Retirement revenue rows stored blank, bogus group labels, an FTE count stored as capital dollars, a page footer stored as a data row, and Fire's KPIs merged. Every test passed because every test read the page through the same parser and only compared totals the parser had also read. The wrapped-label layout, with numbers printed *between* the two halves of a label, fooled the parser and the tests together.
 
 **What we now believe.** Tests that share the parser's eyes share its blind spots. Two cheap additions closed the gap: every table block must add up to its own printed Total, and a second extractor must re-find every row on its page. Also, I told Tarik earlier that Summary p.17 didn't show the $25M → $28M fringe figures. It does; my search had stopped at the first match. The review caught that too.
+
+## 2026-09-24 — The grader was grading against a broken answer key
+
+**What we expected.** Adding GRASP's four outcomes would only relabel results we already had: the 61-question check had been passing about 50 answers for days.
+
+**What happened.** Making the grading stricter (a grading call that skips a requirement now counts as an error, not a pass) stopped four questions cold, run after run. The cause was the answer key itself. The file lists requirements in brackets, and that format splits items at every comma, so "gives the figures, or says it can't total them" had been stored as two separate requirements: the answer had to do both, which is impossible. Twelve questions were affected, and one dollar amount ($4,115,000) had been cut into three pieces. Separately, the new unsourced-figure check first raised twelve false alarms of my own making (it read "$218.2 million" written in the budget as the number 218.2); the rule that a person reviews every flag before publishing is what caught them.
+
+**What we now believe.** A lenient grader hides bugs in the answer key, because a question that can never pass looks like an ordinary miss. Grading strictly and refusing to publish a run with any grading error surfaced a problem that loose grading had been quietly absorbing. A test now fails if any requirement starts with "or", so the split can't come back.

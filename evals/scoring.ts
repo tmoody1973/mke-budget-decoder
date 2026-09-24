@@ -44,6 +44,10 @@ function roundsTo(hay: string, fig: string): boolean {
 export const hasFigure = (hay: string, fig: string) => roundsTo(hay, fig) || variants(fig).some((v) => hay.includes(v))
 
 export async function judge(c: Case, text: string, tools: string): Promise<Judgment> {
+  try { return await judgeOnce(c, text, tools) } catch { return judgeOnce(c, text, tools) } // one retry, then the error stands
+}
+
+async function judgeOnce(c: Case, text: string, tools: string): Promise<Judgment> {
   const earlier = c.before?.length ? `Earlier questions in this conversation: ${JSON.stringify(c.before)}\n` : ''
   const prompt = `You grade an answer from a nonpartisan guide to the City of Milwaukee's 2027 proposed budget.
 ${earlier}Question: ${c.q}
@@ -61,12 +65,13 @@ Reply with JSON only: {"include":[{"item":"...","met":true}],"not":[{"item":"...
     headers: { 'content-type': 'application/json', 'x-api-key': process.env.ANTHROPIC_API_KEY!, 'anthropic-version': '2023-06-01' },
     body: JSON.stringify({ model: JUDGE, max_tokens: 600, messages: [{ role: 'user', content: prompt }] }),
   })
+  // A failed or partial grading throws, so the run records an error instead of a free pass.
   const body = (await res.json()) as { content?: { text: string }[] }
-  const raw = body.content?.[0]?.text ?? '{}'
-  try {
-    const j = JSON.parse(raw.slice(raw.indexOf('{'), raw.lastIndexOf('}') + 1))
-    return { include: j.include ?? [], not: j.not ?? [], declined: j.declined === true, note: j.note ?? '' }
-  } catch { return { include: [], not: [], declined: false, note: `judge unreadable: ${raw.slice(0, 80)}` } }
+  const raw = body.content?.[0]?.text
+  if (!res.ok || !raw) throw new Error(`judge failed (${res.status})`)
+  const j = JSON.parse(raw.slice(raw.indexOf('{'), raw.lastIndexOf('}') + 1)) as Partial<Judgment>
+  if ((j.include?.length ?? 0) < (c.must_include?.length ?? 0) || (j.not?.length ?? 0) < (c.must_not?.length ?? 0)) throw new Error('judge skipped criteria')
+  return { include: j.include ?? [], not: j.not ?? [], declined: j.declined === true, note: j.note ?? '' }
 }
 
 
@@ -117,28 +122,42 @@ export const figuresFound = (c: Case, text: string, toolData: string) =>
   (c.expected_figures ?? []).map((f) => ({ f, found: hasFigure(`${text}\n${toolData}`.toLowerCase(), f) }))
 
 // Dollar amounts ("$343.9 million", "$343.9M", "$1,458.00") and percentages the answer states.
-const FIGURE = /\$\d+(?:,\d{3})*(?:\.\d+)?(?:\s(?:million|billion)|[MBK]\b)?|\d+(?:,\d{3})*(?:\.\d+)?%/g
+const FIGURE = /\$\d+(?:,\d{3})*(?:\.\d+)?(?:\s(?:million|billion)|[MBK]\b)?|\b\d+(?:,\d{3})*(?:\.\d+)?\s(?:million|billion)\b|\d+(?:,\d{3})*(?:\.\d+)?%/g
 // The tax rate's unit, in English or Spanish: "per $1,000 of assessed value", "each $1,000 of value", "por cada $1,000".
 const RATE_UNIT = /(?:per|each|every|por cada)\s+\$1,000|\$1,000\s+(?:of|de)\s+(?:assessed\s+)?(?:value|valor|property)/gi
 /** Figures in the answer text that appear nowhere in the lookups' data or the questions asked: the
  *  "unsourced figure" check. Numbers must come from a lookup (principle 1), so any hit is a defect, even when the arithmetic is right. */
 export function unsupportedFigures(c: Case, text: string, toolData: string, earlierData = ''): string[] {
-  const hay = `${toolData}\n${earlierData}\n${c.q}\n${(c.before ?? []).join('\n')}`.toLowerCase()
-  const said = text.replace(RATE_UNIT, '').match(FIGURE) ?? []
-  const nums = (hay.replace(/,/g, '').match(/\d+(?:\.\d+)?/g) ?? []).map(Number)
-  return [...new Set(said)].filter((f) => !hasFigure(hay, f.replace(/\s+/g, ' ')) && !roundsFrom(nums, f))
+  // Values only: JSON keys ("year2026") are dropped, and numbers are read whole ("$2" is not in "$2,000").
+  const hay = `${toolData}\n${earlierData}`.replace(/"[^"]*"\s*:/g, ' ') + `\n${c.q}\n${(c.before ?? []).join('\n')}`
+  const clean = text.replace(RATE_UNIT, '')
+  // "over $32 million" is true of $32,675,272: a bound word widens the match one step in its direction.
+  const said = [...clean.matchAll(FIGURE)].map((m) => {
+    const before = clean.slice(Math.max(0, m.index - 14), m.index).toLowerCase()
+    const bound = /(over|more than|above)\s*$/.test(before) ? 'over' : /(nearly|almost|under|less than|below)\s*$/.test(before) ? 'under' : undefined
+    return { f: m[0], bound } as const
+  })
+  // Prose in the data ("$218.2 million" in a reviewed fact) counts at full size, like a stored 218200000.
+  const plain = hay.replace(/(\d),(?=\d{3})/g, '$1')
+    .replace(/(\d+(?:\.\d+)?)\s*(million|billion)/gi, (_, n: string, u: string) => String(Number(n) * (/^b/i.test(u) ? 1e9 : 1e6)))
+  const nums = (plain.match(/\d+(?:\.\d+)?/g) ?? []).map(Number)
+  const seen = new Set<string>()
+  return said.filter(({ f, bound }) => !roundsFrom(nums, f.replace(/\s+/g, ' '), bound)).map(({ f }) => f).filter((f) => !seen.has(f) && !!seen.add(f))
 }
 
 /** Does any number in the data round to this figure at the precision it was stated? Dollars may be
  *  stored as dollars or cents; percentages as 8.9 or 0.089. */
-function roundsFrom(nums: number[], fig: string): boolean {
+function roundsFrom(nums: number[], fig: string, bound?: 'over' | 'under'): boolean {
   const m = fig.replace(/[$,]/g, '').match(/^([\d.]+)(%|\s(?:million|billion)|[MBK])?$/)
+  // ponytail: a year like 2026 is never read as $20.26 in cents; a real 2,026-cent amount would be missed.
   if (!m) return false
   const v = Number(m[1]), places = m[1].split('.')[1]?.length ?? 0
   const unit = m[2]?.trim() ?? ''
   const scale = /^(billion|B)$/.test(unit) ? 1e9 : /^(million|M)$/.test(unit) ? 1e6 : unit === 'K' ? 1e3 : 1
-  const same = (n: number) => +n.toFixed(places) === v
-  return nums.some((n) => same(n / scale) || (scale === 1 && same(n / 100)) || (m[2] === '%' && same(n * 100)))
+  const step = 10 ** -places
+  const same = (n: number) => bound === 'over' ? n >= v && n < v + step : bound === 'under' ? n <= v && n > v - step : Math.abs(n - v) <= step / 2 + 1e-9 // a tie ($7,165,000 as $7.16M) may round either way
+  const isYear = (n: number) => Number.isInteger(n) && n >= 1990 && n <= 2040
+  return nums.some((n) => same(n / scale) || (scale === 1 && !isYear(n) && same(n / 100)) || (m[2] === '%' && same(n * 100)))
 }
 
 export type Bucket = 'correct' | 'incomplete' | 'unsourced figure' | "couldn't answer"

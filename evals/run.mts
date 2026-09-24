@@ -25,7 +25,7 @@ async function runCase(c: Case) {
       // Evidence for a flagged answer, so a person can confirm or clear it before results are published.
       ...(madeUp.length ? { lookupData: a.toolData.slice(0, 20000), earlierData: a.earlierData.slice(0, 20000) } : {}) }
   } catch (e) {
-    // A run error is our failure, not the model's: counted as incomplete, never as correct.
+    // A run error is our failure, not the model's: listed as incomplete, and it blocks publishing.
     return { id: c.id, q: c.q, before: c.before, pass: false, bucket: 'incomplete' as const, madeUp: [] as string[], error: String(e).slice(0, 200), tools: [] as string[], cents: 0, secs: 0 }
   }
 }
@@ -48,7 +48,9 @@ console.log(`\n${MODEL}: ${passed}/${results.length} passed · ${(cents / result
 const buckets = Object.fromEntries((['correct', 'incomplete', 'unsourced figure', "couldn't answer"] as const).map((b) => [b, results.filter((r) => r.bucket === b).length]))
 console.log(Object.entries(buckets).map(([b, n]) => `${b}: ${n} (${Math.round((100 * n) / results.length)}%)`).join(' · '))
 // A full run on the production model is what How it works publishes (evals/summary.json, committed).
-if (!process.argv.slice(2).length && MODEL === CHAT_MODEL) {
+const errored = results.filter((r) => 'error' in r)
+if (errored.length) console.log(`not publishing: ${errored.length} question(s) could not be run or graded (${errored.map((r) => r.id).join(', ')})`)
+else if (!process.argv.slice(2).length && MODEL === CHAT_MODEL) {
   writeFileSync('evals/summary.json', JSON.stringify({ date: stamp.slice(0, 10), model: MODEL, questions: results.length, followUps: results.filter((r) => r.before?.length).length, buckets, unsourcedFigures: results.flatMap((r) => r.madeUp.map((f) => ({ id: r.id, figure: f }))) }, null, 2) + '\n')
   console.log('wrote evals/summary.json')
 }
