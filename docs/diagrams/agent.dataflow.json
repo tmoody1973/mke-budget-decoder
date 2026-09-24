@@ -1,0 +1,152 @@
+{
+  "schema_version": 1,
+  "diagram_type": "dataflow",
+  "meta": {
+    "title": "How the chat answers a question",
+    "quality_profile": "showcase",
+    "viewBox": [
+      1080,
+      620
+    ],
+    "visual_preset": "editorial",
+    "legend": {
+      "entries": {
+        "security": {
+          "label": "guardrail"
+        }
+      }
+    }
+  },
+  "stages": [
+    {
+      "label": "Your browser"
+    },
+    {
+      "label": "Guardrails"
+    },
+    {
+      "label": "Agent"
+    },
+    {
+      "label": "Lookups"
+    },
+    {
+      "label": "Answer"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "chat",
+      "type": "frontend",
+      "label": "CopilotKit chat",
+      "sublabel": "side panel",
+      "stage": 0,
+      "row": 1,
+      "tag": "your question"
+    },
+    {
+      "id": "guard",
+      "type": "security",
+      "label": "Question checks",
+      "sublabel": "500 characters",
+      "stage": 1,
+      "row": 1,
+      "tag": "55 a day"
+    },
+    {
+      "id": "agent",
+      "type": "backend",
+      "label": "Mastra agent",
+      "sublabel": "Claude Sonnet 5",
+      "stage": 2,
+      "row": 1,
+      "tag": "6 steps max"
+    },
+    {
+      "id": "tools",
+      "type": "messagebus",
+      "label": "16 lookup tools",
+      "sublabel": "read-only",
+      "stage": 3,
+      "row": 1,
+      "tag": "numbers"
+    },
+    {
+      "id": "db",
+      "type": "database",
+      "label": "Postgres",
+      "sublabel": "tables + pgvector",
+      "stage": 3,
+      "row": 3,
+      "tag": "page cited"
+    },
+    {
+      "id": "trace",
+      "type": "database",
+      "label": "Braintrust",
+      "sublabel": "private traces",
+      "stage": 2,
+      "row": 3,
+      "tag": "61-question eval"
+    },
+    {
+      "id": "cards",
+      "type": "frontend",
+      "label": "Cited cards",
+      "sublabel": "tables + page links",
+      "stage": 4,
+      "row": 1,
+      "tag": "in the chat"
+    }
+  ],
+  "flows": [
+    {
+      "id": "run",
+      "from": "chat",
+      "to": "guard",
+      "label": "AG-UI run",
+      "classification": "streamed",
+      "variant": "emphasis"
+    },
+    {
+      "id": "allowed",
+      "from": "guard",
+      "to": "agent",
+      "label": "allowed",
+      "classification": "rate limited",
+      "variant": "security"
+    },
+    {
+      "id": "call",
+      "from": "agent",
+      "to": "tools",
+      "label": "tool calls",
+      "classification": "typed",
+      "variant": "emphasis"
+    },
+    {
+      "id": "query",
+      "from": "tools",
+      "to": "db",
+      "label": "SQL + search",
+      "classification": "read-only",
+      "variant": "default"
+    },
+    {
+      "id": "results",
+      "from": "tools",
+      "to": "cards",
+      "label": "cited rows",
+      "classification": "from the database",
+      "variant": "emphasis"
+    },
+    {
+      "id": "traced",
+      "from": "agent",
+      "to": "trace",
+      "label": "every step",
+      "classification": "tokens + timing",
+      "variant": "dashed"
+    }
+  ]
+}
