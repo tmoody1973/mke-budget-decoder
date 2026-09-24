@@ -9,16 +9,20 @@ import { getHeadline, getSectionBudgets } from '@/lib/db/overview'
 
 export const C = { ink: '#1a2b49', inkSoft: '#404d66', band: '#fdbe45', paper: '#fdfaf1', rule: '#e3ddcb' }
 
-const file = (p: string) => readFile(join(process.cwd(), p))
+// Literal paths, so the deploy bundles just these files (a computed path makes it trace the whole project).
 export async function ogFonts() {
-  const [regular, semi, extra] = await Promise.all(['Regular', 'SemiBold', 'ExtraBold'].map((w) => file(`assets/fonts/LibreFranklin-${w}.ttf`)))
+  const [regular, semi, extra] = await Promise.all([
+    readFile(join(process.cwd(), 'assets/fonts/LibreFranklin-Regular.ttf')),
+    readFile(join(process.cwd(), 'assets/fonts/LibreFranklin-SemiBold.ttf')),
+    readFile(join(process.cwd(), 'assets/fonts/LibreFranklin-ExtraBold.ttf')),
+  ])
   return [
     { name: 'Franklin', data: regular, weight: 400 as const, style: 'normal' as const },
     { name: 'Franklin', data: semi, weight: 600 as const, style: 'normal' as const },
     { name: 'Franklin', data: extra, weight: 800 as const, style: 'normal' as const },
   ]
 }
-export const logoSrc = async () => `data:image/png;base64,${(await file('assets/logo-160.png')).toString('base64')}`
+export const logoSrc = async () => `data:image/png;base64,${(await readFile(join(process.cwd(), 'assets/logo-160.png'))).toString('base64')}`
 
 /** The biggest sections by 2027 proposed spending, plus everything else (total minus those, all p.7). */
 export async function sectionShares(top = 5) {
