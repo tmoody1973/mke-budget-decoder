@@ -231,3 +231,29 @@
 **How we'll know if this was right.** The Anthropic bill stays under $45 in October; the `chat_usage` table shows how often the cap is hit, which tells us whether to raise it or switch models after the model comparison.
 
 **What actually happened.**
+
+## D21 — The chat stays on Claude Sonnet 5, capped at 55 questions a day
+
+**Decision.** After running all 60 questions in the answer check (`pnpm evals`) on five models, the chat keeps Claude Sonnet 5, and the daily cap drops from 60 to 55 questions so a month stays under $45.
+
+**Why this came up.** Tarik asked whether a cheaper model, possibly through OpenRouter (one account that reaches many AI companies' models), would give the best results for less money if many people use the site.
+
+**Options.** Measured 2026-09-23, same prompt, lookups and limits for every model (one run each; scores move by a couple of questions between runs):
+
+| Model | Passed (of 60) | Neutrality slips | Average answer time | Cost per question |
+|---|---|---|---|---|
+| Claude Sonnet 5 | 49 | 0 | 15 s | 2.6 cents |
+| GPT-5.6 Luna (OpenRouter) | 46 | 1 | 10 s | 0.46 cents |
+| Qwen 3.8 Flash (OpenRouter) | 48 | 1 | 40 s | 0.70 cents |
+| DeepSeek V4 Flash (OpenRouter) | 47 | 2 | 22 s | 0.23 cents |
+| Claude Haiku 4.5 | 42 | 1 | 7 s | 0.65 cents |
+
+The cheaper models' slips were soft (for example, saying the proposal "reflects some survey priorities" when asked whether the Mayor listened). DeepSeek and Haiku also narrated their own lookups to the reader ("Let me search…") in many answers, and Qwen and DeepSeek were slow enough to feel broken on a phone.
+
+**What we chose and why.** Sonnet 5 with a 55-a-day cap (Tarik chose; Claude recommended). It is the only model with no neutrality slips, and for a public civic tool a leaning answer costs more trust than the money saved. GPT-5.6 Luna is the fallback if traffic or cost grows: about 5.6 times cheaper with no narration, at three fewer passes.
+
+**What we gave up.** About 1,650 answered questions a month instead of roughly 9,800 on Luna. On a busy day the chat stops earlier.
+
+**How we'll know if this was right.** The October bill stays under $45; the `chat_usage` table shows how often the 55 cap is reached. If it is reached most days, revisit Luna, or Sonnet first and Luna after the cap.
+
+**What actually happened.**

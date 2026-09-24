@@ -21,9 +21,9 @@ const handler = createCopilotRuntimeHandler({ runtime, basePath: '/api/copilotki
 const off = () => process.env.CHAT_ENABLED !== 'true'
 const notFound = () => new Response('Not found', { status: 404 })
 
-// Daily cap on paid questions for the whole site (D20). About 2 cents a question with prompt
-// caching, so 60 a day keeps a month under ~$45. Override with CHAT_DAILY_LIMIT.
-const dailyLimit = () => Number(process.env.CHAT_DAILY_LIMIT ?? 60)
+// Daily cap on paid questions for the whole site (D20, D21). Measured 2.6 cents a question on Claude
+// Sonnet 5 with caching, so 55 a day keeps a full month under ~$45. Override with CHAT_DAILY_LIMIT.
+const dailyLimit = () => Number(process.env.CHAT_DAILY_LIMIT ?? 55)
 const LIMIT_TEXT = 'I’ve answered all the questions I can for today, so I’m resting until tomorrow. Everything else on this site works without me: the charts and tables, every source page, and Your City Receipt.'
 
 const MAX_QUESTION_CHARS = 500
