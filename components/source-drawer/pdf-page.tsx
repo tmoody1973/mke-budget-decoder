@@ -7,7 +7,7 @@ import 'react-pdf/dist/Page/TextLayer.css'
 
 import { markTerms } from '@/lib/highlight'
 
-pdfjs.GlobalWorkerOptions.workerSrc = new URL('pdfjs-dist/build/pdf.worker.min.mjs', import.meta.url).toString()
+pdfjs.GlobalWorkerOptions.workerSrc = new URL('pdfjs-dist/legacy/build/pdf.worker.min.mjs', import.meta.url).toString()
 
 type Props = { file: string; page: number; terms: string[]; onHits: (n: number) => void }
 
