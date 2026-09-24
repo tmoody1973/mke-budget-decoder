@@ -49,6 +49,14 @@ describe.skipIf(!url)('overview queries (Neon)', () => {
     expect(d.every((x) => x.requested2027 !== null && x.proposed2027 !== null)).toBe(true)
   })
 
+  it('departments carry the changes the Summary prints, so the chat never subtracts (Library p.100, Fire p.91)', async () => {
+    const d = await getDepartmentTotals(db, VERSION)
+    const library = d.find((x) => x.slug === 'library')!, fire = d.find((x) => x.slug === 'fire')!
+    expect([library.changeFromAdopted, library.changeFromRequest, library.percentChangeFromAdopted]).toEqual([1_490_755, -1_055_032, 4.4])
+    expect([fire.changeFromAdopted, fire.changeFromRequest, fire.percentChangeFromAdopted]).toEqual([7_479_471, -5_872_611, 4.5])
+    expect(d.every((x) => x.changeFromAdopted === x.proposed2027 - x.adopted2026)).toBe(true)
+  })
+
   it('departments + special purpose accounts + fringe offset = general city purposes (adopted and proposed)', async () => {
     const [d, r, h] = await Promise.all([getDepartmentTotals(db, VERSION), getGcpReconciliation(db, VERSION), getHeadline(db, VERSION)])
     for (const k of ['adopted2026', 'proposed2027'] as const) {

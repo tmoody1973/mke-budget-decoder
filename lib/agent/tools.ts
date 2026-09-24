@@ -29,7 +29,7 @@ export const getBudgetOverview = createTool({
 export const getDepartments = createTool({
   id: 'getDepartments',
   description:
-    'General city purposes departments with four stages each: 2025 actual, 2026 adopted, 2027 requested (what the department asked for) and 2027 proposed (the Mayor). Pass slugs to show only some departments (for example ["fire", "police"]); call with no slugs first if you do not know the slug. Each row carries its source page. Renders as a table or a chart of changes.',
+    'General city purposes departments with four stages each: 2025 actual, 2026 adopted, 2027 requested (what the department asked for) and 2027 proposed (the Mayor). Pass slugs to show only some departments (for example ["fire", "police"]); call with no slugs first if you do not know the slug. Each row carries its source page and the changes printed beside it: changeFromAdopted (proposed minus 2026 adopted), changeFromRequest (proposed minus what the department asked for; negative means the Mayor proposed less) and percentChangeFromAdopted. Quote these instead of calculating them. Renders as a table or a chart of changes.',
   inputSchema: z.object({
     slugs: z.array(z.string()).optional().describe('Department slugs to include; omit for all departments'),
     view: z.enum(['stages', 'changes']).default('stages')
@@ -52,7 +52,7 @@ const OPS = {
 export const calculate = createTool({
   id: 'calculate',
   description:
-    'Exact arithmetic on figures copied from other tool results. difference = b - a; percent_change = (b - a) / a * 100; share = a / b * 100 (a as a percent of b); per = a / b. Use it for every change, percent or share you mention.',
+    'Exact arithmetic on figures copied from other tool results, for anything a lookup does not already give (department and line changes come with the lookups). difference = b - a; percent_change = (b - a) / a * 100; share = a / b * 100 (a as a percent of b); per = a / b. Use it for every change, percent or share you mention.',
   inputSchema: z.object({ op: z.enum(['difference', 'percent_change', 'share', 'per']), a: z.number(), b: z.number() }),
   execute: async ({ op, a, b }) => {
     if ((op === 'percent_change' && a === 0) || ((op === 'share' || op === 'per') && b === 0)) return { error: 'division by zero' }
@@ -63,7 +63,7 @@ export const calculate = createTool({
 export const getDepartmentBreakdown = createTool({
   id: 'getDepartmentBreakdown',
   description:
-    'What one department spends its money on, from its Summary table: salaries and wages, fringe benefits, operating costs, equipment, special funds, total, budgeted positions and full-time equivalents, and the revenue it brings in, each for 2025 actual, 2026 adopted, 2027 requested and 2027 proposed. Use the department slug from getDepartments (for example "police"). Renders as a cited table.',
+    'What one department spends its money on, from its Summary table: salaries and wages, fringe benefits, operating costs, equipment, special funds, total, budgeted positions and full-time equivalents, and the revenue it brings in, each for 2025 actual, 2026 adopted, 2027 requested and 2027 proposed, with changeFromAdopted, changeFromRequest and percentChangeFromAdopted as printed. Use the department slug from getDepartments (for example "police"). Renders as a cited table.',
   inputSchema: z.object({ slug: z.string().describe('Department slug, e.g. "police", "fire", "library", "dpw-operations"') }),
   execute: async ({ slug }) => {
     const b = await breakdown(getDb(), BUDGET_VERSION, slug)
@@ -169,7 +169,7 @@ export const getPerformanceMeasures = createTool({
 export const searchBudgetLines = createTool({
   id: 'searchBudgetLines',
   description:
-    'Detailed budget line items (the line-by-line books): search by words in the line description ("overtime", "professional services", "information technology", "consultant") or by an account number ("634000"). Without a department it totals the matching lines by department. Scope: the Detailed budget\'s department line items. Renders as a cited table.',
+    'Detailed budget line items (the line-by-line books): search by words in the line description ("overtime", "professional services", "information technology", "consultant") or by an account number ("634000"). Without a department it totals the matching lines by department. Every line and total carries changeFromAdopted and changeFromRequest; quote those. Scope: the Detailed budget\'s department line items. Renders as a cited table.',
   inputSchema: z.object({ query: z.string().min(3), slug: z.string().optional().describe('Limit to one department') }),
   execute: async ({ query, slug }) => ({ query, ...(await lines(getDb(), BUDGET_VERSION, query, slug)) }),
 })

@@ -5,6 +5,7 @@ import type { NodePgDatabase } from 'drizzle-orm/node-postgres'
 
 import * as s from './schema'
 import type { Cite } from './schema'
+import { changes } from './overview'
 import { anyWords } from './search'
 
 type Db = NodePgDatabase<typeof s>
@@ -26,13 +27,14 @@ const METRICS: Record<string, { label: string; unit: 'dollars' | 'count' }> = {
 }
 
 export type BreakdownRow = { metric: string; label: string; unit: 'dollars' | 'count'; actual2025: number | null
-  adopted2026: number | null; requested2027: number | null; proposed2027: number | null }
+  adopted2026: number | null; requested2027: number | null; proposed2027: number | null
+  changeFromAdopted: number | null; changeFromRequest: number | null; percentChangeFromAdopted: number | null }
 
 /** A department's Summary table: salaries, benefits, operating, equipment, positions, revenue. */
 export async function getDepartmentBreakdown(db: Db, version: string, slug: string) {
   const rows = await db.select({ name: s.departments.name, metric: s.deptSummary.metric, actual2025: s.deptSummary.actual2025,
     adopted2026: s.deptSummary.adopted2026, requested2027: s.deptSummary.requested2027, proposed2027: s.deptSummary.proposed2027,
-    cite: s.deptSummary.cite })
+    changeFromAdopted: s.deptSummary.changeVsAdopted, changeFromRequest: s.deptSummary.changeVsRequested, cite: s.deptSummary.cite })
     .from(s.deptSummary).innerJoin(s.departments, eq(s.deptSummary.deptId, s.departments.id))
     .where(and(eq(s.deptSummary.budgetVersionId, versionId(version)), eq(s.departments.slug, slug)))
   if (!rows.length) return null
@@ -42,7 +44,7 @@ export async function getDepartmentBreakdown(db: Db, version: string, slug: stri
     rows: Object.keys(METRICS).flatMap((m) => {
       const r = rows.find((x) => x.metric === m)
       return r ? [{ metric: m, ...METRICS[m], actual2025: num(r.actual2025), adopted2026: num(r.adopted2026),
-        requested2027: num(r.requested2027), proposed2027: num(r.proposed2027) }] : []
+        requested2027: num(r.requested2027), proposed2027: num(r.proposed2027), ...changes(r) }] : []
     }) satisfies BreakdownRow[],
   }
 }
@@ -130,7 +132,11 @@ export async function searchBudgetLines(db: Db, version: string, query: string, 
     .from(s.lineItems).innerJoin(s.departments, eq(s.lineItems.deptId, s.departments.id))
     .where(and(eq(s.lineItems.budgetVersionId, versionId(version)), sql`not ${s.lineItems.isSubtotal}`, sql`not ${s.lineItems.isPosition}`, match,
       slug ? eq(s.departments.slug, slug) : sql`true`))
-  const lines = rows.map((r) => ({ ...r, actual2025: n(r.actual2025), adopted2026: n(r.adopted2026), requested2027: n(r.requested2027), proposed2027: n(r.proposed2027) }))
+  const diff = (a: number | null, b: number | null) => (a === null || b === null ? null : b - a)
+  const lines = rows.map((r) => {
+    const l = { ...r, actual2025: n(r.actual2025), adopted2026: n(r.adopted2026), requested2027: n(r.requested2027), proposed2027: n(r.proposed2027) }
+    return { ...l, changeFromAdopted: diff(l.adopted2026, l.proposed2027), changeFromRequest: diff(l.requested2027, l.proposed2027) }
+  })
   if (slug) return { byDepartment: false as const, lines: lines.slice(0, 40) }
   const groups = new Map<string, { dept: string; slug: string; lineCount: number; adopted2026: number; requested2027: number; proposed2027: number; cite: Cite }>()
   for (const l of lines) {
@@ -138,7 +144,9 @@ export async function searchBudgetLines(db: Db, version: string, query: string, 
     groups.set(l.slug, { ...g, lineCount: g.lineCount + 1, adopted2026: g.adopted2026 + (l.adopted2026 ?? 0),
       requested2027: g.requested2027 + (l.requested2027 ?? 0), proposed2027: g.proposed2027 + (l.proposed2027 ?? 0) })
   }
-  return { byDepartment: true as const, lines: [...groups.values()].sort((a, b) => b.proposed2027 - a.proposed2027) }
+  // Group changes are sums of the lines, worked out here so the chat never subtracts them itself.
+  const withChanges = [...groups.values()].map((g) => ({ ...g, changeFromAdopted: g.proposed2027 - g.adopted2026, changeFromRequest: g.proposed2027 - g.requested2027 }))
+  return { byDepartment: true as const, lines: withChanges.sort((a, b) => b.proposed2027 - a.proposed2027) }
 }
 
 /** Capital projects the Summary's department pages describe (kind 'project' from the extractor).
