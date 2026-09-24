@@ -5,7 +5,7 @@ import { Mastra } from '@mastra/core'
 
 import { systemPrompt } from './system-prompt'
 import {
-  calculate, estimateCityCharges, getBudgetFacts, getBudgetOverview, getBudgetSections, getCityFees, getDepartmentBreakdown, getDepartments,
+  calculate, estimateCityCharges, getBudgetFacts, getBudgetOverview, getBudgetSections, getCapitalProjects, getCityFees, getDepartmentBreakdown, getDepartments,
   getHearingCalendar, getPerformanceMeasures, getPositionChanges, getRevenues, lookupGlossary, searchBudgetLines, searchBudgetText,
 } from './tools'
 
@@ -14,7 +14,7 @@ import {
 const TOOLS = `<tools>
 - Headline totals, levy and tax rate: getBudgetOverview. Departments and their four stages: getDepartments. What a department spends on (salaries, benefits, positions): getDepartmentBreakdown.
 - Budget sections, the levy and tax-rate split ("where my property tax goes"), capital budget, debt, Water Works: getBudgetSections. Revenue by fund, reserves withdrawal, parking and streetcar revenue, requested vs proposed total: getRevenues. How much the Mayor cut from department requests overall: getRevenues with fund "general" (total requested vs proposed). Household fees: getCityFees. A personal estimate from an assessed value: estimateCityCharges.
-- Position changes and their reasons (vacancies, layoffs, 911, grants): getPositionChanges. Performance measures: getPerformanceMeasures. Line items such as overtime, consultants or an account number: searchBudgetLines.
+- Position changes and their reasons (vacancies, layoffs, 911, grants): getPositionChanges. Performance measures: getPerformanceMeasures. Line items such as overtime, consultants or an account number: searchBudgetLines. Capital projects and new buildings by name and amount: getCapitalProjects.
 - The budget-facts tool: getBudgetFacts. The glossary tool: lookupGlossary. The text-search tool: searchBudgetText. The calendar tool: getHearingCalendar. Arithmetic: calculate.
 - Prefer a lookup that returns the figure over searchBudgetText; use text search for "why" questions, programs, capital projects and new buildings, streets and state law. Try it before saying the documents don't cover something.
 - Never name these tools, mention "tools", or call anything a preview in your answer. If a lookup finds nothing, say the budget documents don't appear to cover it and suggest where to ask.
@@ -43,7 +43,7 @@ export const createBudgetGuide = (model: string = CHAT_MODEL) => new Agent({
   defaultOptions: { maxSteps: 6, modelSettings: { maxOutputTokens: 1600 } },
   tools: {
     getBudgetOverview, getDepartments, getDepartmentBreakdown, getBudgetSections, getRevenues, getCityFees, estimateCityCharges,
-    getPositionChanges, getPerformanceMeasures, searchBudgetLines, searchBudgetText, getBudgetFacts, lookupGlossary, getHearingCalendar, calculate,
+    getCapitalProjects, getPositionChanges, getPerformanceMeasures, searchBudgetLines, searchBudgetText, getBudgetFacts, lookupGlossary, getHearingCalendar, calculate,
   },
 })
 

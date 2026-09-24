@@ -6,7 +6,7 @@ import { z } from 'zod'
 import { BUDGET_VERSION, getDb } from '@/lib/db/client'
 import { EVENTS } from '@/lib/civic/events'
 import {
-  findBudgetFacts, getBudgetSections as sections, getDepartmentBreakdown as breakdown, getPerformanceMeasures as measures,
+  findBudgetFacts, getBudgetSections as sections, getCapitalProjects as capital, getDepartmentBreakdown as breakdown, getPerformanceMeasures as measures,
   getPositionChanges as positions, getRevenues as revenues, lookupGlossary as glossary, searchBudgetLines as lines,
 } from '@/lib/db/chat'
 import { getReceiptRates } from '@/lib/db/receipt'
@@ -172,4 +172,12 @@ export const searchBudgetLines = createTool({
     'Detailed budget line items (the line-by-line books): search by words in the line description ("overtime", "professional services", "information technology", "consultant") or by an account number ("634000"). Without a department it totals the matching lines by department. Scope: the Detailed budget\'s department line items. Renders as a cited table.',
   inputSchema: z.object({ query: z.string().min(3), slug: z.string().optional().describe('Limit to one department') }),
   execute: async ({ query, slug }) => ({ query, ...(await lines(getDb(), BUDGET_VERSION, query, slug)) }),
+})
+
+export const getCapitalProjects = createTool({
+  id: 'getCapitalProjects',
+  description:
+    'Capital projects the department pages describe, with amounts: new buildings (Midtown library, facilities), IT systems, police vehicles, water mains, sewers, trees, port, blight programs. Filter by department slug or words ("library", "water", "police"). Totals of these are department capital items, not the whole capital budget (use getBudgetSections for that). Renders as a cited table.',
+  inputSchema: z.object({ slug: z.string().optional(), query: z.string().optional().describe('Words to match in the project, its description or its department') }),
+  execute: async ({ slug, query }) => ({ projects: await capital(getDb(), BUDGET_VERSION, { slug, query }), facts: query ? await factsFor(query) : [] }),
 })

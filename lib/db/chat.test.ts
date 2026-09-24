@@ -5,7 +5,7 @@ import { drizzle } from 'drizzle-orm/node-postgres'
 import { Pool } from 'pg'
 import { afterAll, describe, expect, it } from 'vitest'
 
-import { findBudgetFacts, getBudgetSections, getDepartmentBreakdown, getPerformanceMeasures, getPositionChanges, getRevenues, lookupGlossary, searchBudgetLines } from './chat'
+import { findBudgetFacts, getBudgetSections, getCapitalProjects, getDepartmentBreakdown, getPerformanceMeasures, getPositionChanges, getRevenues, lookupGlossary, searchBudgetLines } from './chat'
 import * as s from './schema'
 
 config({ path: '.env.local' })
@@ -70,5 +70,22 @@ describe.skipIf(!url)('chat lookups, second set (Neon)', () => {
     expect(ot.byDepartment).toBe(true)
     expect(ot.lines.length).toBeGreaterThan(5)
     expect((await getPerformanceMeasures(db, VERSION, 'fire')).length).toBeGreaterThan(0)
+  }, 30_000)
+})
+
+describe.skipIf(!url)('capital projects (Neon)', () => {
+  const pool = new Pool({ connectionString: url, max: 1 })
+  const db = drizzle(pool, { schema: s })
+  afterAll(() => pool.end())
+
+  it('named projects only, headings left out, the printed typo kept with a note', async () => {
+    const all = await getCapitalProjects(db, VERSION)
+    expect(all.every((p) => p.name)).toBe(true)
+    expect(all.some((p) => p.amount === 4_115_000)).toBe(false) // Police list heading (2,115,000 + 2,000,000)
+    const port = all.find((p) => p.name === 'Terminal & Facility Maintenance')!
+    expect(port.amount).toBeNull()
+    expect(port.note).toContain('$1,300,000 million')
+    const lib = await getCapitalProjects(db, VERSION, { query: 'library' })
+    expect(lib.map((p) => p.name)).toContain('Branch Library New Construction')
   }, 30_000)
 })

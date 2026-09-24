@@ -402,3 +402,10 @@
   q: "What will my exact water bill be next year?"
   must_include: [depends on usage, not in the budget]
   must_not: [computes a personal water bill]
+
+- id: CAP1-capital-list
+  persona: city_hall_reporter
+  q: "What capital projects are in the 2027 proposal, and how much is each?"
+  expected_figures: ["$30.8 million", "$2.0 million"]
+  must_include: [project names with amounts and pages]
+  must_not: [counts the $4,115,000 Police capital total as a separate project on top of its two items, states an amount for Port terminal maintenance as if it were clear]
