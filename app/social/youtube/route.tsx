@@ -1,7 +1,7 @@
 // YouTube thumbnail (1280x720) for the launch video. Built to read at phone-feed size: a few huge words,
 // and a City Receipt with its totals hidden, so the only way to see your number is to watch (or visit).
 // No dollar figure on the receipt: the one number shown, the $2.26B, is read from the database (Summary p.7).
-// GET /social/youtube.
+// GET /social/youtube (receipt hook) or /social/youtube?v=ask (adds the chat).
 import { ImageResponse } from 'next/og'
 
 import { BUDGET_VERSION, getDb } from '@/lib/db/client'
@@ -17,7 +17,8 @@ const Row = ({ label, bold = false }: { label: string; bold?: boolean }) => (
   </div>
 )
 
-export async function GET() {
+export async function GET(req: Request) {
+  const ask = new URL(req.url).searchParams.get('v') === 'ask' // /social/youtube?v=ask: the chat version
   const [fonts, logo, h] = await Promise.all([ogFonts(), logoSrc(), getHeadline(getDb(), BUDGET_VERSION)])
   const total = `$${(h.allFunds.proposed2027 / 1e9).toFixed(2)}B`
   return new ImageResponse(
@@ -47,8 +48,8 @@ export async function GET() {
           {Array.from({ length: 34 }, (_, i) => <div key={i} style={{ width: (i * 7) % 3 + 2, marginRight: 4, background: C.ink }} />)}
         </div>
       </div>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'absolute', right: 318, top: 452, width: 150, height: 150, borderRadius: 75, background: C.ink, color: C.band, transform: 'rotate(-10deg)', fontSize: 34, fontWeight: 800, lineHeight: 1, textAlign: 'center' }}>
-        What’s yours?
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'absolute', right: 318, top: 452, width: ask ? 172 : 150, height: ask ? 172 : 150, borderRadius: 86, background: C.ink, color: C.band, transform: 'rotate(-10deg)', fontSize: ask ? 35 : 34, fontWeight: 800, lineHeight: 1, textAlign: 'center' }}>
+        {ask ? 'Ask it anything' : 'What’s yours?'}
       </div>
 
       {/* Bottom-left: YouTube covers the bottom-right corner with the video length. */}
