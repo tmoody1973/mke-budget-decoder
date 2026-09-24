@@ -115,6 +115,39 @@ def test_capital_amounts_parsed(tables):
     assert by[("police", "Police Facilities Maintenance Program")]["amount"] == 2_115_000
 
 
+KINDS = {"project", "list_heading", "funding_source", "context"}
+
+
+def test_capital_rows_are_classified(tables):
+    rows = tables["capital_projects"]
+    assert {r["kind"] for r in rows} <= KINDS
+    # every project has a name; a heading's amount is the sum of its items, so it is not a project
+    assert all(r["name"] for r in rows if r["kind"] == "project"), [r["description"][:60] for r in rows if r["kind"] == "project" and not r["name"]]
+    heading = next(r for r in rows if r["description"].startswith("The 2027 Capital Budget includes $4,115,000"))
+    assert heading["kind"] == "list_heading"
+    source = next(r for r in rows if r["description"].startswith("$19.25 million in levy-supported"))
+    assert source["kind"] == "funding_source"
+
+
+def test_capital_names_from_the_sentence(tables):
+    names = {(r["name"] or "").lower(): r for r in tables["capital_projects"]}
+    assert names["general it upgrades"]["amount"] == 150_000                 # Summary p.38 list item
+    assert names["water main improvements"]["amount"] == 30_800_000         # p.201
+    assert names["compliance loan program (clp)"]["amount"] == 962_189      # p.115, name before a dash
+    lead = next(r for r in tables["capital_projects"] if r["description"].startswith("The cost to replace lead service lines"))
+    assert lead["kind"] == "context"                                         # p.202: a per-line cost, not a project
+
+
+def test_capital_sentence_not_split_at_street_abbreviation(tables):
+    flood = next(r for r in tables["capital_projects"] if r["name"] == "Flood Mitigation")
+    assert "Capitol Drive" in flood["description"] and flood["amount"] == 1_000_000   # p.205-206
+
+
+def test_capital_printed_typo_is_kept_not_corrected(tables):
+    port = next(r for r in tables["capital_projects"] if r["name"] == "Terminal & Facility Maintenance")
+    assert port["amount_text"] == "$1,300,000 million" and port["amount"] is None   # Summary p.123 as printed
+
+
 def test_position_reasons_unwrapped(tables):
     admin = [r for r in tables["position_changes"] if r["dept"] == "administration"]
     assert admin[1]["reason"] == "Moved from ITMD to the Office of the Commissioner and changed titles"

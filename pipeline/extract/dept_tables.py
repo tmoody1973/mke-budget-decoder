@@ -362,6 +362,23 @@ def _amount(m: re.Match) -> tuple[int, bool]:
     return int(n * scale), bool(unit)
 
 
+# Street abbreviations end a line without ending a sentence ('…in N. 35th Street from W.' / 'Capitol
+# Drive…', Summary p.205-206), so a line ending in one of them continues the item.
+ABBREV_END = re.compile(r"(?:\b[A-Z]|\bSt|\bAve|\bDr|\bNo|\bInc|\bRd|\bBlvd)\.$")
+
+
+def _ends_sentence(text: str) -> bool:
+    t = text.rstrip()
+    return t.endswith(".") and not ABBREV_END.search(t)
+
+
+# '$150,000 for general IT upgrades' / 'includes $3.0 million for MFD Facilities Maintenance program.'
+FOR_NAME = re.compile(r"\$[\d.,]+\s*(?:million|billion)?\s+for\s+(?:the\s+)?(?P<name>.+?)"
+                      r"(?=,|\.(?:\s|$)|;|:|\s(?:which|that|to fund|to support|to begin|to continue|including)\b|$)")
+DASH_NAME = re.compile(r"^(?P<name>[A-Z][^–:]{2,90}?)\s+[–-]\s+[A-Z]")     # 'Compliance Loan Program (CLP) - The …'
+FUNDING = re.compile(r"^\$[\d.,]+\s*(?:million|billion)?\s+in\s", re.I)   # '$19.25 million in levy-supported City capital funds'
+
+
 def capital_projects(slug: str, pages: list[int]) -> list[dict]:
     out, inside, cur = [], False, None
     for pdf_page in pages:
@@ -382,7 +399,7 @@ def capital_projects(slug: str, pages: list[int]) -> list[dict]:
                 cur = {"dept": slug, "text": t.lstrip("• ").strip(), "bullet": True, "cite": cite(pdf_page),
                        "pdf_pages": [pdf_page]}
                 out.append(cur)
-            elif cur is not None and (cur["bullet"] or not cur["text"].rstrip().endswith(".")):
+            elif cur is not None and (cur["bullet"] or not _ends_sentence(cur["text"])):
                 cur["text"] += " " + t.strip()
                 if pdf_page not in cur["pdf_pages"]:
                     cur["pdf_pages"].append(pdf_page)     # item continues across a page break (Summary p.205-206)
@@ -395,15 +412,29 @@ def capital_projects(slug: str, pages: list[int]) -> list[dict]:
         m = paren or SENTENCE_AMOUNT_RE.search(c["text"])
         # "Police Vehicles ($2.0 million) – …" / "Advanced Planning Fund ($200,000): …" print a name
         # before a parenthesised amount. A bare "$3.0 million" inside a sentence has no name → None.
-        colon = re.match(r"^([A-Z][^:.]{2,70}):\s", c["text"])
+        colon = re.match(r"^([A-Z][^:]{2,100}?):\s", c["text"])
+        dash, named_for = DASH_NAME.match(c["text"]), FOR_NAME.search(c["text"])
         if paren and paren.start() < 120:
             c["name"] = c["text"][:paren.start()].strip(" •:–-")
-        elif colon:
+        elif colon and not colon.group(1).startswith("The ") and "." not in colon.group(1).replace("(", "").replace(")", "")[:-1]:
             c["name"] = colon.group(1).strip()           # 'Pump Facilities: The Sewer Maintenance Fund…' (p.205)
+        elif dash:
+            c["name"] = dash["name"].strip()
+        elif named_for and not c["text"].rstrip().endswith(":"):
+            c["name"] = named_for["name"].strip()
+            c["name"] = c["name"][:1].upper() + c["name"][1:]
         else:
             c["name"] = None
         c["amount"], c["amount_from_millions"] = _amount(m) if m else (None, False)
-        c["amount_text"] = m.group(0) if m else None
+        c["amount_text"] = m.group(0).strip() if m else None
+        # A figure printed in millions that is itself a million or more ('$1,300,000 million', Summary
+        # p.123) is a typo in the document. Keep the printed text; leave the amount unset, not guessed.
+        if c["amount_from_millions"] and m and Decimal(m["n"].replace(",", "")) >= 1000:
+            c["amount"] = None
+        text = c["text"].rstrip()
+        c["kind"] = ("funding_source" if FUNDING.match(text)
+                     else "list_heading" if text.endswith(":")
+                     else "project" if c["name"] else "context")
         c["description"] = c.pop("text")
     return out
 

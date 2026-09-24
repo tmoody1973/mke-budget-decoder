@@ -148,7 +148,7 @@ def run() -> list[dict]:
     for r in load("capital_projects").itertuples():
         doc, p = r.cite["doc"], int(r.cite["pdf_page"])
         at = r.amount_text.strip() if isinstance(r.amount_text, str) else ""
-        if not at:
+        if not at or pd.isna(r.amount):   # no figure, or a printed figure left unset as a typo (p.123)
             rec(r.dept, "capital_projects", r.name or r.description[:60], p, "ok" if pd.isna(r.amount) else "note")
             continue
         pages = list(r.pdf_pages) if hasattr(r, "pdf_pages") and r.pdf_pages is not None else [p]

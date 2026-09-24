@@ -140,3 +140,19 @@ export async function searchBudgetLines(db: Db, version: string, query: string, 
   }
   return { byDepartment: true as const, lines: [...groups.values()].sort((a, b) => b.proposed2027 - a.proposed2027) }
 }
+
+/** Capital projects the Summary's department pages describe (kind 'project' from the extractor).
+ *  List headings (whose amount sums the items under them) and funding sources are left out so a total
+ *  never counts anything twice. A printed amount the document garbled keeps its text, amount null. */
+export async function getCapitalProjects(db: Db, version: string, opts: { slug?: string; query?: string } = {}) {
+  const q = opts.query?.trim()
+  const rows = await db.select({ name: s.capitalProjects.name, amount: s.capitalProjects.amount, amountText: s.capitalProjects.amountText,
+    description: s.capitalProjects.description, dept: s.departments.name, slug: s.departments.slug, cite: s.capitalProjects.cite })
+    .from(s.capitalProjects).leftJoin(s.departments, eq(s.capitalProjects.deptId, s.departments.id))
+    .where(and(eq(s.capitalProjects.budgetVersionId, versionId(version)), eq(s.capitalProjects.category, 'project'),
+      opts.slug ? eq(s.departments.slug, opts.slug) : sql`true`,
+      q ? sql`(${s.capitalProjects.name} ilike ${`%${q}%`} or ${s.capitalProjects.description} ilike ${`%${q}%`} or ${s.departments.name} ilike ${`%${q}%`})` : sql`true`))
+  return rows.map((r) => ({ ...r, amount: n(r.amount),
+    note: r.amount === null && r.amountText ? `The budget prints this as "${r.amountText}", so the amount is unclear.` : null }))
+    .sort((a, b) => (b.amount ?? 0) - (a.amount ?? 0))
+}

@@ -128,6 +128,26 @@ export function DataRenderers() {
   }, [])
 
   useRenderTool({
+    name: 'getCapitalProjects', parameters: z.object({ slug: z.string().optional(), query: z.string().optional() }),
+    render: ({ status, result }) => {
+      if (status !== 'complete') return <Pending what="capital projects" />
+      const d = parse<{ facts?: CardFact[]; projects: { name: string; dept: string | null; amount: number | null; amountText: string | null; note: string | null; cite: Cite }[] }>(result)
+      if (!d?.projects?.length) return <p className="my-2 text-sm text-ink-soft">No capital projects matched.</p>
+      const { src, table } = ChatTable({ head: ['Project', 'Department', '2027'],
+        rows: d.projects.map((p, i) => ({ key: `cap-${i}`, label: p.name, cite: p.cite,
+          cells: [p.dept, p.amount === null ? (p.amountText ? `“${p.amountText}” (as printed)` : '—') : bigDollars(p.amount)] })) })
+      const notes = d.projects.filter((p) => p.note)
+      return (
+        <Card title="Capital projects in the 2027 proposal" sources={src}>
+          {table}
+          {notes.map((p) => <p key={p.name} className="mt-2 text-sm text-ink-soft">{p.name}: {p.note}</p>)}
+          <FactsList facts={d.facts} src={src} />
+        </Card>
+      )
+    },
+  }, [])
+
+  useRenderTool({
     name: 'searchBudgetLines', parameters: z.object({ query: z.string(), slug: z.string().optional() }),
     render: ({ status, result }) => {
       if (status !== 'complete') return <Pending what="line items" />

@@ -150,7 +150,7 @@ async function load(db: Db) {
       mergedWithPrevious: Boolean(r.merged_with_previous), cite: r.cite as s.Cite })))
     await insertAll(tx, s.capitalProjects, capitalProjects.map((r) => ({ ...v, deptId: deptOf(r.dept), name: (r.name as string) ?? null,
       amount: int(r.amount), amountText: (r.amount_text as string) ?? null, amountFromMillions: Boolean(r.amount_from_millions),
-      description: (r.description as string) ?? null, pdfPages: (r.pdf_pages as number[]) ?? [], cite: r.cite as s.Cite })))
+      description: (r.description as string) ?? null, category: (r.kind as string) ?? null, pdfPages: (r.pdf_pages as number[]) ?? [], cite: r.cite as s.Cite })))
 
     // line items → keep ids so position lines can point at their line
     const liIds: Record<string, number> = {}
