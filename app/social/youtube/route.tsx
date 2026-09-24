@@ -1,7 +1,7 @@
 // YouTube thumbnail (1280x720) for the launch video. Built to read at phone-feed size: a few huge words,
 // and a City Receipt with its totals hidden, so the only way to see your number is to watch (or visit).
 // No dollar figure on the receipt: the one number shown, the $2.26B, is read from the database (Summary p.7).
-// GET /social/youtube.
+// GET /social/youtube (receipt hook) or /social/youtube?v=ask (adds the chat).
 import { ImageResponse } from 'next/og'
 
 import { BUDGET_VERSION, getDb } from '@/lib/db/client'
@@ -17,7 +17,8 @@ const Row = ({ label, bold = false }: { label: string; bold?: boolean }) => (
   </div>
 )
 
-export async function GET() {
+export async function GET(req: Request) {
+  const ask = new URL(req.url).searchParams.get('v') === 'ask' // /social/youtube?v=ask: the chat version
   const [fonts, logo, h] = await Promise.all([ogFonts(), logoSrc(), getHeadline(getDb(), BUDGET_VERSION)])
   const total = `$${(h.allFunds.proposed2027 / 1e9).toFixed(2)}B`
   return new ImageResponse(
@@ -47,9 +48,19 @@ export async function GET() {
           {Array.from({ length: 34 }, (_, i) => <div key={i} style={{ width: (i * 7) % 3 + 2, marginRight: 4, background: C.ink }} />)}
         </div>
       </div>
+      {ask ? (
+        // Chat bubble, for the "ask" version: the receipt still asks "what's yours?"
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', position: 'absolute', right: 56, top: 528, transform: 'rotate(-3deg)' }}>
+          <svg width="40" height="26" viewBox="0 0 40 26" style={{ marginLeft: 48 }}><path d="M0 26 L22 0 L40 26 Z" fill={C.ink} /></svg>
+          <div style={{ display: 'flex', background: C.ink, color: C.band, padding: '12px 28px 16px', borderRadius: 26, marginTop: -1 }}>
+            <span style={{ fontSize: 46, fontWeight: 800, letterSpacing: '-0.02em', lineHeight: 1.05 }}>Ask it anything</span>
+          </div>
+        </div>
+      ) : (
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'absolute', right: 318, top: 452, width: 150, height: 150, borderRadius: 75, background: C.ink, color: C.band, transform: 'rotate(-10deg)', fontSize: 34, fontWeight: 800, lineHeight: 1, textAlign: 'center' }}>
         What’s yours?
       </div>
+      )}
 
       {/* Bottom-left: YouTube covers the bottom-right corner with the video length. */}
       <div style={{ display: 'flex', alignItems: 'flex-end', gap: 22, position: 'absolute', left: 56, bottom: 34 }}>
