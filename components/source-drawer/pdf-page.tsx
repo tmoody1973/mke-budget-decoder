@@ -1,6 +1,8 @@
 'use client'
 // One PDF page at the drawer's width, with the cited figures highlighted in the text layer.
 // Loaded on demand (next/dynamic, no SSR) so the dashboard never pays for pdf.js.
+// Before pdf.js runs: Safari can't iterate a ReadableStream, which pdf.js needs for the text layer.
+import '@/lib/polyfills/readable-stream-iterator'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Document, Page, pdfjs } from 'react-pdf'
 import 'react-pdf/dist/Page/TextLayer.css'
