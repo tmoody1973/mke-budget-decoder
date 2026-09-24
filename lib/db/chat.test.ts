@@ -53,6 +53,10 @@ describe.skipIf(!url)('chat lookups, second set (Neon)', () => {
     expect(secs.at(-1)!.section).toBe('TOTAL')
     // Changes and shares come with the lookup (principle 1): debt +$54,381,592; section shares sum to 100%.
     expect([d.budgetChange, d.budget2026]).toEqual([54_381_592, 272_242_143])
+    // Total = levy + other money, as printed on p.7 (debt: $109.1M from the levy, $217.5M other money).
+    expect([d.levy2027, d.otherMoney2027, d.budget2027]).toEqual([109_132_817, 217_490_918, 326_623_735])
+    expect((d.levy2027 ?? 0) + (d.otherMoney2027 ?? 0)).toBe(d.budget2027)
+    expect([d.budgetPercentChange, d.levyPercentChange]).toEqual([20, 2.2])
     const shares = secs.filter((x) => /^[A-Z]$/.test(x.section)).reduce((t, x) => t + (x.levySharePercent2027 ?? 0), 0)
     expect(Math.abs(shares - 100)).toBeLessThan(0.5)
   }, 30_000)

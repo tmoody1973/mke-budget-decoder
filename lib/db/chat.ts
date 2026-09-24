@@ -83,19 +83,23 @@ const n = (v: unknown) => (v === null || v === undefined ? null : Number(v))
  *  adds per $1,000 of assessed value (only A, B, C, D and F have one). */
 export async function getBudgetSections(db: Db, version: string) {
   const rows = await db.select().from(s.sectionTotals)
-    .where(and(eq(s.sectionTotals.budgetVersionId, versionId(version)), sql`${s.sectionTotals.line} in ('budget', 'levy')`))
+    .where(and(eq(s.sectionTotals.budgetVersionId, versionId(version)), sql`${s.sectionTotals.line} in ('budget', 'levy', 'non_levy')`))
   const bySection = new Map<string, typeof rows>()
   for (const r of rows) bySection.set(r.section, [...(bySection.get(r.section) ?? []), r])
   // The whole city levy is printed on the A-F subtotal (sections G-N levy nothing; TOTAL has no levy line).
   const totalLevy = n(rows.find((r) => r.section === 'SUBTOTAL_ABCDF' && r.line === 'levy')?.proposed2027)
   const diff = (a: number | null, b: number | null, places = 0) => (a === null || b === null ? null : +(b - a).toFixed(places))
+  const pct = (a: number | null, b: number | null) => (a === null || b === null || !a ? null : Math.round(((b - a) / a) * 1000) / 10)
   return [...bySection].map(([section, rs]) => {
-    const b = rs.find((r) => r.line === 'budget'), l = rs.find((r) => r.line === 'levy')
+    const b = rs.find((r) => r.line === 'budget'), l = rs.find((r) => r.line === 'levy'), o = rs.find((r) => r.line === 'non_levy')
     const row = { budget2026: n(b?.adopted2026), budget2027: n(b?.proposed2027), levy2026: n(l?.adopted2026), levy2027: n(l?.proposed2027),
-      rate2026: n(l?.taxRate2026), rate2027: n(l?.taxRate2027) }
+      rate2026: n(l?.taxRate2026), rate2027: n(l?.taxRate2027),
+      // As printed (p.7): the part other money pays, e.g. most of city debt and, through the sales tax, most of pensions.
+      otherMoney2026: n(o?.adopted2026), otherMoney2027: n(o?.proposed2027) }
     // Changes and shares worked out here, so the chat quotes them instead of doing arithmetic (principle 1).
     return { section, label: (b ?? l)!.label, cite: (b ?? l)!.cite as Cite, ...row,
       budgetChange: diff(row.budget2026, row.budget2027), levyChange: diff(row.levy2026, row.levy2027), rateChange: diff(row.rate2026, row.rate2027, 2),
+      budgetPercentChange: pct(row.budget2026, row.budget2027), levyPercentChange: pct(row.levy2026, row.levy2027),
       levySharePercent2027: row.levy2027 === null || !totalLevy ? null : Math.round((row.levy2027 / totalLevy) * 1000) / 10 }
   }).sort((a, b) => (a.section === 'TOTAL' ? 1 : b.section === 'TOTAL' ? -1 : a.section.localeCompare(b.section)))
 }

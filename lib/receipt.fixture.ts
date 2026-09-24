@@ -7,8 +7,8 @@ export const RATES: ReceiptRates = {
   total: { r2026: '7.61', r2027: '7.29', cite },
   components: [
     { section: 'A', label: 'City operations (General City Purposes)', r2026: '3.33', r2027: '3.05', cite },
-    { section: 'D', label: 'Debt', r2026: '2.41', r2027: '2.31', cite },
-    { section: 'B', label: 'Pensions (Employee Retirement)', r2026: '1.74', r2027: '1.80', cite },
+    { section: 'D', label: 'City debt', r2026: '2.41', r2027: '2.31', cite },
+    { section: 'B', label: 'Pensions (employee retirement)', r2026: '1.74', r2027: '1.80', cite },
     { section: 'F', label: 'Contingent fund', r2026: '0.11', r2027: '0.11', cite },
     { section: 'C', label: 'Capital improvements', r2026: '0.02', r2027: '0.02', cite },
   ],
