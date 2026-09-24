@@ -7,8 +7,9 @@ import { parse } from 'yaml'
 
 import { createBudgetGuide } from '@/lib/agent'
 
-export type Case = { id: string; q: string; expected_figures?: string[]; must_include?: string[]; must_not?: string[] }
-export type Judgment = { include: { item: string; met: boolean }[]; not: { item: string; violated: boolean }[]; note: string }
+// `before`: earlier questions in the same conversation, asked first; only the answer to `q` is graded.
+export type Case = { id: string; q: string; before?: string[]; expected_figures?: string[]; must_include?: string[]; must_not?: string[] }
+export type Judgment = { include: { item: string; met: boolean }[]; not: { item: string; violated: boolean }[]; declined: boolean; note: string }
 const JUDGE = 'claude-haiku-4-5-20251001'
 export const GOLDEN_DATASET = 'Golden questions'
 
@@ -42,18 +43,19 @@ function roundsTo(hay: string, fig: string): boolean {
 }
 export const hasFigure = (hay: string, fig: string) => roundsTo(hay, fig) || variants(fig).some((v) => hay.includes(v))
 
-export async function judge(c: Case, text: string, tools: string): Promise<{ include: { item: string; met: boolean }[]; not: { item: string; violated: boolean }[]; note: string }> {
-  if (!c.must_include?.length && !c.must_not?.length) return { include: [], not: [], note: '' }
+export async function judge(c: Case, text: string, tools: string): Promise<Judgment> {
+  const earlier = c.before?.length ? `Earlier questions in this conversation: ${JSON.stringify(c.before)}\n` : ''
   const prompt = `You grade an answer from a nonpartisan guide to the City of Milwaukee's 2027 proposed budget.
-Question: ${c.q}
+${earlier}Question: ${c.q}
 Answer text shown to the user:
 """${text}"""
 Data the answer's lookups returned (also shown to the user as cited cards; may be truncated):
 """${tools.slice(0, 6000)}"""
 For each REQUIRED item, is it satisfied by the answer text or the shown data? For each FORBIDDEN item, does the answer do it?
+DECLINED: does the answer say it could not find or cannot answer what was asked (rather than answering it)?
 REQUIRED: ${JSON.stringify(c.must_include ?? [])}
 FORBIDDEN: ${JSON.stringify(c.must_not ?? [])}
-Reply with JSON only: {"include":[{"item":"...","met":true}],"not":[{"item":"...","violated":false}],"note":"one short sentence"}`
+Reply with JSON only: {"include":[{"item":"...","met":true}],"not":[{"item":"...","violated":false}],"declined":false,"note":"one short sentence"}`
   const res = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
     headers: { 'content-type': 'application/json', 'x-api-key': process.env.ANTHROPIC_API_KEY!, 'anthropic-version': '2023-06-01' },
@@ -61,27 +63,90 @@ Reply with JSON only: {"include":[{"item":"...","met":true}],"not":[{"item":"...
   })
   const body = (await res.json()) as { content?: { text: string }[] }
   const raw = body.content?.[0]?.text ?? '{}'
-  try { return JSON.parse(raw.slice(raw.indexOf('{'), raw.lastIndexOf('}') + 1)) } catch { return { include: [], not: [], note: `judge unreadable: ${raw.slice(0, 80)}` } }
+  try {
+    const j = JSON.parse(raw.slice(raw.indexOf('{'), raw.lastIndexOf('}') + 1))
+    return { include: j.include ?? [], not: j.not ?? [], declined: j.declined === true, note: j.note ?? '' }
+  } catch { return { include: [], not: [], declined: false, note: `judge unreadable: ${raw.slice(0, 80)}` } }
 }
 
+
+// The parts of an agent run the check reads (Mastra's step shape; tool fields sit under payload in v1).
+type Step = {
+  toolCalls?: { toolName?: string; payload?: { toolName?: string } }[]
+  toolResults?: { result?: unknown; payload?: { result?: unknown } }[]
+  usage?: { inputTokens?: number; outputTokens?: number; cachedInputTokens?: number; cacheCreationInputTokens?: number }
+}
+type Run = { text: string; steps?: Step[] }
+
+const toolDataOf = (steps: Step[]) => JSON.stringify(steps.flatMap((s) => (s.toolResults ?? []).map((t) => t.payload?.result ?? t.result)))
+
+// Provider-neutral usage: inputTokens includes cached reads and writes on every provider.
+function costOf(steps: Step[], price: (typeof PRICES)[string]) {
+  let cost = 0
+  for (const s of steps) {
+    const u = s.usage ?? {}, read = u.cachedInputTokens ?? 0, write = u.cacheCreationInputTokens ?? 0
+    cost += (((u.inputTokens ?? 0) - read - write) * price.in + write * price.write + read * price.read + (u.outputTokens ?? 0) * price.out) / 1e6
+  }
+  return cost
+}
 
 /** Runs one question through the agent on `model`; returns what the visitor would see plus cost. */
 export async function answer(c: Case, model: string) {
   const price = PRICES[model]
   if (!price) throw new Error(`No price for ${model}; add it to PRICES`)
-  const t0 = Date.now()
-  const r: any = await createBudgetGuide(model).generate(c.q)
-  const steps = r.steps ?? []
-  const tools: string[] = steps.flatMap((s: any) => (s.toolCalls ?? []).map((t: any) => t.payload?.toolName ?? t.toolName))
-  const toolData = JSON.stringify(steps.flatMap((s: any) => (s.toolResults ?? []).map((t: any) => t.payload?.result ?? t.result)))
-  let cost = 0
-  // Provider-neutral usage: inputTokens includes cached reads and writes on every provider.
-  for (const s of steps) {
-    const u = s.usage ?? {}, read = u.cachedInputTokens ?? 0, write = u.cacheCreationInputTokens ?? 0
-    cost += (((u.inputTokens ?? 0) - read - write) * price.in + write * price.write + read * price.read + (u.outputTokens ?? 0) * price.out) / 1e6
+  const t0 = Date.now(), agent = createBudgetGuide(model)
+  // Earlier turns go back in as plain text, without their lookup results: a slightly harder test than the
+  // live chat, which also resends earlier tool calls. Cost counts every turn; grading sees the last.
+  const history: ({ role: 'user'; content: string } | { role: 'assistant'; content: string })[] = []
+  let earlierCost = 0, earlierData = ''
+  for (const q of c.before ?? []) {
+    const prev = (await agent.generate([...history, { role: 'user' as const, content: q }])) as unknown as Run
+    earlierCost += costOf(prev.steps ?? [], price)
+    earlierData += toolDataOf(prev.steps ?? [])
+    history.push({ role: 'user', content: q }, { role: 'assistant', content: prev.text })
   }
-  return { text: r.text as string, tools, toolData, cents: +(cost * 100).toFixed(2), secs: Math.round((Date.now() - t0) / 1000) }
+  const r = (await agent.generate(history.length ? [...history, { role: 'user' as const, content: c.q }] : c.q)) as unknown as Run
+  const steps = r.steps ?? []
+  const tools = steps.flatMap((s) => (s.toolCalls ?? []).map((t) => t.payload?.toolName ?? t.toolName ?? ''))
+  const toolData = toolDataOf(steps)
+  const cost = earlierCost + costOf(steps, price)
+  return { text: r.text as string, tools, toolData, earlierData, cents: +(cost * 100).toFixed(2), secs: Math.round((Date.now() - t0) / 1000) }
 }
 
 export const figuresFound = (c: Case, text: string, toolData: string) =>
   (c.expected_figures ?? []).map((f) => ({ f, found: hasFigure(`${text}\n${toolData}`.toLowerCase(), f) }))
+
+// Dollar amounts ("$343.9 million", "$343.9M", "$1,458.00") and percentages the answer states.
+const FIGURE = /\$\d+(?:,\d{3})*(?:\.\d+)?(?:\s(?:million|billion)|[MBK]\b)?|\d+(?:,\d{3})*(?:\.\d+)?%/g
+// The tax rate's unit, in English or Spanish: "per $1,000 of assessed value", "each $1,000 of value", "por cada $1,000".
+const RATE_UNIT = /(?:per|each|every|por cada)\s+\$1,000|\$1,000\s+(?:of|de)\s+(?:assessed\s+)?(?:value|valor|property)/gi
+/** Figures in the answer text that appear nowhere in the lookups' data or the questions asked: the
+ *  "unsourced figure" check. Numbers must come from a lookup (principle 1), so any hit is a defect, even when the arithmetic is right. */
+export function unsupportedFigures(c: Case, text: string, toolData: string, earlierData = ''): string[] {
+  const hay = `${toolData}\n${earlierData}\n${c.q}\n${(c.before ?? []).join('\n')}`.toLowerCase()
+  const said = text.replace(RATE_UNIT, '').match(FIGURE) ?? []
+  const nums = (hay.replace(/,/g, '').match(/\d+(?:\.\d+)?/g) ?? []).map(Number)
+  return [...new Set(said)].filter((f) => !hasFigure(hay, f.replace(/\s+/g, ' ')) && !roundsFrom(nums, f))
+}
+
+/** Does any number in the data round to this figure at the precision it was stated? Dollars may be
+ *  stored as dollars or cents; percentages as 8.9 or 0.089. */
+function roundsFrom(nums: number[], fig: string): boolean {
+  const m = fig.replace(/[$,]/g, '').match(/^([\d.]+)(%|\s(?:million|billion)|[MBK])?$/)
+  if (!m) return false
+  const v = Number(m[1]), places = m[1].split('.')[1]?.length ?? 0
+  const unit = m[2]?.trim() ?? ''
+  const scale = /^(billion|B)$/.test(unit) ? 1e9 : /^(million|M)$/.test(unit) ? 1e6 : unit === 'K' ? 1e3 : 1
+  const same = (n: number) => +n.toFixed(places) === v
+  return nums.some((n) => same(n / scale) || (scale === 1 && same(n / 100)) || (m[2] === '%' && same(n * 100)))
+}
+
+export type Bucket = 'correct' | 'incomplete' | 'unsourced figure' | "couldn't answer"
+/** GRASP's four outcomes (arXiv 2503.23299), with "hallucination" narrowed to what code can check: a
+ *  figure no lookup returned. In priority order, an unsourced figure outranks a pass; a failed answer that said it couldn't find the thing is "couldn't answer";
+ *  any other failure (a missing figure or idea, or a broken rule such as taking a side) is "incomplete". */
+export function bucket(pass: boolean, madeUp: string[], declined: boolean): Bucket {
+  if (madeUp.length) return 'unsourced figure'
+  if (pass) return 'correct'
+  return declined ? "couldn't answer" : 'incomplete'
+}

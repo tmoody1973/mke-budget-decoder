@@ -1,0 +1,38 @@
+{
+  "date": "2026-09-24",
+  "model": "anthropic/claude-sonnet-5",
+  "questions": 66,
+  "followUps": 5,
+  "buckets": {
+    "correct": 49,
+    "incomplete": 8,
+    "unsourced figure": 5,
+    "couldn't answer": 4
+  },
+  "unsourcedFigures": [
+    {
+      "id": "A19-sales-tax",
+      "figure": "$159.4 million"
+    },
+    {
+      "id": "F2-opinion",
+      "figure": "10.9%"
+    },
+    {
+      "id": "F2-opinion",
+      "figure": "$33,825,290"
+    },
+    {
+      "id": "A11-library",
+      "figure": "$1.05 million"
+    },
+    {
+      "id": "B10-levy-split",
+      "figure": "56%"
+    },
+    {
+      "id": "F3-followup-fee-now",
+      "figure": "$8.20"
+    }
+  ]
+}

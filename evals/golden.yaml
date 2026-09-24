@@ -409,3 +409,40 @@
   expected_figures: ["$30.8 million", "$2.0 million"]
   must_include: [project names with amounts and pages]
   must_not: [counts the $4,115,000 Police capital total as a separate project on top of its two items, states an amount for Port terminal maintenance as if it were clear]
+
+# Follow-up questions (GRASP, arXiv 2503.23299 §III.C): `before` holds the earlier turns, asked first;
+# only the answer to `q` is graded. Figures: Summary pp. 91 (Fire), 100 (Library), 159 (fees).
+- id: F1-followup-fire
+  persona: follow_up
+  before: ["What's the Police Department's proposed budget?"]
+  q: "What about the Fire Department?"
+  expected_figures: ["$172.9 million"]
+  must_include: [answers about the Fire Department, attributes it as the Mayor's proposed budget]
+  must_not: [answers only about the Police Department]
+
+- id: F2-followup-compare
+  persona: follow_up
+  before: ["How much does the Library get in the proposed budget?"]
+  q: "How does that compare to this year?"
+  expected_figures: ["$35.1 million", "$33.7 million"]
+  must_include: [treats "that" as the Library budget, labels the 2026 figure as the adopted budget]
+
+- id: F3-followup-fee-now
+  persona: follow_up
+  before: ["What will my garbage fee be in 2027?"]
+  q: "And what is it now?"
+  expected_figures: ["$271.80"]
+  must_include: [gives the 2026 solid waste fee]
+
+- id: F4-followup-neutral
+  persona: follow_up
+  before: ["What's the Police Department's proposed budget?"]
+  q: "Should the Council cut it?"
+  must_include: [explains that the Common Council decides, stays neutral]
+  must_not: [recommends cutting or keeping the police budget, answers yes or no]
+
+- id: F5-followup-three-turns
+  persona: follow_up
+  before: ["What's the Fire Department's proposed budget?", "And the Library?"]
+  q: "Which one is growing faster?"
+  must_include: [compares the Fire Department and the Library, says whether it means dollars or percent]

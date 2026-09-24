@@ -276,3 +276,22 @@ The cheaper models' slips were soft (for example, saying the proposal "reflects 
 **How we'll know if this was right.** After a month, the event counts answer "is the receipt or the chat used more, and where do people open the chat from"; at least one chat problem is found through a trace rather than a complaint.
 
 **What actually happened.**
+
+## D23 — Grade the chat in four published outcomes, with a code check for unsourced figures
+
+**Decision.** The answer check now sorts every answer into one of four outcomes, borrowed from the GRASP paper on municipal budget chatbots (arXiv 2503.23299): correct, incomplete, unsourced figure, couldn't answer. It also asks follow-up questions (a short conversation, graded on the last answer), and a full run writes a summary that the How it works page publishes.
+
+**Why this came up.** Research into similar tools found that the most credible ones publish their accuracy, and GRASP reported 78% correct against 60% for GPT-4o. Our check graded answers but kept the results private, and it only ever asked single questions, while people on phones ask follow-ups constantly.
+
+**Options.**
+1. *Keep private pass/fail grading.* No new work; nothing a reader can judge the chat by.
+2. *Publish GRASP's four outcomes, with "hallucination" judged by the grading model.* Directly comparable to the paper; a model deciding what is made up is hard to defend.
+3. *Publish the four outcomes, with the made-up check done in code* (chosen). Every dollar amount or percentage in an answer must match, after rounding, a number that a lookup returned in this conversation. Anything else is flagged.
+
+**What we chose and why.** Option 3 (Tarik chose to publish; Claude designed the checks). The first follow-up run showed why the label matters: the chat twice worked out a small difference in its head ("about $5.9 million lower than the department asked"). The arithmetic was right, but the figure came from no lookup, which breaks the site's first rule. So the outcome is called "unsourced figure", not "made up": it is a rule break, not necessarily a wrong number.
+
+**What we gave up.** The code check can raise false alarms (a figure the data holds in an unusual form), so flagged answers keep their lookup data for a person to confirm before results are published. It also only checks numbers: a wrong fact stated in words is left to the grading model. Follow-ups are replayed without earlier lookup results, a slightly harder test than the live chat.
+
+**How we'll know if this was right.** Each published run is reviewed by hand for false alarms; if more than one in ten flags turns out to be a false alarm, the check needs work. Over later runs, the unsourced-figure count should fall toward zero as the causes are fixed.
+
+**What actually happened.**
