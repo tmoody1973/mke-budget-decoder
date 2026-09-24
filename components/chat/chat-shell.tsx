@@ -41,7 +41,7 @@ function Panel({ children }: { children: React.ReactNode }) {
         <div className="flex min-w-0 flex-1 flex-col">{children}</div>
         {/* Kept mounted while closed, so the conversation survives closing the panel. */}
         <aside aria-label="Ask about the budget" hidden={!open}
-          className="fixed inset-0 z-40 flex flex-col bg-paper xl:sticky xl:top-0 xl:z-auto xl:h-dvh xl:w-[26rem] xl:shrink-0 xl:border-l xl:border-rule">
+          className="budget-chat fixed inset-0 z-40 flex flex-col bg-paper xl:sticky xl:top-0 xl:z-auto xl:h-dvh xl:w-[26rem] xl:shrink-0 xl:border-l xl:border-rule">
           <div className="flex items-start justify-between gap-3 border-b border-rule px-4 py-3">
             <div>
               <h2 className="font-bold text-ink">Ask about the budget</h2>
@@ -55,7 +55,11 @@ function Panel({ children }: { children: React.ReactNode }) {
             </button>
           </div>
           <div className="min-h-0 flex-1">
-            <CopilotChat agentId={AGENT} labels={{ chatInputPlaceholder: 'Ask about the proposed 2027 budget' }} />
+            <CopilotChat agentId={AGENT} labels={{
+              chatInputPlaceholder: 'Ask about the proposed 2027 budget',
+              welcomeMessageText: 'Ask a question about the Mayor’s proposed budget, or start with one of these.',
+              chatDisclaimerText: 'Answers can word things imperfectly. Every figure links to its page; check it before you rely on it.',
+            }} />
           </div>
         </aside>
       </div>
