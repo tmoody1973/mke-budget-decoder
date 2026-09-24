@@ -10,16 +10,18 @@ Made by [Tarik Moody](https://www.linkedin.com/in/tarikmoody). A personal projec
 
 - **Overview:** where the $2.26 billion would go, where general city money comes from, what each department asked for against what the Mayor proposed, the biggest changes, and the property tax levy against the tax rate. Every chart has a table version and a source mark that opens the budget page.
 - **Your City Receipt:** enter a Milwaukee address (or a condo's assessed value) and see what the city would charge that home in 2026 and under the 2027 proposal: property tax, garbage, snow and ice, street lighting, sewer. Renters see their unit's share. Save it as a receipt-style picture to share.
-- **Ask about the budget:** a chat that answers from the budget itself. It looks figures up in the database and shows them as cited tables; the AI writes the sentences, never the numbers.
+- **Ask about the budget:** a chat that answers from the budget itself. It looks figures up in the database and shows them as cited tables; the AI writes the sentences, never the numbers. Changes and differences come ready-made from the lookups, so it doesn't do arithmetic in its head.
 - **In the news:** the topics local coverage leads with, and a "Find it in the budget" list that sets reported figures beside what the documents print, with neutral labels.
 - **Have your say:** the Common Council's budget hearings, with a calendar file to download.
+- **How it works:** the method in plain language, diagrams of the data pipeline and the chat, and the chat's latest test results.
 
 ## How the numbers stay trustworthy
 
 1. A Python pipeline reads the two budget PDFs (a 224-page summary and a 455-page line-item book) into Postgres. Every row keeps its document, PDF page, printed page and line.
 2. Twenty figures read by hand, and the documents' own totals, are checked on every change (`pipeline/validate/`). If a check fails, the change can't deploy.
 3. Plain-language facts, glossary entries and news-claim labels are page-checked in code, verified by a second model, and reviewed by a person before they show.
-4. The chat's 61-question answer check runs locally and in Braintrust, so prompt and model changes are compared against a baseline.
+4. The chat is tested on 66 questions, including follow-ups asked mid-conversation. Each answer is sorted into one of four outcomes (correct, incomplete, unsourced figure, couldn't answer), borrowed from the [GRASP paper](https://arxiv.org/abs/2503.23299) on municipal budget chatbots. A code check flags any dollar amount or percentage that didn't come from a lookup. A person reviews every flag, and the latest full run is published on How it works.
+5. A test run with any grading error is never published.
 
 The full method is on the site's [How it works](https://www.mkebudget.app/how-it-works) page.
 
@@ -44,14 +46,16 @@ pnpm mprop:refresh                        # refresh the city property file for t
 ### Checking the chat
 
 ```bash
-pnpm evals                  # 61 questions from docs/05 through the real agent; results in evals/results/
+pnpm evals                  # 66 questions through the real agent; results in evals/results/, summary in evals/summary.json
 pnpm evals A10 B6           # only some questions
 EVAL_MODEL=openrouter/openai/gpt-5.6-luna pnpm evals   # same agent, another model
 pnpm evals:sync             # copy evals/golden.yaml into the Braintrust dataset "Golden questions"
 pnpm evals:bt               # run the check as a Braintrust experiment
 ```
 
-`evals/golden.yaml` is the source of truth for the questions. Rows added by hand in Braintrust (for example from a live trace) are left alone by the sync, as an inbox to turn into YAML entries.
+`evals/golden.yaml` is the source of truth for the questions. A case can carry `before`, earlier questions in the same conversation, to test follow-ups. A full run on the production model writes `evals/summary.json`, which the How it works page publishes; flagged answers keep their lookup data in the results file so a person can confirm or clear them first. Rows added by hand in Braintrust (for example from a live trace) are left alone by the sync, as an inbox to turn into YAML entries.
+
+Diagrams: `docs/diagrams/*.dataflow.json` are the Archify specs; they render to `public/diagrams/`, and `node scripts/theme-diagrams.mjs` gives them the site's colors.
 
 ## Project docs
 
@@ -67,7 +71,8 @@ pnpm evals:bt               # run the check as a Braintrust experiment
 | `docs/06-RAG-INGESTION.md` | How both PDFs are indexed |
 | `docs/07-CITY-RECEIPT.md` | The receipt's data, math and privacy rules |
 | `docs/09-NEWS-AND-CIVIC.md` | News coverage and the Council calendar |
-| `docs/decisions.md` | Every significant decision, its options and tradeoffs (D1–D22) |
+| `docs/decisions.md` | Every significant decision, its options and tradeoffs (D1–D24) |
+| `docs/LEARNING-LOG.md` | What we expected, what happened, what we now believe |
 | `docs/open-questions.md` | Open questions and known source inconsistencies |
 
 ## Privacy
