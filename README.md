@@ -78,3 +78,11 @@ Diagrams: `docs/diagrams/*.dataflow.json` are the Archify specs; they render to 
 ## Privacy
 
 Addresses typed into the receipt are not stored or logged, and owner names from the property file are never loaded. Site events carry no addresses, assessed values or question text. Chat questions are kept in a private Braintrust project to find and fix wrong answers.
+
+## License
+
+The code is under the [MIT License](LICENSE). It does not cover material that isn't the project's own:
+
+- **Budget documents** in `data/raw/` are City of Milwaukee public records, included so the pipeline can be rerun.
+- **Extracted data** in `data/processed/` comes from those documents and the city's Master Property File (MPROP). It's offered as-is and is only as current as the documents it was read from.
+- **Fonts** in `assets/fonts/` (Libre Franklin, IBM Plex Mono) are under the SIL Open Font License; the license files sit beside them.
