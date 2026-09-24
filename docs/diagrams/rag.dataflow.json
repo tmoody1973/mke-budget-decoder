@@ -1,0 +1,162 @@
+{
+  "schema_version": 1,
+  "diagram_type": "dataflow",
+  "meta": {
+    "title": "How the budget PDFs become cited answers",
+    "quality_profile": "showcase",
+    "viewBox": [
+      1080,
+      620
+    ],
+    "visual_preset": "editorial"
+  },
+  "stages": [
+    {
+      "label": "Source"
+    },
+    {
+      "label": "Extract"
+    },
+    {
+      "label": "Check and index"
+    },
+    {
+      "label": "Store"
+    },
+    {
+      "label": "Look up"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "pdfs",
+      "type": "external",
+      "label": "Budget PDFs",
+      "sublabel": "224 + 455 pages",
+      "stage": 0,
+      "row": 1,
+      "tag": "read-only"
+    },
+    {
+      "id": "extract",
+      "type": "backend",
+      "label": "Python extraction",
+      "sublabel": "pdfplumber + pandas",
+      "stage": 1,
+      "row": 1,
+      "tag": "run once"
+    },
+    {
+      "id": "checks",
+      "type": "security",
+      "label": "Number checks",
+      "sublabel": "golden numbers + totals",
+      "stage": 2,
+      "row": 0,
+      "tag": "blocks deploy"
+    },
+    {
+      "id": "chunks",
+      "type": "backend",
+      "label": "Narrative passages",
+      "sublabel": "Voyage voyage-4",
+      "stage": 2,
+      "row": 2,
+      "tag": "embedded"
+    },
+    {
+      "id": "tables",
+      "type": "database",
+      "label": "Budget tables",
+      "sublabel": "Postgres on Neon",
+      "stage": 3,
+      "row": 0,
+      "tag": "page + line"
+    },
+    {
+      "id": "vectors",
+      "type": "database",
+      "label": "Passage index",
+      "sublabel": "pgvector + full-text",
+      "stage": 3,
+      "row": 2,
+      "tag": "page cited"
+    },
+    {
+      "id": "lookups",
+      "type": "backend",
+      "label": "Figure lookups",
+      "sublabel": "typed SQL queries",
+      "stage": 4,
+      "row": 0,
+      "tag": "exact numbers"
+    },
+    {
+      "id": "search",
+      "type": "backend",
+      "label": "Hybrid search",
+      "sublabel": "vector + keyword, RRF",
+      "stage": 4,
+      "row": 2,
+      "tag": "context"
+    }
+  ],
+  "flows": [
+    {
+      "id": "read-pages",
+      "from": "pdfs",
+      "to": "extract",
+      "label": "pages",
+      "classification": "text + tables",
+      "variant": "emphasis"
+    },
+    {
+      "id": "figures",
+      "from": "extract",
+      "to": "checks",
+      "label": "figures",
+      "classification": "with page",
+      "variant": "emphasis"
+    },
+    {
+      "id": "narrative",
+      "from": "extract",
+      "to": "chunks",
+      "label": "narrative",
+      "classification": "passages",
+      "variant": "default"
+    },
+    {
+      "id": "passed",
+      "from": "checks",
+      "to": "tables",
+      "label": "passed rows",
+      "classification": "reconciled",
+      "variant": "emphasis"
+    },
+    {
+      "id": "embedded",
+      "from": "chunks",
+      "to": "vectors",
+      "label": "vectors",
+      "classification": "1024 dims",
+      "variant": "default"
+    },
+    {
+      "id": "sql",
+      "from": "tables",
+      "to": "lookups",
+      "label": "SQL",
+      "classification": "read-only",
+      "variant": "emphasis"
+    },
+    {
+      "id": "matches",
+      "from": "vectors",
+      "to": "search",
+      "label": "matches",
+      "classification": "ranked",
+      "variant": "default"
+    }
+  ]
+}

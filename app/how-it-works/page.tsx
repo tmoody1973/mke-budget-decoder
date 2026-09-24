@@ -88,6 +88,11 @@ export default async function HowItWorks() {
         figure you plan to use against its source page. The code is public on{' '}
         <a href="https://github.com/tmoody1973/mke-budget-decoder" className="text-ref underline underline-offset-4">GitHub</a>.
       </P>
+      <P>
+        Two diagrams show the whole path:{' '}
+        <a href="/diagrams/rag.html" className="text-ref underline underline-offset-4">how the budget PDFs become cited answers</a>{' '}
+        and <a href="/diagrams/agent.html" className="text-ref underline underline-offset-4">how the chat answers a question</a>.
+      </P>
 
       <H2 id="receipt">How we calculate your receipt</H2>
       <P>Your City Receipt estimates what the city charges one property, under the 2026 budget and under the Mayor’s proposal for 2027.</P>

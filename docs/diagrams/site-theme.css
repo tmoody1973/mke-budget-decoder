@@ -1,0 +1,22 @@
+/* Milwaukee Budget Decoder look for the Archify diagrams (tokens from app/globals.css).
+   Injected into public/diagrams/*.html by scripts/theme-diagrams.mjs after `archify deliver`. */
+html[data-preset="editorial"][data-theme] {
+  --bg: #fdfaf1; --grid: #d9dee7; --panel: #ffffff; --panel-border: #1b2a4a;
+  --lane-fill: rgba(253, 190, 69, 0.10); --lane-stroke: #d9dee7;
+  --text: #1b2a4a; --text-muted: #3d4a66; --text-dim: #6b7690; --text-faint: #56627d; --mask: #ffffff;
+  --frontend-fill: rgba(60, 111, 176, 0.08); --frontend-stroke: #3c6fb0;
+  --backend-fill: #ffffff; --backend-stroke: #1b2a4a;
+  --database-fill: rgba(253, 190, 69, 0.22); --database-stroke: #1b2a4a;
+  --cloud-fill: #ffffff; --cloud-stroke: #1b2a4a;
+  --security-fill: rgba(223, 145, 26, 0.14); --security-stroke: #a8650a;
+  --messagebus-fill: rgba(253, 190, 69, 0.45); --messagebus-stroke: #1b2a4a;
+  --external-fill: #ffffff; --external-stroke: #56627d;
+  --arrow: #56627d; --arrow-emphasis: #1b2a4a;
+  --toolbar-bg: #ffffff; --toolbar-border: #1b2a4a; --toolbar-text: #1b2a4a; --toolbar-hover: #fdfaf1; --toolbar-menu-bg: #ffffff;
+}
+html[data-preset="editorial"] body { background: #fdbe45; background-image: none; }
+html[data-preset="editorial"] .header-row::after,
+html[data-preset="editorial"] .diagram-container::after { content: none; display: none; }
+html[data-preset="editorial"] .diagram-container { border: 2px solid #1b2a4a; border-radius: 0; background: #fdfaf1; box-shadow: none; }
+html[data-preset="editorial"] h1 { font-family: 'Libre Franklin', system-ui, sans-serif; font-weight: 800; letter-spacing: -0.02em; color: #1b2a4a; }
+html[data-preset="editorial"] svg text { font-family: 'Libre Franklin', system-ui, sans-serif; }
