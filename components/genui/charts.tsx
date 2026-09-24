@@ -136,7 +136,7 @@ export function BoxScore({ scores }: { scores: Score[] }) {
           <dd className="tabular mt-1 text-3xl font-bold tracking-[-0.01em] text-ink lg:text-4xl">
             <Tail label={s.value}><Mark n={s.n} q={s.q} /></Tail>
           </dd>
-          <dd className="tabular mt-1 text-sm text-ink-soft"><span className="font-semibold text-ink">{s.change}</span> from {s.was} in 2026</dd>
+          <dd className="tabular mt-1 text-sm text-ink-soft"><span className="font-semibold text-ink">{s.change}</span> from {s.was} adopted for 2026</dd>
         </div>
       ))}
     </dl>
@@ -202,7 +202,7 @@ function PairBars({ title, a, b, fmt }: { title: string; a: number; b: number; f
 /** The city levy rises while the rate falls: two small paired bars, 2026 against 2027. */
 export function LevyVsRate({ d }: { d: LevyRate }) {
   return (
-    <div role="img" aria-label={`City property tax levy ${bigDollars(d.levy2026)} in 2026, ${bigDollars(d.levy2027)} proposed for 2027; tax rate $${d.rate2026} per $1,000 in 2026, $${d.rate2027} proposed.`}
+    <div role="img" aria-label={`City property tax levy ${bigDollars(d.levy2026)} adopted for 2026, ${bigDollars(d.levy2027)} proposed for 2027; tax rate $${d.rate2026} per $1,000 adopted for 2026, $${d.rate2027} proposed.`}
       className="grid gap-6 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
       <div aria-hidden><PairBars title="City property tax levy" a={d.levy2026} b={d.levy2027} fmt={bigDollars} /></div>
       <div aria-hidden><PairBars title="Tax rate per $1,000" a={Number(d.rate2026)} b={Number(d.rate2027)} fmt={(v) => `$${v.toFixed(2)}`} /></div>

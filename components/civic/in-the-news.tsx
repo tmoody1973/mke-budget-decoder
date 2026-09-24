@@ -28,7 +28,7 @@ function Figure({ f }: { f: TopicFigure & { n: number } }) {
         <span className="text-lg font-bold">{money(f, f.proposed2027)}</span>
         <Mark n={f.n} q={[f.adopted2026 ?? '', f.proposed2027].filter((v) => v !== '').map((v) => (f.kind === 'dollars' ? v : Number(v).toFixed(2)))} />
         <span className="ml-1 text-sm text-ink-soft">
-          {f.adopted2026 === null ? 'proposed for 2027' : `proposed, ${change} from ${money(f, f.adopted2026)} in 2026`}
+          {f.adopted2026 === null ? 'proposed for 2027' : `proposed, ${change} from ${money(f, f.adopted2026)} adopted for 2026`}
         </span>
       </p>
     </li>

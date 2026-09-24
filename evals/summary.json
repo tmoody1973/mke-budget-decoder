@@ -1,0 +1,30 @@
+{
+  "date": "2026-09-24",
+  "model": "anthropic/claude-sonnet-5",
+  "questions": 66,
+  "followUps": 5,
+  "buckets": {
+    "correct": 57,
+    "incomplete": 6,
+    "unsourced figure": 3,
+    "couldn't answer": 0
+  },
+  "unsourcedFigures": [
+    {
+      "id": "A2-household-fees",
+      "figure": "$49.20"
+    },
+    {
+      "id": "A2-household-fees",
+      "figure": "$46.40"
+    },
+    {
+      "id": "B10-levy-split",
+      "figure": "$183,608,851"
+    },
+    {
+      "id": "F4-followup-neutral",
+      "figure": "$11.7M"
+    }
+  ]
+}

@@ -108,7 +108,7 @@ export function DataRenderers() {
       const t = d.totalPositions
       const { src, table } = ChatTable({ head: ['Position', 'Change', 'Reason given'],
         rows: [
-          ...(t && t.adopted2026 !== null && t.proposed2027 !== null ? [{ key: 'pos-total', label: `All budgeted positions: ${t.adopted2026.toLocaleString('en-US')} in 2026 → ${t.proposed2027.toLocaleString('en-US')} proposed`, cite: t.cite, strong: true, cells: [signed(t.proposed2027 - t.adopted2026), null] }] : []),
+          ...(t && t.adopted2026 !== null && t.proposed2027 !== null ? [{ key: 'pos-total', label: `All budgeted positions: ${t.adopted2026.toLocaleString('en-US')} adopted for 2026 → ${t.proposed2027.toLocaleString('en-US')} proposed`, cite: t.cite, strong: true, cells: [signed(t.proposed2027 - t.adopted2026), null] }] : []),
           ...d.changes.map((c, i) => ({ key: `pos-${i}`, label: c.title, cite: c.cite, cells: [signed(Number(c.positions)), c.reason || '—'] })),
         ] })
       return <Card title="Position changes, with the budget’s reasons" sources={src}>{table}</Card>

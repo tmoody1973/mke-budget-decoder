@@ -7,7 +7,7 @@ import { config } from 'dotenv'
 config({ path: '.env.local' })
 const { Eval, initDataset } = await import('braintrust')
 const { BRAINTRUST_PROJECT, CHAT_MODEL } = await import('@/lib/agent')
-const { GOLDEN_DATASET, answer, figuresFound, judge } = await import('./scoring')
+const { GOLDEN_DATASET, answer, figuresFound, judge, unsupportedFigures } = await import('./scoring')
 type Case = import('./scoring').Case
 type Out = Awaited<ReturnType<typeof answer>>
 
@@ -41,6 +41,10 @@ await Eval(BRAINTRUST_PROJECT, {
     async ({ output, expected }) => {
       const j = await judgeOnce(expected as Case, output)
       return j.not.length ? { name: 'no forbidden behavior', score: j.not.some((x) => x.violated) ? 0 : 1, metadata: { violated: j.not.filter((x) => x.violated).map((x) => x.item) } } : null
+    },
+    ({ output, expected }) => {
+      const u = unsupportedFigures(expected as Case, output.text, output.toolData, output.earlierData)
+      return { name: 'no unsourced figures', score: u.length ? 0 : 1, metadata: { unsourced: u } }
     },
     ({ output }) => ({ name: 'under 3 cents', score: output.cents <= 3 ? 1 : 0, metadata: { cents: output.cents, secs: output.secs } }),
   ],

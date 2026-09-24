@@ -6,6 +6,7 @@ import type { Metadata } from 'next'
 import { Mark, SourcesList, sourceRegistry } from '@/components/genui/sources'
 import { BUDGET_VERSION, getDb } from '@/lib/db/client'
 import { getReceiptRates } from '@/lib/db/receipt'
+import evalRun from '@/evals/summary.json'
 
 export const dynamic = 'force-dynamic'
 export const metadata: Metadata = {
@@ -16,6 +17,13 @@ export const metadata: Metadata = {
 const H2 = ({ id, children }: { id: string; children: React.ReactNode }) => (
   <h2 id={id} className="mt-14 border-t-2 border-ink pt-3 text-xl font-bold tracking-[-0.01em] text-ink">{children}</h2>
 )
+// The four outcomes of the answer check (evals/run.mts, D23), latest full run on the production model.
+const OUTCOMES = [
+  ['correct', 'Correct', 'Right figures and points, and it followed the rules'],
+  ['incomplete', 'Incomplete', 'Missed a figure or point, or broke a rule such as taking a side'],
+  ['unsourced figure', 'Unsourced figure', 'Stated a number no lookup returned, even when the arithmetic was right'],
+  ["couldn't answer", 'Couldn’t answer', 'Said it couldn’t find what was asked'],
+] as const
 const P = ({ children }: { children: React.ReactNode }) => <p className="mt-3 leading-relaxed text-ink">{children}</p>
 
 export default async function HowItWorks() {
@@ -39,7 +47,7 @@ export default async function HowItWorks() {
       <h1 className="text-[2.1rem] font-extrabold leading-[1.08] tracking-[-0.02em] text-ink sm:text-5xl">How it works</h1>
       <nav aria-label="On this page" className="mt-4">
         <ul className="flex flex-wrap gap-x-5 gap-y-2 text-sm">
-          {[['#about', 'About'], ['#numbers', 'How the numbers are checked'], ['#receipt', 'How we calculate your receipt']].map(([h, l]) => (
+          {[['#about', 'About'], ['#numbers', 'How the numbers are checked'], ['#accuracy', 'How well the chat answers'], ['#receipt', 'How we calculate your receipt']].map(([h, l]) => (
             <li key={h}><a href={h} className="font-semibold text-ref underline underline-offset-4">{l}</a></li>
           ))}
         </ul>
@@ -108,6 +116,47 @@ export default async function HowItWorks() {
         The same two paths as diagrams (best on a larger screen):{' '}
         <a href="/diagrams/rag.html" className="text-ref underline underline-offset-4">the budget data</a> and{' '}
         <a href="/diagrams/agent.html" className="text-ref underline underline-offset-4">the chat</a>.
+      </P>
+
+      <H2 id="accuracy">How well the chat answers</H2>
+      <P>
+        The chat is tested on {evalRun.questions} questions residents and journalists ask, including {evalRun.followUps} follow-ups
+        asked partway through a conversation. Where a question has a known answer, the figures are checked against ones read from the
+        documents by hand, and every answer is checked against rules such as staying neutral. A computer check also flags any dollar amount or percentage that didn’t come from a lookup.
+      </P>
+      <div className="mt-4 overflow-x-auto">
+        <table className="w-full border-collapse text-[0.95rem]">
+          <caption className="pb-2 text-left text-base font-semibold text-ink">Latest test, {new Date(`${evalRun.date}T12:00:00`).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</caption>
+          <thead>
+            <tr className="border-y-2 border-ink text-left text-xs font-semibold uppercase tracking-[0.06em] text-ink">
+              <th scope="col" className="py-2 pr-2">Outcome</th>
+              <th scope="col" className="py-2 pl-2 text-right">Answers</th>
+              <th scope="col" className="py-2 pl-2 text-right">Share</th>
+            </tr>
+          </thead>
+          <tbody>
+            {OUTCOMES.map(([key, label, meaning]) => {
+              const n = evalRun.buckets[key]
+              return (
+                <tr key={key} className="border-b border-rule align-top">
+                  <th scope="row" className="py-2.5 pr-2 text-left font-normal text-ink">
+                    <span className="font-semibold">{label}</span>
+                    <span className="block text-sm text-ink-soft">{meaning}</span>
+                  </th>
+                  <td className="tabular py-2.5 pl-2 text-right text-ink">{n}</td>
+                  <td className="tabular py-2.5 pl-2 text-right font-semibold text-ink">{Math.round((100 * n) / evalRun.questions)}%</td>
+                </tr>
+              )
+            })}
+          </tbody>
+        </table>
+      </div>
+      <P>
+        For comparison, researchers testing a chatbot for the Lexington, Massachusetts town budget reported 78% correct{' '}
+        (<a href="https://arxiv.org/abs/2503.23299" className="text-ref underline underline-offset-4">GRASP, 2025</a>). Their questions
+        were different, so read that as a rough guide, not a ranking. The{' '}
+        <a href="https://github.com/tmoody1973/mke-budget-decoder/blob/main/evals/golden.yaml" className="text-ref underline underline-offset-4">test questions</a>{' '}
+        are public.
       </P>
 
       <H2 id="receipt">How we calculate your receipt</H2>
