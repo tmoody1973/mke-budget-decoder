@@ -92,7 +92,7 @@ export default async function HowItWorks() {
       <ol className="mt-3 list-decimal space-y-2 pl-6 leading-relaxed text-ink">
         <li>The city’s two budget PDFs are the only source.</li>
         <li>A Python program reads their pages once, splitting them into figures (tables and line items) and narrative text.</li>
-        <li>The figures go through the number checks above. Only rows that pass are loaded into the database, each with its page.</li>
+        <li>The figures are loaded into the database, each with its page. The number checks above test them against the documents’ own totals, and if any check fails, nothing new goes live.</li>
         <li>The narrative text is cut into passages and indexed so it can be searched by meaning and by keyword, each passage keeping its page.</li>
         <li>Pages and the chat read exact figures from the database tables, and background from the passage search.</li>
       </ol>
