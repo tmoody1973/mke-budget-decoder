@@ -257,3 +257,22 @@ The cheaper models' slips were soft (for example, saying the proposal "reflects 
 **How we'll know if this was right.** The October bill stays under $45; the `chat_usage` table shows how often the 55 cap is reached. If it is reached most days, revisit Luna, or Sonnet first and Luna after the cap.
 
 **What actually happened.**
+
+## D22 — Page views in Vercel, site events in PostHog, chat traces and evals in Braintrust
+
+**Decision.** Vercel Web Analytics counts page views; PostHog records eight named site events (receipt choices and results, receipt image saved, chat opened, topic questions, source pages opened, calendar downloads, news headlines opened); Braintrust receives a trace of every chat answer and hosts the 60-question answer check as experiments. Each is off until its key is set.
+
+**Why this came up.** Tarik asked whether the site had analytics and event tracking (it had none) and proposed Braintrust for traces and evals. Without them there is no way to know which parts people use, or why a live chat answer went wrong.
+
+**Options.**
+1. *Vercel for everything.* One tool; custom events require the Pro plan ($20 a month).
+2. *Vercel page views plus PostHog events* (chosen). Both free at this scale; two dashboards.
+3. *Page views only.* Simplest; no idea which features are used.
+
+**What we chose and why.** Option 2 plus Braintrust (Tarik chose; Claude recommended). Privacy rules, because this is a civic site that promises addresses are never stored: PostHog masks all element text, never records sessions, and the receipt lookup is excluded from automatic capture; events carry no addresses, assessed values or question text. Chat traces go only to the private Braintrust project and contain the question and what the lookups returned.
+
+**What we gave up.** Two analytics tools instead of one, and less detail than autocapture would give. Braintrust traces hold visitors' questions, which is sensitive even without names.
+
+**How we'll know if this was right.** After a month, the event counts answer "is the receipt or the chat used more, and where do people open the chat from"; at least one chat problem is found through a trace rather than a complaint.
+
+**What actually happened.**

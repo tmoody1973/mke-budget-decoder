@@ -4,6 +4,8 @@
 // messages); computers download the file.
 import { useState } from 'react'
 
+import { track } from '@/lib/analytics'
+
 const FILE = 'my-milwaukee-city-receipt-2027.png'
 
 export function ShareImage({ body }: { body: Record<string, unknown> }) {
@@ -17,10 +19,12 @@ export function ShareImage({ body }: { body: Record<string, unknown> }) {
       const file = new File([await res.blob()], FILE, { type: 'image/png' })
       if (navigator.canShare?.({ files: [file] }) && matchMedia('(pointer: coarse)').matches) {
         await navigator.share({ files: [file], title: 'My Milwaukee city receipt' }).catch(() => {}) // closing the sheet is not an error
+        track('receipt_image_saved', { method: 'share_sheet', view: String(body.view) })
       } else {
         const url = URL.createObjectURL(file)
         const a = Object.assign(document.createElement('a'), { href: url, download: FILE })
         a.click()
+        track('receipt_image_saved', { method: 'download', view: String(body.view) })
         URL.revokeObjectURL(url)
       }
       setState('idle')

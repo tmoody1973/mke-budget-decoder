@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Libre_Franklin } from "next/font/google";
 
+import { Analytics } from "@vercel/analytics/next";
+
 import { ChatShell } from "@/components/chat/chat-shell";
 import { SiteFooter } from "@/components/site/site-footer";
 import { SiteHeader } from "@/components/site/site-header";
@@ -31,6 +33,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           <SiteFooter />
         </ChatShell>
         <SourceDrawer />
+        <Analytics />
       </body>
     </html>
   );

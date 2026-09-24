@@ -45,12 +45,21 @@ export default async function HowItWorks() {
         </ul>
       </nav>
 
-      {/* TODO(Tarik): rewrite this section in your own voice: who you are and why you built this. */}
+      {/* Written from Tarik's own answers (2026-09-24); his words, his edits. */}
       <H2 id="about">About</H2>
       <P>
-        Milwaukee Budget Decoder explains the City of Milwaukee’s 2027 budget as the Mayor proposed it to the Common Council, for residents
-        and for reporters. It is an independent, personal project by Tarik Moody. It is not an official City of Milwaukee website and
-        is not affiliated with any news organization.
+        I built Milwaukee Budget Decoder to make the city’s budget easier to get into and understand. Each year the budget
+        arrives as two long PDFs, hundreds of pages of tables and numbers, and it’s overwhelming even for people who want to follow along.
+      </P>
+      <P>
+        I’ve lived in Milwaukee for more than 19 years and have worked at Radio Milwaukee that whole time; today I’m its Director of
+        Digital Strategy and Innovation. This is a personal project, not a Radio Milwaukee product. For the past two years I’ve been
+        learning to build products with AI, through more than 20 hackathons and several launched projects, and this site follows the
+        rule I care most about: AI helps explain, but every number comes from the budget documents and links to its page.
+      </P>
+      <P>
+        It’s for anyone who wants to be engaged with what Milwaukee is doing. If you spot a mistake, tell me on{' '}
+        <a href="https://www.linkedin.com/in/tarikmoody" className="text-ref underline underline-offset-4">LinkedIn</a>.
       </P>
       <P>
         Everything here describes a <strong>proposal</strong>. The Common Council reviews and amends the budget before adopting it in

@@ -1,0 +1,10 @@
+[
+  {"event_name": "receipt_view_chosen", "event_description": "A visitor chose Own this or Rent here on the City Receipt (never the address).", "file": "components/receipt/receipt-finder.tsx"},
+  {"event_name": "receipt_shown", "event_description": "A City Receipt result appeared, with its kind (estimate, exempt…) and whether it came from an address or a typed value.", "file": "components/receipt/receipt-finder.tsx"},
+  {"event_name": "receipt_image_saved", "event_description": "The receipt picture was shared from the phone share sheet or downloaded.", "file": "components/receipt/share-image.tsx"},
+  {"event_name": "chat_opened", "event_description": "The chat panel was opened from the header button.", "file": "components/chat/chat-shell.tsx"},
+  {"event_name": "chat_topic_question", "event_description": "A news topic's Ask about link sent its prepared question (topic id only).", "file": "components/chat/chat-shell.tsx"},
+  {"event_name": "source_opened", "event_description": "A source mark opened a budget page in the PDF drawer (document and page).", "file": "components/source-drawer/source-drawer.tsx"},
+  {"event_name": "calendar_downloaded", "event_description": "The Council budget calendar file was downloaded.", "file": "components/civic/take-part.tsx"},
+  {"event_name": "news_article_opened", "event_description": "A news headline was opened (outlet and topic).", "file": "components/civic/in-the-news.tsx"}
+]

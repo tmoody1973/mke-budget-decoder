@@ -6,6 +6,8 @@ import { X } from 'lucide-react'
 import dynamic from 'next/dynamic'
 import { useEffect, useRef, useState } from 'react'
 
+import { track } from '@/lib/analytics'
+
 const PdfPage = dynamic(() => import('./pdf-page'), {
   ssr: false, loading: () => <p className="p-6 text-sm text-ink-soft">Loading the page viewer…</p>,
 })
@@ -30,6 +32,7 @@ export function SourceDrawer() {
       if (!a || !li || !doc || !(doc in FILES)) return
       e.preventDefault()
       setHits(null)
+      track('source_opened', { doc, page: Number(li.dataset.pdfPage) })
       setSrc({ doc, pdfPage: Number(li.dataset.pdfPage), where: li.dataset.where ?? '', trigger: a,
         terms: (a.dataset.q ?? '').split('|').filter(Boolean) })
     }

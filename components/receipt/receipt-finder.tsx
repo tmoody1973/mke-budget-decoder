@@ -8,6 +8,7 @@ import type { Receipt } from '@/lib/receipt'
 
 import { ReceiptTable, type Entered, type ParcelInfo } from './receipt-table'
 import { ShareImage } from './share-image'
+import { track } from '@/lib/analytics'
 
 type View = 'owner' | 'renter'
 type Target = { kind: 'parcel'; taxkey: string; address: string }
@@ -69,7 +70,11 @@ export function ReceiptFinder() {
     let live = true
     post<Result>('/api/receipt', requestBody(target, view))
       .catch(() => ({ error: 'The receipt is unavailable right now. Try again.' }))
-      .then((r) => { if (live) setAnswer({ key, targetKey: JSON.stringify(target), result: r }) })
+      .then((r) => {
+        if (!live) return
+        setAnswer({ key, targetKey: JSON.stringify(target), result: r })
+        if ('receipt' in r) track('receipt_shown', { kind: r.receipt.kind, view, lookup: target.kind === 'parcel' ? 'address' : 'typed_value' })
+      })
     return () => { live = false }
   }, [target, view, key])
 
@@ -93,7 +98,7 @@ export function ReceiptFinder() {
   const address = target?.address ?? condo?.address
 
   return (
-    <div>
+    <div className="ph-no-capture">
       <label htmlFor="address" className="block text-base font-semibold text-ink">Milwaukee street address</label>
       <div className="relative mt-2">
         <input
@@ -138,7 +143,7 @@ export function ReceiptFinder() {
           <div className="mt-3 grid grid-cols-2 border-2 border-ink">
             {(['owner', 'renter'] as const).map((v) => (
               <label key={v} className={`cursor-pointer py-3 text-center font-semibold has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-ref ${view === v ? 'bg-ink text-paper' : 'text-ink'}`}>
-                <input type="radio" name="view" value={v} checked={view === v} onChange={() => setView(v)} className="sr-only" />
+                <input type="radio" name="view" value={v} checked={view === v} onChange={() => { setView(v); track('receipt_view_chosen', { view: v }) }} className="sr-only" />
                 {v === 'owner' ? 'Own this' : 'Rent here'}
               </label>
             ))}

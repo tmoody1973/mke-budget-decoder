@@ -2,6 +2,7 @@
 // Pure: events, the current time and the cited legal deadline arrive as props.
 import { CalendarPlus } from 'lucide-react'
 
+import { TrackedLink } from '@/components/site/tracked-link'
 import type { CivicEvent } from '@/lib/civic/events'
 import { SOURCE } from '@/lib/civic/events'
 
@@ -46,9 +47,9 @@ export function TakePart({ events, now, deadline }: { events: CivicEvent[]; now:
         })}
       </ol>
       <p className="mt-4 text-sm text-ink">{deadline}</p>
-      <a href="/calendar/budget-2027.ics" className="mt-4 inline-flex items-center gap-2 border-2 border-ink px-4 py-2 font-semibold text-ink no-underline hover:border-ref hover:text-ref">
+      <TrackedLink event="calendar_downloaded" href="/calendar/budget-2027.ics" className="mt-4 inline-flex items-center gap-2 border-2 border-ink px-4 py-2 font-semibold text-ink no-underline hover:border-ref hover:text-ref">
         <CalendarPlus aria-hidden className="size-4" strokeWidth={2} />Add all dates to my calendar
-      </a>
+      </TrackedLink>
       <p className="mt-4 text-sm text-ink-soft">
         <span className="font-semibold text-ink">Source:</span> Common Council press release, “
         <a href={SOURCE.url} className="text-ref underline underline-offset-4" target="_blank" rel="noopener">{SOURCE.title}</a>,”
