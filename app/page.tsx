@@ -71,7 +71,7 @@ export default async function Overview() {
     articles: c.sources.flatMap((x) => { const a = ARTICLES.find((y) => y.id === x.article); return a ? [{ ...a, quote: x.quote }] : [] }) }))
   const deadlineMark = src.mark(deadlines.cite, { id: 'take-part-deadline', label: 'the legal deadlines' })
 
-  const blocks = sectionRows.map((r) => ({ key: r.section, letter: r.section, label: r.name, short: r.short, value: r.proposed2027, levy: r.taxRate2027 > 0 }))
+  const blocks = sectionRows.map((r) => ({ key: r.section, letter: r.section, label: r.name, short: r.short, value: r.proposed2027, levy: r.taxRate2027 > 0, levyAmount: r.levy2027 }))
   const ups = withChange.filter((d) => d.change > 0).length, downs = withChange.filter((d) => d.change < 0).length
   const notes = [
     { l: 'a', text: 'The budget has no sections lettered E or L.' },

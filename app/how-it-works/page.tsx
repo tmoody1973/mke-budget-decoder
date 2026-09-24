@@ -5,7 +5,10 @@ import type { Metadata } from 'next'
 
 import { Mark, SourcesList, sourceRegistry } from '@/components/genui/sources'
 import { BUDGET_VERSION, getDb } from '@/lib/db/client'
+import { getRevenueLineByFund } from '@/lib/db/chat'
+import { getSectionBudgets } from '@/lib/db/overview'
 import { getReceiptRates } from '@/lib/db/receipt'
+import { bigDollars } from '@/lib/format'
 import evalRun from '@/evals/summary.json'
 
 export const dynamic = 'force-dynamic'
@@ -27,7 +30,8 @@ const OUTCOMES = [
 const P = ({ children }: { children: React.ReactNode }) => <p className="mt-3 leading-relaxed text-ink">{children}</p>
 
 export default async function HowItWorks() {
-  const rates = await getReceiptRates(getDb(), BUDGET_VERSION)
+  const [rates, sectionRows, salesTax] = await Promise.all([getReceiptRates(getDb(), BUDGET_VERSION),
+    getSectionBudgets(getDb(), BUDGET_VERSION), getRevenueLineByFund(getDb(), BUDGET_VERSION, 'Local Sales Tax')])
   const src = sourceRegistry()
   const f = rates.fees
   const rows: { id: string; label: string; unit: string; a: string; b: string; n: number; note?: string }[] = [
@@ -197,6 +201,27 @@ export default async function HowItWorks() {
           </tbody>
         </table>
       </div>
+
+      <h3 id="debt-pensions" className="mt-8 font-bold text-ink">Why debt and pensions look bigger on the Overview</h3>
+      {(() => {
+        // Summary p.7 prints each section's total and the part the property tax levy pays; p.163 the sales tax for pensions.
+        const debt = sectionRows.find((r) => r.section === 'D')!, pensions = sectionRows.find((r) => r.section === 'B')!
+        const pensionSalesTax = salesTax.find((r) => r.fund === 'employee-retirement')
+        const n7 = src.mark(debt.cite, { id: 'debt-pensions', label: 'section totals and levies' })
+        const n163 = pensionSalesTax ? src.mark(pensionSalesTax.cite, { id: 'pension-sales-tax', label: 'the sales tax for pensions' }) : null
+        return (
+          <P>
+            The Overview shows what each budget section costs in total. The receipt shows only the part paid by the city property tax.
+            City debt costs {bigDollars(debt.proposed2027)} in the 2027 proposal, and {bigDollars(debt.levy2027)} of it comes from the
+            property tax<Mark n={n7} q={[debt.proposed2027, debt.levy2027]} />; other money pays the rest. Pensions cost{' '}
+            {bigDollars(pensions.proposed2027)}, of which {bigDollars(pensions.levy2027)} comes from the property tax
+            {pensionSalesTax?.proposed2027 && n163 !== null
+              ? <> and {bigDollars(pensionSalesTax.proposed2027)} from the city’s sales tax<Mark n={n163} q={[pensionSalesTax.proposed2027]} /></>
+              : null}. That’s why the debt total can rise while the debt part of your tax rate falls: most of the increase is paid by
+            other money, and the rate is the levy divided by the city’s total assessed value, which grew.
+          </P>
+        )
+      })()}
 
       <h3 className="mt-8 font-bold text-ink">What the receipt assumes</h3>
       <ul className="mt-2 list-disc space-y-1 pl-6 leading-relaxed text-ink">

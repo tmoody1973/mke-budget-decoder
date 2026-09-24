@@ -28,6 +28,7 @@ export function ShowTable({ children, label = 'Show as table' }: { children: Rea
 export type Block = {
   key: string; letter: string; label: string; short: string; value: number
   levy: boolean // has a city property tax rate (Summary p.7, from section_totals)
+  levyAmount?: number // the part paid by property tax; the rest comes from other money (Summary p.7)
 }
 
 type Layout = { w: number; h: number; className: string }
@@ -47,7 +48,7 @@ function Tiles({ blocks, total, layout }: { blocks: Block[]; total: number; layo
           const d = n.data as Block
           const x0 = Math.max(0, n.x0), y0 = Math.max(0, n.y0), x1 = Math.min(layout.w, n.x1), y1 = Math.min(layout.h, n.y1)
           const share = ((d.value / total) * 100).toFixed(1)
-          const text = `${d.letter}. ${d.label}: ${bigDollars(d.value)}, ${share}% of all funds, ${d.levy ? 'has' : 'no'} city property tax rate`
+          const text = `${d.letter}. ${d.label}: ${bigDollars(d.value)}, ${share}% of all funds, ${d.levy ? `${bigDollars(d.levyAmount ?? 0)} of it from property tax` : 'no city property tax'}`
           const below = y1 < layout.h * 0.72, right = x0 > layout.w * 0.55
           return (
             <div key={d.key}>
@@ -66,7 +67,7 @@ function Tiles({ blocks, total, layout }: { blocks: Block[]; total: number; layo
                   ...(right ? { right: pctOf(layout.w - x1, layout.w) } : { left: pctOf(x0, layout.w) }) }}>
                 <p className="font-semibold">{d.letter}. {d.label}</p>
                 <p className="tabular mt-1">{bigDollars(d.value)} · {share}% of all funds</p>
-                <p className="mt-1 text-ink-soft">{d.levy ? 'Has a city property tax rate' : 'No city property tax rate'}</p>
+                <p className="mt-1 text-ink-soft">{d.levy ? `${bigDollars(d.levyAmount ?? 0)} of it from property tax; the rest from other money` : 'No city property tax rate'}</p>
               </div>
             </div>
           )
@@ -93,7 +94,9 @@ export function BudgetTreemap({ blocks, total, n }: { blocks: Block[]; total: nu
         <span className="mt-3 grid gap-x-8 border-t border-rule pt-2 sm:grid-cols-2">
           {shown.map((b) => (
             <span key={b.key} className="tabular grid grid-cols-[1.25rem_1fr_auto] items-baseline gap-2 border-b border-rule py-1 text-ink-soft">
-              <span className="font-bold text-ink">{b.letter}</span><span>{b.label}</span><span className="text-right text-ink">{bigDollars(b.value)}</span>
+              <span className="font-bold text-ink">{b.letter}</span>
+              <span>{b.label}{b.levy && b.levyAmount ? <span className="block text-xs">{bigDollars(b.levyAmount)} of it from property tax</span> : null}</span>
+              <span className="text-right text-ink">{bigDollars(b.value)}</span>
             </span>
           ))}
         </span>

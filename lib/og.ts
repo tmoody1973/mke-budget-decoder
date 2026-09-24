@@ -29,7 +29,7 @@ export async function sectionShares(top = 5) {
   const db = getDb()
   const [h, sections] = await Promise.all([getHeadline(db, BUDGET_VERSION), getSectionBudgets(db, BUDGET_VERSION)])
   const sorted = [...sections].sort((a, b) => b.proposed2027 - a.proposed2027)
-  const plain: Record<string, string> = { D: 'Debt payments', C: 'Capital projects' } // clearer than the budget's shorthand
+  const plain: Record<string, string> = { D: 'City debt', C: 'Capital projects' } // clearer than the budget's shorthand
   const head = sorted.slice(0, top).map((s) => ({ label: plain[s.section] ?? s.short, amount: s.proposed2027 }))
   const rest = h.allFunds.proposed2027 - head.reduce((a, s) => a + s.amount, 0)
   return { total: h.allFunds.proposed2027, rows: [...head, { label: 'Everything else', amount: rest }], page: h.allFunds.cite.printed_page }

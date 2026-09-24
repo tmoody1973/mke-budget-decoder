@@ -10,7 +10,7 @@ type Db = NodePgDatabase<typeof s>
 
 // Plain-language names for the tax-rate parts, in the order the receipt lists them.
 const SECTIONS: [string, string][] = [
-  ['A', 'City operations (General City Purposes)'], ['D', 'Debt'], ['B', 'Pensions (Employee Retirement)'],
+  ['A', 'City operations (General City Purposes)'], ['D', 'City debt'], ['B', 'Pensions (employee retirement)'],
   ['F', 'Contingent fund'], ['C', 'Capital improvements'],
 ]
 const FEES: FeeKey[] = ['solid_waste', 'extra_cart', 'snow_ice', 'street_lighting', 'sewer_stormwater_avg']

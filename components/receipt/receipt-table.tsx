@@ -185,6 +185,8 @@ export function ReceiptTable({ receipt, parcel, entered = null }: { receipt: Est
       <h3 className="mt-12 text-xl font-bold tracking-[-0.01em] text-ink">Where the 2027 city property tax goes</h3>
       <p className="mt-1 text-sm text-ink-soft">
         The city tax rate is split among budget sections. Only this split is exact; the tax isn’t earmarked by department.
+        These are the property-tax parts only: city debt and pensions cost more in total, because other money also pays for
+        them, including sales tax for pensions (<a href="/how-it-works#debt-pensions" className="text-ref underline underline-offset-4">why the totals differ</a>).
       </p>
       <table className="tabular mt-4 w-full border-collapse text-[0.95rem]">
         <caption className="sr-only">2027 city property tax by budget section</caption>
