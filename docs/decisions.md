@@ -314,3 +314,22 @@ The cheaper models' slips were soft (for example, saying the proposal "reflects 
 **How we'll know if this was right.** Over the next several runs, no blank answers and correct stays within the 54 to 60 band; monthly chat spend stays under the $45 cap from D20.
 
 **What actually happened.**
+
+## D25 — A dark theme that keeps the receipt and the PDF pages as paper
+
+**Decision.** The site has a dark theme, chosen in the header (Match my device, Light, Dark) and defaulting to the device's setting. The City Receipt and the budget's PDF pages stay light in it.
+
+**Why this came up.** Tarik asked for an accessible dark mode that works on Windows, Mac and Safari. Many phones switch to dark at night, and the site was the one bright page in them.
+
+**Options.**
+1. *Invert everything.* Simplest; the receipt becomes a dark card and the PDF pages a dark frame around white pages, which reads as broken.
+2. *Dark site, paper objects stay paper* (chosen). The receipt stays a cream receipt in its marigold frame, and PDF pages stay white, like documents on a dark desk.
+3. *No toggle, follow the device only.* Less code; no way to override a device setting you don't want here.
+
+**What we chose and why.** Option 2 with a toggle (Tarik asked for the toggle; Claude designed the palette and the paper-object rule). Every color was already a token in one file, so dark mode is a second set of values, contrast-checked to WCAG AA, plus Windows High Contrast rules. A script in the page head applies the saved choice before first paint, so nothing flashes.
+
+**What we gave up.** A bright receipt on a dark page is a strong contrast some people may find glaring. The theme choice is saved per browser, so it doesn't follow a person across devices.
+
+**How we'll know if this was right.** No reports of unreadable text or a flash of the wrong theme; the receipt image people share still looks like the one on screen.
+
+**What actually happened.**

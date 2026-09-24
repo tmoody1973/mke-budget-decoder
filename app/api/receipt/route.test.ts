@@ -13,7 +13,7 @@ describe.skipIf(!url)('POST /api/receipt and /api/address', () => {
     const res = await POST(post({ view: 'owner', assessed2026: 200_000, assessed2025: 188_000, frontageFt: 40 }))
     const { receipt } = await res.json()
     expect(receipt.total).toEqual({ c2026: 203676, c2027: 208062 })
-  })
+  }, 30_000) // first test in the file: loads the route and opens the database connection
 
   it('a condo unit in a large building gets no city garbage line', async () => {
     const { POST } = await import('./route')

@@ -53,7 +53,7 @@ function Tiles({ blocks, total, layout }: { blocks: Block[]; total: number; layo
           return (
             <div key={d.key}>
               <div role="img" tabIndex={0} aria-label={text}
-                className={`tile peer absolute overflow-hidden outline-offset-[-3px] ${d.levy ? 'bg-ink text-paper' : 'bg-fund text-ink ring-1 ring-inset ring-ref'}`}
+                className={`tile peer absolute overflow-hidden outline-offset-[-3px] ${d.levy ? 'bg-tile text-tile-ink' : 'bg-fund text-ink ring-1 ring-inset ring-ref'}`}
                 style={{ left: pctOf(x0, layout.w), top: pctOf(y0, layout.h), width: pctOf(x1 - x0, layout.w), height: pctOf(y1 - y0, layout.h) }}>
                 <div className="p-1.5 sm:p-3">{/* padding lives inside, so thin tiles keep their exact size */}
                   <p aria-hidden className="tile-letter text-xs font-bold">{d.letter}</p>
@@ -87,7 +87,7 @@ export function BudgetTreemap({ blocks, total, n }: { blocks: Block[]; total: nu
       {LAYOUTS.map((l) => <Tiles key={l.w} blocks={shown} total={total} layout={l} />)}
       <figcaption className="mt-3 text-sm text-ink">
         <span className="legend flex flex-wrap gap-x-6 gap-y-2">
-          <span className="flex items-center gap-2"><span aria-hidden className="size-3 bg-ink" /><span>Has a city property tax rate<Mark n={n} /></span></span>
+          <span className="flex items-center gap-2"><span aria-hidden className="size-3 bg-tile" /><span>Has a city property tax rate<Mark n={n} /></span></span>
           <span className="flex items-center gap-2"><span aria-hidden className="size-3 bg-fund ring-1 ring-inset ring-ref" />No city property tax rate; paid from its own revenue</span>
         </span>
         <span className="sr-only">Key to the sections:</span>
