@@ -1,0 +1,93 @@
+# "Find it in the budget" (docs/09 step 3): specific figures from news coverage set beside what the
+# budget documents print. Labels describe the relationship, never judge the reporting:
+#   matches · rounded · not_in_budget · different_measure
+# budget.text must only contain figures printed on budget.cite's page (validate/test_news_claims.py).
+# Percentages we worked out ourselves go in `note`, labeled. reviewed_by null = not shown on the site.
+
+- id: total-fox6
+  topic: taxes-fees
+  label: rounded
+  sources: [{article: fox6-overview, quote: "Milwaukee mayor introduces $2.2 billion budget proposal for 2027"}]
+  budget: {text: "All city funds, 2027 proposed: $2,261,087,412.", cite: {doc: summary, pdf_page: 17, printed_page: "7"}}
+  note: "About $2.26 billion; the headline rounds down."
+  reviewed_by: "Tarik (claude-precheck)"
+
+- id: total-wisn
+  topic: taxes-fees
+  label: matches
+  sources: [{article: wisn-parking, quote: "his $2.26 billion budget proposal for 2027"}]
+  budget: {text: "All city funds, 2027 proposed: $2,261,087,412.", cite: {doc: summary, pdf_page: 17, printed_page: "7"}}
+  reviewed_by: "Tarik (claude-precheck)"
+
+- id: streets-19-2
+  topic: roads
+  label: matches
+  sources:
+    - {article: wisn-parking, quote: "$19.2 million for local street improvements, the highest amount ever proposed for roads"}
+    - {article: um-streets, quote: "The capital budget will include $19.2 million for local road construction"}
+  budget: {text: "\"The combined total of investments in the HIP and local road reconstruction line items are now proposed to be $19.2 million, the highest total on record.\"", cite: {doc: summary, pdf_page: 16, printed_page: "6"}}
+  reviewed_by: "Tarik (claude-precheck)"
+
+- id: hip-12
+  topic: roads
+  label: matches
+  sources: [{article: um-streets, quote: "A total of $12 million would be allocated to the Department of Public Works high-impact paving program"}]
+  budget: {text: "\"The 2027 capital budget includes $12 million for the high impact street program.\"", cite: {doc: summary, pdf_page: 139, printed_page: "129"}}
+  reviewed_by: "Tarik (claude-precheck)"
+
+- id: local-recon-7-2
+  topic: roads
+  label: matches
+  sources: [{article: um-streets, quote: "The 2027 budget would also include $7.2 million for local street reconstruction."}]
+  budget: {text: "\"In 2027, $7.2 million is included in the budget for the resurfacing and reconstruction of local streets.\"", cite: {doc: summary, pdf_page: 139, printed_page: "129"}}
+  reviewed_by: "Tarik (claude-precheck)"
+
+- id: parking-6m
+  topic: parking
+  label: matches
+  sources:
+    - {article: wisn-parking, quote: "These changes are expected to generate $6 million for road work"}
+    - {article: um-streets, quote: "the three changes would yield $6 million a year for the high-impact paving program"}
+  budget: {text: "Higher parking permit, citation and meter fees \"will allow a $6 million transfer from the Transportation Fund for High Impact Paving (HIP).\"", cite: {doc: summary, pdf_page: 16, printed_page: "6"}}
+  reviewed_by: "Tarik (claude-precheck)"
+
+- id: parking-prices
+  topic: parking
+  label: not_in_budget
+  sources:
+    - {article: fox6-overview, quote: "increasing parking ticket fines by $10, increasing downtown metered parking from $2.25-per-hour to $3-per-hour, and doubling the cost of overnight parking permits"}
+    - {article: wisn-parking, quote: "overnight parking permits would double from $55 to $110 annually"}
+    - {article: um-streets, quote: "Downtown parking meters would increase from a minimum of $2.25 per hour to $3."}
+  budget: {text: "The budget documents don't print the new prices. They estimate Transportation Fund revenue: parking citations $14,000,000 in 2026 and $21,000,000 proposed for 2027; permits $3,350,000 and $6,000,000; meters $4,634,000 and $6,178,000.", cite: {doc: summary, pdf_page: 200, printed_page: "190"}}
+  reviewed_by: "Tarik (claude-precheck)"
+
+- id: fees-3pct
+  topic: taxes-fees
+  label: rounded
+  sources: [{article: wisn-parking, quote: "a 3% increase in city service fees like trash services and snow removal"}]
+  budget: {text: "Solid waste fee $271.80 to $280.00 a year; snow and ice $1.19 to $1.23 per foot of frontage; street lighting $1.12 to $1.16 per foot.", cite: {doc: summary, pdf_page: 169, printed_page: "159"}}
+  note: "Increases of 3.0% to 3.6% (our calculation from these figures)."
+  reviewed_by: "Tarik (claude-precheck)"
+
+- id: property-tax-3pct
+  topic: taxes-fees
+  label: different_measure
+  sources: [{article: wisn-parking, quote: "a three percent increase in property taxes, which for an average homeowner in Wisconsin is about $45.50 a year"}]
+  budget: {text: "The city property tax levy would go from $336,820,871 to $343,557,288, and the city tax rate from $7.61 to $7.29 per thousand dollars of assessed value.", cite: {doc: summary, pdf_page: 17, printed_page: "7"}}
+  note: "The city levy rises 2.0% (our calculation). The budget doesn't state a change for an average homeowner's bill, which also includes school, county, sewerage district and technical college taxes."
+  reviewed_by: "Tarik (claude-precheck)"
+
+- id: raise-2pct
+  topic: taxes-fees
+  label: not_in_budget
+  sources: [{article: wisn-parking, quote: "a two percent raise for city employees"}]
+  budget: {text: "\"Funding of future salary increases is provided in the Wages Supplement Fund.\"", cite: {doc: summary, pdf_page: 222, printed_page: "212"}}
+  note: "Neither budget document states a percentage for employee raises."
+  reviewed_by: "Tarik (claude-precheck)"
+
+- id: ssr-200m
+  topic: gap
+  label: matches
+  sources: [{article: fox6-overview, quote: "Johnson says the city would have $200 million more this year"}]
+  budget: {text: "\"If State Shared Revenues had grown at the rate of inflation, the city would be receiving over $200 million more in State Shared Revenue in 2027 than it is.\"", cite: {doc: summary, pdf_page: 166, printed_page: "156"}}
+  reviewed_by: "Tarik (claude-precheck)"

@@ -2,11 +2,13 @@
 import { AskedVsProposed, BiggestChanges, RevenueMix, SectionBudgets } from '@/components/genui/budget-tables'
 import { BoxScore, BudgetTreemap, headlineScores, LevyVsRate, Movers, ShowTable } from '@/components/genui/charts'
 import { Mark, NoteMark, SourcesList, sourceRegistry } from '@/components/genui/sources'
+import { FindInBudget } from '@/components/civic/find-in-budget'
 import { InTheNews } from '@/components/civic/in-the-news'
 import { TakePart } from '@/components/civic/take-part'
 import { ReceiptBand } from '@/components/receipt/receipt-band'
 import { ReceiptFinder } from '@/components/receipt/receipt-finder'
 import { EVENTS } from '@/lib/civic/events'
+import { reviewedClaims } from '@/lib/civic/claims'
 import { ARTICLES, TOPICS } from '@/lib/civic/news'
 import { BUDGET_VERSION, getDb } from '@/lib/db/client'
 import {
@@ -64,6 +66,9 @@ export default async function Overview() {
     pages: t.pages.map((p) => ({ n: src.mark(p.cite, { id: `topic-${t.id}`, label: `${t.title.toLowerCase()} coverage` }), label: p.label, printed: p.cite.printed_page })),
     articles: ARTICLES.filter((a) => a.topics.includes(t.id)).sort((a, b) => b.date.localeCompare(a.date) || a.outlet.localeCompare(b.outlet)),
   }))
+  const claims = reviewedClaims().map((c) => ({ ...c,
+    n: src.mark(c.budget.cite, { id: `claim-${c.id}`, label: 'a news figure' }),
+    articles: c.sources.flatMap((x) => { const a = ARTICLES.find((y) => y.id === x.article); return a ? [{ ...a, quote: x.quote }] : [] }) }))
   const deadlineMark = src.mark(deadlines.cite, { id: 'take-part-deadline', label: 'the legal deadlines' })
 
   const blocks = sectionRows.map((r) => ({ key: r.section, letter: r.section, label: r.name, short: r.short, value: r.proposed2027, levy: r.taxRate2027 > 0 }))
@@ -178,6 +183,7 @@ export default async function Overview() {
           The topics local coverage leads with. Figures come from the budget documents, not from the stories; headlines link to each outlet.
         </p>
         <InTheNews topics={topics} />
+        <FindInBudget claims={claims} />
       </section>
 
       <section aria-labelledby="take-part" className="mt-16 grid gap-10 lg:grid-cols-12 lg:gap-0">

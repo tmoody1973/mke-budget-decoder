@@ -1,6 +1,6 @@
 # 09 — News coverage and taking part
 
-Plan agreed with Tarik, 2026-09-23. Status: (1) live; (2) built 2026-09-23 (`lib/civic/news.ts`, `lib/db/news.ts`; article topic tags await Tarik's review). Built in this order: (1) Take part calendar, (2) "What's in the news" topic cards, (3) "Find it in the budget" claims list, (4) topic questions feed the P3 chat.
+Plan agreed with Tarik, 2026-09-23. Status: (1) live; (2) built 2026-09-23 (`lib/civic/news.ts`, `lib/db/news.ts`; article topic tags await Tarik's review); (3) built 2026-09-24, 11 claims in `pipeline/data/news_claims.yaml`, page-checked and approved by Tarik. Built in this order: (1) Take part calendar, (2) "What's in the news" topic cards, (3) "Find it in the budget" claims list, (4) topic questions feed the P3 chat.
 
 ## Sources read (2026-09-23)
 
