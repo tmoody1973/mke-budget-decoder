@@ -48,7 +48,7 @@ export async function GET(req: Request) {
           {Array.from({ length: 34 }, (_, i) => <div key={i} style={{ width: (i * 7) % 3 + 2, marginRight: 4, background: C.ink }} />)}
         </div>
       </div>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'absolute', right: 318, top: 452, width: ask ? 172 : 150, height: ask ? 172 : 150, borderRadius: 86, background: C.ink, color: C.band, transform: 'rotate(-10deg)', fontSize: ask ? 38 : 34, fontWeight: 800, lineHeight: 1, textAlign: 'center' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'absolute', right: 318, top: 452, width: ask ? 172 : 150, height: ask ? 172 : 150, borderRadius: 86, background: C.ink, color: C.band, transform: 'rotate(-10deg)', fontSize: ask ? 35 : 34, fontWeight: 800, lineHeight: 1, textAlign: 'center' }}>
         {ask ? 'Ask it anything' : 'What’s yours?'}
       </div>
 
