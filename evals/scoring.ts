@@ -10,6 +10,7 @@ import { createBudgetGuide } from '@/lib/agent'
 export type Case = { id: string; q: string; expected_figures?: string[]; must_include?: string[]; must_not?: string[] }
 export type Judgment = { include: { item: string; met: boolean }[]; not: { item: string; violated: boolean }[]; note: string }
 const JUDGE = 'claude-haiku-4-5-20251001'
+export const GOLDEN_DATASET = 'Golden questions'
 
 // $ per million tokens: input, cache write, cache read, output (Anthropic list prices and OpenRouter's
 // model list, 2026-09-23). Unknown cache pricing is charged as full input, an upper bound.
