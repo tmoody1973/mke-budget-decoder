@@ -43,20 +43,24 @@ export type AddressMatch = {
   parcels: number // how many parcels share this address
 }
 
-/** Up to `limit` parcels that look like the typed address: exact house-number matches first,
- *  then the nearest numbers on the best-matching street. Typo-tolerant (pg_trgm word similarity). */
+/** Up to `limit` parcels that look like the typed address: the typed direction first, then exact
+ *  house-number matches, then the nearest numbers on the best-matching street. Typo-tolerant (pg_trgm word similarity). */
 export async function searchAddresses(db: Db, input: string, limit = 8): Promise<AddressMatch[]> {
   const { houseNr, street } = normalizeAddress(input)
   if (street.length < 3) return []
+  // A typed direction outranks an exact house number: '3120 N 48th St' must not lead with 3120 S 48th St.
+  const first = street.split(' ')[0]
+  const dir = first in DIRECTIONS && street.includes(' ') ? first : null
   // Repeated addresses (condo units) collapse to one row: 1300 N Prospect Av has 312 parcels.
   const rows = await db.execute(sql`
     select min(taxkey) as taxkey, count(*)::int as n, house_nr_lo, house_nr_hi, house_nr_sfx, sdir, street, sttype,
            (${houseNr}::int is not null and ${houseNr}::int between house_nr_lo and house_nr_hi) as exact,
+           (${dir}::text is null or sdir = ${dir}::text) as dir_ok,
            max(word_similarity(${street}, address)) as sim
     from parcels
     where ${street} <% address
     group by house_nr_lo, house_nr_hi, house_nr_sfx, sdir, street, sttype
-    order by exact desc, sim desc, abs(house_nr_lo - coalesce(${houseNr}::int, house_nr_lo)), house_nr_lo
+    order by dir_ok desc, exact desc, sim desc, abs(house_nr_lo - coalesce(${houseNr}::int, house_nr_lo)), house_nr_lo
     limit ${limit}`)
   return (rows.rows as Record<string, string | number | boolean | null>[]).map((r) => {
     const num = r.house_nr_hi !== r.house_nr_lo ? `${r.house_nr_lo}-${r.house_nr_hi}` : String(r.house_nr_lo)
