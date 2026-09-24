@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { computeReceipt } from './receipt'
+import { computeReceipt, feeChanges } from './receipt'
 import { RATES } from './receipt.fixture'
 
 const line = (r: ReturnType<typeof computeReceipt>, key: string) => {
@@ -71,5 +71,15 @@ describe('defaults and labels', () => {
     const r = computeReceipt({ assessed2026: 200_000, assessed2025: 188_000, units: 1, cityGarbage: true,
       frontageFt: 40, extraCarts: 2, view: 'owner' }, RATES)
     expect([line(r, 'extra_carts').c2026, line(r, 'extra_carts').c2027]).toEqual([16248, 16736])
+  })
+})
+
+describe('feeChanges: ready-made changes for the chat (principle 1)', () => {
+  it('garbage +$8.20, and the typical 40-foot property for the per-foot fees (p.141)', () => {
+    const f = feeChanges(RATES.fees)
+    expect(f.solid_waste).toMatchObject({ change: 8.2, percentChange: 3 })
+    expect(f.snow_ice.typicalProperty).toEqual({ frontageFeet: 40, page: '141', cost2026: 47.6, cost2027: 49.2 })
+    expect(f.street_lighting.typicalProperty).toMatchObject({ cost2026: 44.8, cost2027: 46.4 })
+    expect(f.solid_waste).not.toHaveProperty('typicalProperty')
   })
 })

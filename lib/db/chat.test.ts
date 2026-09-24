@@ -5,7 +5,7 @@ import { drizzle } from 'drizzle-orm/node-postgres'
 import { Pool } from 'pg'
 import { afterAll, describe, expect, it } from 'vitest'
 
-import { findBudgetFacts, getBudgetSections, getCapitalProjects, getDepartmentBreakdown, getPerformanceMeasures, getPositionChanges, getRevenues, lookupGlossary, searchBudgetLines } from './chat'
+import { findBudgetFacts, getBudgetSections, getRevenueLineByFund, getCapitalProjects, getDepartmentBreakdown, getPerformanceMeasures, getPositionChanges, getRevenues, lookupGlossary, searchBudgetLines } from './chat'
 import * as s from './schema'
 
 config({ path: '.env.local' })
@@ -51,13 +51,24 @@ describe.skipIf(!url)('chat lookups, second set (Neon)', () => {
     expect([a.rate2027, a.levy2027]).toEqual([3.05, 143_688_740])
     expect([c.budget2026, c.budget2027, d.budget2027]).toEqual([236_708_867, 316_607_345, 326_623_735])
     expect(secs.at(-1)!.section).toBe('TOTAL')
+    // Changes and shares come with the lookup (principle 1): debt +$54,381,592; section shares sum to 100%.
+    expect([d.budgetChange, d.budget2026]).toEqual([54_381_592, 272_242_143])
+    const shares = secs.filter((x) => /^[A-Z]$/.test(x.section)).reduce((t, x) => t + (x.levySharePercent2027 ?? 0), 0)
+    expect(Math.abs(shares - 100)).toBeLessThan(0.5)
   }, 30_000)
 
   it('revenues: parking citations and the GCP requested total', async () => {
     const t = await getRevenues(db, VERSION, 'transportation-fund')
-    expect(t.find((r) => r.line === 'Parking Citation Revenue')).toMatchObject({ adopted2026: 14_000_000, requested2027: 18_000_000, proposed2027: 21_000_000 })
+    expect(t.find((r) => r.line === 'Parking Citation Revenue')).toMatchObject({ adopted2026: 14_000_000, requested2027: 18_000_000, proposed2027: 21_000_000,
+      changeFromAdopted: 7_000_000, changeFromRequest: 3_000_000 })
     const g = await getRevenues(db, VERSION, 'general')
     expect(g.some((r) => r.requested2027 === 878_902_850)).toBe(true) // G2
+  }, 30_000)
+
+  it('sales tax split is printed: general fund p.160, pensions p.163 (no subtraction needed)', async () => {
+    const rows = await getRevenueLineByFund(db, VERSION, 'Local Sales Tax')
+    expect(rows.find((r) => r.fund === 'general')?.proposed2027).toBe(58_839_110)
+    expect(rows.find((r) => r.fund === 'employee-retirement')).toMatchObject({ proposed2027: 159_360_890, cite: { printed_page: '163' } })
   }, 30_000)
 
   it('911 position changes keep the document reason', async () => {

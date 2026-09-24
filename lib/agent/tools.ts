@@ -6,10 +6,11 @@ import { z } from 'zod'
 import { BUDGET_VERSION, getDb } from '@/lib/db/client'
 import { EVENTS } from '@/lib/civic/events'
 import {
-  findBudgetFacts, getBudgetSections as sections, getCapitalProjects as capital, getDepartmentBreakdown as breakdown, getPerformanceMeasures as measures,
+  findBudgetFacts, getBudgetSections as sections, getRevenueLineByFund, getCapitalProjects as capital, getDepartmentBreakdown as breakdown, getPerformanceMeasures as measures,
   getPositionChanges as positions, getRevenues as revenues, lookupGlossary as glossary, searchBudgetLines as lines,
 } from '@/lib/db/chat'
 import { getReceiptRates } from '@/lib/db/receipt'
+import { feeChanges } from '@/lib/receipt'
 import { receiptFromBody } from '@/lib/receipt-request'
 import { getBudgetFact, getDepartmentTotals, getHeadline } from '@/lib/db/overview'
 import { searchBudgetText as search } from '@/lib/db/search'
@@ -43,6 +44,7 @@ export const getDepartments = createTool({
 })
 
 const OPS = {
+  sum: (a: number, b: number) => a + b,
   difference: (a: number, b: number) => b - a,
   percent_change: (a: number, b: number) => ((b - a) / a) * 100,
   share: (a: number, b: number) => (a / b) * 100,
@@ -52,11 +54,11 @@ const OPS = {
 export const calculate = createTool({
   id: 'calculate',
   description:
-    'Exact arithmetic on figures copied from other tool results, for anything a lookup does not already give (department and line changes come with the lookups). difference = b - a; percent_change = (b - a) / a * 100; share = a / b * 100 (a as a percent of b); per = a / b. Use it for every change, percent or share you mention.',
-  inputSchema: z.object({ op: z.enum(['difference', 'percent_change', 'share', 'per']), a: z.number(), b: z.number() }),
+    'Exact arithmetic on figures copied from other tool results, for anything a lookup does not already give (department and line changes come with the lookups). sum = a + b (to combine two amounts or two shares); difference = b - a; percent_change = (b - a) / a * 100; share = a / b * 100 (a as a percent of b); per = a / b. Use it for every change, percent or share you mention.',
+  inputSchema: z.object({ op: z.enum(['sum', 'difference', 'percent_change', 'share', 'per']), a: z.number(), b: z.number() }),
   execute: async ({ op, a, b }) => {
     if ((op === 'percent_change' && a === 0) || ((op === 'share' || op === 'per') && b === 0)) return { error: 'division by zero' }
-    return { op, a, b, result: Number(OPS[op](a, b).toFixed(op === 'difference' ? 2 : 4)) }
+    return { op, a, b, result: Number(OPS[op](a, b).toFixed(op === 'difference' || op === 'sum' ? 2 : 4)) }
   },
 })
 
@@ -86,9 +88,14 @@ export const searchBudgetText = createTool({
 export const getBudgetFacts = createTool({
   id: 'getBudgetFacts',
   description:
-    'Human-reviewed facts from the budget on topics people ask about: Act 12 (the sales tax, school resource officers), police recruit classes, State Shared Revenue, the Tax Stabilization Fund withdrawal, cuts from department requests, the Expenditure Restraint program, the resident survey, the legal deadlines. Prefer these over searchBudgetText when one matches. Render as cited quotes.',
+    'Human-reviewed facts from the budget on topics people ask about: Act 12 (the sales tax, school resource officers), police recruit classes, State Shared Revenue, the Tax Stabilization Fund withdrawal, cuts from department requests, the Expenditure Restraint program, the resident survey, the legal deadlines. Prefer these over searchBudgetText when one matches. For the sales tax it also returns salesTaxByFund, the printed amount going to the general fund and to pensions; quote those. Render as cited quotes.',
   inputSchema: z.object({ query: z.string().min(2).describe('Topic words, e.g. "Act 12 police"') }),
-  execute: async ({ query }) => ({ facts: await findBudgetFacts(getDb(), BUDGET_VERSION, query) }),
+  execute: async ({ query }) => {
+    const facts = await findBudgetFacts(getDb(), BUDGET_VERSION, query)
+    // The sales tax split is printed in two revenue tables; attach both so the chat never subtracts it.
+    const salesTax = facts.some((f) => f.topic === 'sales_tax') ? await getRevenueLineByFund(getDb(), BUDGET_VERSION, 'Local Sales Tax') : undefined
+    return { facts, ...(salesTax?.length ? { salesTaxByFund: salesTax } : {}) }
+  },
 })
 
 export const lookupGlossary = createTool({
@@ -111,7 +118,7 @@ export const getHearingCalendar = createTool({
 export const getBudgetSections = createTool({
   id: 'getBudgetSections',
   description:
-    'Every budget section for 2026 adopted and 2027 proposed (Summary p.7): general city purposes, pensions, capital improvements, city debt (borrowing costs), contingent fund, Transportation Fund, grants, Water Works, sewer and others, with each section\'s property tax levy and its share of the tax rate per $1,000 of assessed value. Use it for "where does my property tax go", levy splits, capital budget and debt totals, and Water Works. Renders as a cited table.',
+    'Every budget section for 2026 adopted and 2027 proposed (Summary p.7): general city purposes, pensions, capital improvements, city debt (borrowing costs), contingent fund, Transportation Fund, grants, Water Works, sewer and others, with each section\'s property tax levy and its share of the tax rate per $1,000 of assessed value. Each section carries budgetChange, levyChange, rateChange and levySharePercent2027 (its share of the total levy); quote these, and use calculate only to add shares together. Use it for "where does my property tax go", levy splits, capital budget and debt totals, and Water Works. Renders as a cited table.',
   inputSchema: z.object({}),
   execute: async () => ({ sections: await sections(getDb(), BUDGET_VERSION), facts: await factsFor('borrowing surge capital facility debt') }),
 })
@@ -119,7 +126,7 @@ export const getBudgetSections = createTool({
 export const getRevenues = createTool({
   id: 'getRevenues',
   description:
-    'Revenue by fund, four stages (2026 adopted, 2027 requested, 2027 proposed): "general" = general city purposes sources, their total (requested vs proposed) and the Tax Stabilization Fund withdrawal (reserves); "transportation-fund" = parking citations, permits, meters, towing, streetcar, scooters (p.190); "sewer-maintenance-fund"; "employee-retirement". Renders as a cited table.',
+    'Revenue by fund, four stages (2026 adopted, 2027 requested, 2027 proposed): "general" = general city purposes sources, their total (requested vs proposed) and the Tax Stabilization Fund withdrawal (reserves); "transportation-fund" = parking citations, permits, meters, towing, streetcar, scooters (p.190); "sewer-maintenance-fund"; "employee-retirement". Each line carries changeFromAdopted and changeFromRequest; quote them. Renders as a cited table.',
   inputSchema: z.object({ fund: z.enum(['general', 'transportation-fund', 'sewer-maintenance-fund', 'employee-retirement']) }),
   execute: async ({ fund }) => ({ fund, rows: await revenues(getDb(), BUDGET_VERSION, fund),
     facts: fund === 'general' ? await factsFor('reserves withdrawal stabilization amortization requested cut') : await factsFor(fund.replace(/-/g, ' ')) }),
@@ -127,9 +134,9 @@ export const getRevenues = createTool({
 
 export const getCityFees = createTool({
   id: 'getCityFees',
-  description: 'City fees a household pays, 2026 and 2027 proposed: solid waste (garbage) per home, extra garbage cart, snow and ice and street lighting per foot of frontage, average household sewer and stormwater (p.159, 203). Renders as a cited table.',
+  description: 'City fees a household pays, 2026 and 2027 proposed: solid waste (garbage) per home, extra garbage cart, snow and ice and street lighting per foot of frontage, average household sewer and stormwater (p.159, 203). Each fee carries its change and percentChange; the per-foot fees also carry typicalProperty, the cost for the typical 40-foot property the budget uses (p.141). Quote these instead of calculating. Renders as a cited table.',
   inputSchema: z.object({}),
-  execute: async () => ({ fees: (await getReceiptRates(getDb(), BUDGET_VERSION)).fees }),
+  execute: async () => ({ fees: feeChanges((await getReceiptRates(getDb(), BUDGET_VERSION)).fees) }),
 })
 
 export const estimateCityCharges = createTool({
