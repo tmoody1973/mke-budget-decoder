@@ -1,6 +1,7 @@
 // CopilotKit runtime (AG-UI) for the chat panel. The Mastra agent runs in this process
 // (MastraAgent.getLocalAgents, docs.copilotkit.ai/mastra/copilot-runtime#local-agents).
 import { MastraAgent } from '@ag-ui/mastra'
+import { after } from 'next/server'
 import { CopilotRuntime, createCopilotRuntimeHandler, InMemoryAgentRunner } from '@copilotkit/runtime/v2'
 
 import { mastra } from '@/lib/agent'
@@ -63,6 +64,8 @@ export async function POST(req: Request) {
     if (lastQuestion(body).length > MAX_QUESTION_CHARS) return reply(body, TOO_LONG_TEXT) // not counted
     const ok = await takeQuestion(getDb(), dailyLimit()).catch(() => true) // a counter failure shouldn't block answers
     if (!ok) return reply(body, LIMIT_TEXT)
+    // Serverless functions pause after responding; send this answer's trace first (Mastra docs).
+    after(() => mastra.observability?.flush())
   }
   return handler(req)
 }

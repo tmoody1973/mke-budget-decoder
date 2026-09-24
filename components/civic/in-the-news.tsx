@@ -3,6 +3,7 @@
 // only; no figure here comes from an article (DESIGN.md ruled blocks, no cards).
 import { AskLink } from '@/components/chat/chat-shell'
 import { Mark } from '@/components/genui/sources'
+import { TrackedLink } from '@/components/site/tracked-link'
 import type { Article } from '@/lib/civic/news'
 import type { TopicFigure } from '@/lib/db/news'
 import { bigDollars, pct } from '@/lib/format'
@@ -50,12 +51,12 @@ export function InTheNews({ topics }: { topics: NewsTopic[] }) {
               ))}.
             </p>
           )}
-          <p className="mt-3"><AskLink question={t.question}>Ask about {t.title.toLowerCase()}</AskLink></p>
+          <p className="mt-3"><AskLink question={t.question} topic={t.id}>Ask about {t.title.toLowerCase()}</AskLink></p>
           <h4 className="mt-4 text-xs font-semibold uppercase tracking-[0.06em] text-ink">Coverage</h4>
           <ul className="mt-1 space-y-2">
             {t.articles.map((a) => (
               <li key={a.id} className="text-sm leading-snug">
-                <a href={a.url} target="_blank" rel="noopener noreferrer" className="text-ref underline underline-offset-2">{a.headline}</a>
+                <TrackedLink event="news_article_opened" outlet={a.outlet} topic={t.id} href={a.url} target="_blank" rel="noopener noreferrer" className="text-ref underline underline-offset-2">{a.headline}</TrackedLink>
                 <span className="block text-ink-soft">{a.outlet} · {fmtDate.format(new Date(`${a.date}T12:00:00Z`))}</span>
               </li>
             ))}

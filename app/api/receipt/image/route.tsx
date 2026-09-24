@@ -15,7 +15,7 @@ type Estimate = Extract<Receipt, { kind: 'estimate' }>
 
 // Hex twins of the app/globals.css tokens (the image renderer cannot read CSS variables).
 const C = { ink: '#1a2b49', inkSoft: '#404d66', band: '#fdbe45', bandDeep: '#df911a', paper: '#fdfaf1' }
-const APP_URL = 'mke-budget-decoder.vercel.app'
+const APP_URL = 'mkebudget.app'
 const W = 1080, H = 1350, PAPER_W = 800
 
 const logo = readFile(join(process.cwd(), 'assets/logo-160.png')).then((b) => `data:image/png;base64,${b.toString('base64')}`)

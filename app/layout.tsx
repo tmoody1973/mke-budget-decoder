@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Libre_Franklin } from "next/font/google";
 
+import { Analytics } from "@vercel/analytics/next";
+
 import { ChatShell } from "@/components/chat/chat-shell";
 import { SiteFooter } from "@/components/site/site-footer";
 import { SiteHeader } from "@/components/site/site-header";
@@ -16,6 +18,7 @@ const franklin = Libre_Franklin({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://www.mkebudget.app"),
   title: "Milwaukee Budget Decoder",
   description:
     "The City of Milwaukee 2027 proposed budget, explained, with every number cited to its page.",
@@ -31,6 +34,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           <SiteFooter />
         </ChatShell>
         <SourceDrawer />
+        <Analytics />
       </body>
     </html>
   );

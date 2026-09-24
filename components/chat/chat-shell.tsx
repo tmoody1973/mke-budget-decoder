@@ -8,6 +8,8 @@ import { createContext, useCallback, useContext, useMemo, useState } from 'react
 
 import { DataRenderers } from './data-renderers'
 import { TextRenderers } from './text-renderers'
+import { track } from '@/lib/analytics'
+
 import { Renderers } from './tool-renderers'
 
 const AGENT = 'budgetGuide'
@@ -84,7 +86,7 @@ export function AskButton() {
   const { enabled, open, setOpen } = useAsk()
   if (!enabled) return null
   return (
-    <button type="button" onClick={() => setOpen(!open)} aria-expanded={open}
+    <button type="button" onClick={() => { if (!open) track('chat_opened', { from: 'header' }); setOpen(!open) }} aria-expanded={open}
       className="border-2 border-ink px-3 py-1.5 text-sm font-semibold text-ink hover:border-ref hover:text-ref">
       {open ? 'Close the chat' : <>Ask<span className="hidden sm:inline"> about the budget</span></>}
     </button>
@@ -92,11 +94,11 @@ export function AskButton() {
 }
 
 /** "Ask about this": opens the panel and sends a prepared question. */
-export function AskLink({ question, children }: { question: string; children: React.ReactNode }) {
+export function AskLink({ question, topic, children }: { question: string; topic: string; children: React.ReactNode }) {
   const { enabled, ask } = useAsk()
   if (!enabled) return null
   return (
-    <button type="button" onClick={() => ask(question)} className="text-sm font-semibold text-ref underline underline-offset-4">
+    <button type="button" onClick={() => { track('chat_topic_question', { topic }); ask(question) }} className="text-sm font-semibold text-ref underline underline-offset-4">
       {children}
     </button>
   )

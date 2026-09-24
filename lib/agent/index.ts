@@ -2,6 +2,8 @@
 // app/api/copilotkit. The Mastra record key `budgetGuide` is the agent name the chat provider uses.
 import { Agent } from '@mastra/core/agent'
 import { Mastra } from '@mastra/core'
+import { BraintrustExporter } from '@mastra/braintrust'
+import { Observability } from '@mastra/observability'
 
 import { systemPrompt } from './system-prompt'
 import {
@@ -47,4 +49,11 @@ export const createBudgetGuide = (model: string = CHAT_MODEL) => new Agent({
   },
 })
 
-export const mastra = new Mastra({ agents: { budgetGuide: createBudgetGuide() } })
+// Traces to Braintrust (D22): every question's model calls, lookups, tokens and timing, private to
+// the project. Off unless BRAINTRUST_API_KEY is set; the chat route flushes after each answer.
+export const BRAINTRUST_PROJECT = 'milwaukee-budget-decoder'
+const observability = process.env.BRAINTRUST_API_KEY
+  ? new Observability({ configs: { braintrust: { serviceName: BRAINTRUST_PROJECT, exporters: [new BraintrustExporter({ projectName: BRAINTRUST_PROJECT })] } } })
+  : undefined
+
+export const mastra = new Mastra({ agents: { budgetGuide: createBudgetGuide() }, ...(observability ? { observability } : {}) })
