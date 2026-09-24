@@ -184,3 +184,72 @@ a { text-underline-offset: 0.2em; text-decoration-thickness: 1px; }
 html { scroll-padding-top: 4.5rem; }
 /* The Overview's header adds a row of section links from 768px. */
 @media (min-width: 48rem) { html:has(nav[aria-label="Sections of this page"]) { scroll-padding-top: 7rem; } }
+
+/* ---------------------------------------------------------------- chat panel (P3, DESIGN.md)
+   CopilotKit's v2 chat reads shadcn tokens under [data-copilotkit]; point them at the site's ink and
+   paper with square corners, then restyle the parts that default to bubbles and pills. Scoped to the
+   panel (.budget-chat) so nothing else on the site changes. */
+.budget-chat [data-copilotkit] {
+  --background: var(--paper);
+  --foreground: var(--ink);
+  --card: var(--paper);
+  --card-foreground: var(--ink);
+  --popover: var(--paper);
+  --popover-foreground: var(--ink);
+  --primary: var(--ink);
+  --primary-foreground: var(--paper);
+  --secondary: var(--paper);
+  --secondary-foreground: var(--ink);
+  --muted: var(--paper);
+  --muted-foreground: var(--ink-soft);
+  --accent: var(--mark);
+  --accent-foreground: var(--ink);
+  --border: var(--rule);
+  --input: var(--ink);
+  --ring: var(--ref);
+  --radius: 0;
+  font-family: var(--font-sans);
+  color: var(--ink);
+}
+.budget-chat [data-copilotkit] * { border-radius: 0; }
+
+/* The welcome line reads as a lead sentence, left-aligned like the rest of the site. */
+.budget-chat [data-testid="copilot-welcome-screen"] { align-items: stretch; justify-content: flex-start; padding-top: 1.25rem; }
+.budget-chat [data-testid="copilot-welcome-screen"] h1 { text-align: left; font-size: 1rem; font-weight: 600; line-height: 1.5; }
+
+/* Suggested questions: a ruled list of links, not chips. */
+.budget-chat [data-testid="copilot-suggestions"] { flex-direction: column; align-items: stretch; gap: 0; padding: 0; }
+.budget-chat [data-testid="copilot-suggestion"] {
+  height: auto; justify-content: flex-start; padding: 0.7rem 0; border: 0; border-bottom: 1px solid var(--rule);
+  background: transparent; box-shadow: none; color: var(--ref); font-weight: 600;
+  text-decoration: underline; text-underline-offset: 4px;
+}
+.budget-chat [data-testid="copilot-suggestion"]:hover { color: var(--ink); background: transparent; }
+
+/* Your question: a bold line under a rule, like a question in a printed Q&A, not a bubble. */
+.budget-chat [data-testid="copilot-user-message"] { align-items: stretch; padding-top: 1.5rem; }
+.budget-chat [data-testid="copilot-user-message"] > div:first-child {
+  max-width: none; background: transparent; padding: 0.6rem 0 0; border-top: 2px solid var(--ink);
+  color: var(--ink); font-weight: 600; font-size: 1.05rem; line-height: 1.45;
+}
+.budget-chat [data-testid="copilot-assistant-message"] { color: var(--ink); line-height: 1.625; }
+
+/* The input: the site's underline field and a square ink send button; no file attachments here. */
+.budget-chat [data-testid="copilot-chat-input"] {
+  background: var(--paper); border: 0; border-bottom: 2px solid var(--ink); box-shadow: none;
+}
+.budget-chat [data-testid="copilot-chat-input"]:focus-within { border-bottom-color: var(--ref); }
+.budget-chat [data-testid="copilot-chat-textarea"] { caret-color: var(--ref); }
+.budget-chat [data-testid="copilot-chat-textarea"]::placeholder { color: var(--ink-soft); }
+.budget-chat [data-testid="copilot-add-menu-button"] { display: none; }
+.budget-chat [data-testid="copilot-send-button"] { background: var(--ink); color: var(--paper); }
+.budget-chat [data-testid="copilot-send-button"]:hover:not(:disabled) { background: var(--ref); }
+.budget-chat [data-testid="copilot-send-button"]:disabled { background: var(--rule); color: var(--ink-soft); opacity: 1; }
+.budget-chat [data-testid="copilot-welcome-screen"] div:has(> [data-testid="copilot-suggestions"]) { justify-content: stretch; width: 100%; }
+.budget-chat [data-testid="copilot-suggestions"] { width: 100%; margin-left: 0; margin-right: 0; }
+/* With the attach button hidden, its grid column and gap go too, so the text starts at the rule. */
+.budget-chat [data-testid="copilot-chat-input"] > div { column-gap: 0; padding-left: 0; padding-right: 0; }
+.budget-chat [data-testid="copilot-chat-input"] > div > div:has(> [data-testid="copilot-add-menu-button"]) { display: none; }
+.budget-chat [data-testid="copilot-send-button"] { margin-left: 0.75rem; }
+.budget-chat [data-testid="copilot-welcome-screen"] div:has(> [data-testid="copilot-chat-input"]) { padding-left: 0; padding-right: 0; }
+.budget-chat [data-testid="copilot-chat-textarea"] { padding-left: 0; }

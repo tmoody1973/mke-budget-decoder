@@ -292,6 +292,13 @@ Square corners throughout (0px). Buttons, the segmented control, the suggestion 
 ### Label Bars (in tables)
 - Revenue and section tables draw a 6px bar under each row label: an ink fill on a rule-gray track, proportional to the largest 2027 proposed row, noted in the unit line ("bars show 2027 proposed").
 
+### Chat Panel (Ask about the budget)
+- **Where:** a right-hand column beside the page from 1280px, full screen on phones (D19). CopilotKit's chat, re-skinned in `app/globals.css` under `.budget-chat`: its shadcn tokens point at paper and ink with `--radius: 0`, and the font is Libre Franklin.
+- **Question:** a bold ink line under a 2px ink rule, like a question in a printed Q&A. No bubble, no right alignment.
+- **Answer:** body text in ink; cited cards open with a 2px ink rule and number their own sources from 1.
+- **Input:** the underline field (2px ink rule, reference blue on focus, blue caret) with a square ink send button that turns reference blue on hover. No file attachments.
+- **Suggestions:** a ruled list of semibold reference-blue links, one per row, left-aligned with the input.
+
 ### Footnote Marks
 - **Source mark:** a numbered superscript at 0.7em, semibold, reference blue, linking to `#fn-N`.
 - **Note mark:** a lettered superscript at 0.7em, italic, soft ink, linking to `#note-x`.
