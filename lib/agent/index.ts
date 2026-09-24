@@ -51,7 +51,7 @@ export const createBudgetGuide = (model: string = CHAT_MODEL) => new Agent({
 
 // Traces to Braintrust (D22): every question's model calls, lookups, tokens and timing, private to
 // the project. Off unless BRAINTRUST_API_KEY is set; the chat route flushes after each answer.
-export const BRAINTRUST_PROJECT = 'milwaukee-budget-decoder'
+export const BRAINTRUST_PROJECT = 'MKE Budget Decoder'
 const observability = process.env.BRAINTRUST_API_KEY
   ? new Observability({ configs: { braintrust: { serviceName: BRAINTRUST_PROJECT, exporters: [new BraintrustExporter({ projectName: BRAINTRUST_PROJECT })] } } })
   : undefined

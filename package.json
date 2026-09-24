@@ -17,7 +17,7 @@
     "mprop:refresh": "cd pipeline && uv run python -m extract.mprop && cd .. && tsx scripts/load-parcels.ts",
     "db:load-parcels": "tsx scripts/load-parcels.ts",
     "evals": "tsx evals/run.mts",
-    "evals:bt": "tsx evals/budget.eval.ts"
+    "evals:bt": "tsx evals/budget.eval.mts"
   },
   "dependencies": {
     "@ag-ui/mastra": "1.1.4",

@@ -15,6 +15,6 @@ type Events = {
 }
 
 export function track<E extends keyof Events>(event: E, props: Events[E]) {
-  if (!process.env.NEXT_PUBLIC_POSTHOG_KEY) return
+  if (!process.env.NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN) return
   posthog.capture(event, props)
 }

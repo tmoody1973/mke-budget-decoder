@@ -1,4 +1,4 @@
-// Shared by the local answer check (evals/run.mts) and the Braintrust eval (evals/budget.eval.ts), so
+// Shared by the local answer check (evals/run.mts) and the Braintrust eval (evals/budget.eval.mts), so
 // both grade the same way: required figures checked in code, required and forbidden ideas graded by a
 // small model, and the cost of each answer from the agent's own token counts.
 import { readFileSync } from 'node:fs'
