@@ -1,18 +1,31 @@
 // Answer check for the budget chat (docs/05, docs/03 §evals): runs every case in evals/golden.yaml
 // through the real agent, checks required figures in code, grades must_include / must_not with a
 // small model, and writes evals/results/<stamp>.json plus a table. Costs roughly $1-1.50 a run.
-// Usage: pnpm evals            (all cases)
-//        pnpm evals A10 B6     (only ids starting with these)
+// Usage: pnpm evals                       (all cases, production model)
+//        pnpm evals A10 B6                (only ids starting with these)
+//        EVAL_MODEL=openrouter/deepseek/deepseek-v4-flash pnpm evals   (same agent, another model)
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { config } from 'dotenv'
 import { parse } from 'yaml'
 
 config({ path: '.env.local' })
-const { mastra } = await import('@/lib/agent')
+const { CHAT_MODEL, createBudgetGuide } = await import('@/lib/agent')
+const MODEL = process.env.EVAL_MODEL ?? CHAT_MODEL
+const agent = createBudgetGuide(MODEL)
 
 type Case = { id: string; q: string; expected_figures?: string[]; must_include?: string[]; must_not?: string[] }
 const JUDGE = 'claude-haiku-4-5-20251001'
-const PRICE = { in: 2, write: 2.5, read: 0.2, out: 10 } // Claude Sonnet 5, $ per million tokens
+// $ per million tokens: input, cache write, cache read, output (Anthropic list prices and OpenRouter's
+// model list, 2026-09-23). Unknown cache pricing is charged as full input, an upper bound.
+const PRICES: Record<string, { in: number; write: number; read: number; out: number }> = {
+  'anthropic/claude-sonnet-5': { in: 2, write: 2.5, read: 0.2, out: 10 },
+  'anthropic/claude-haiku-4-5': { in: 1, write: 1.25, read: 0.1, out: 5 },
+  'openrouter/openai/gpt-5.6-luna': { in: 0.2, write: 0.2, read: 0.2, out: 1.2 },
+  'openrouter/deepseek/deepseek-v4-flash': { in: 0.075, write: 0.075, read: 0.075, out: 0.15 },
+  'openrouter/qwen/qwen3.8-flash': { in: 0.15, write: 0.15, read: 0.15, out: 0.47 },
+}
+const PRICE = PRICES[MODEL]
+if (!PRICE) throw new Error(`No price for ${MODEL}; add it to PRICES`)
 
 const only = process.argv.slice(2)
 const cases = (parse(readFileSync('evals/golden.yaml', 'utf8')) as Case[]).filter((c) => !only.length || only.some((p) => c.id.startsWith(p)))
@@ -58,7 +71,7 @@ Reply with JSON only: {"include":[{"item":"...","met":true}],"not":[{"item":"...
 async function runCase(c: Case) {
   const t0 = Date.now()
   try {
-    const r: any = await mastra.getAgent('budgetGuide').generate(c.q)
+    const r: any = await agent.generate(c.q)
     const steps = r.steps ?? []
     const toolNames = steps.flatMap((s: any) => (s.toolCalls ?? []).map((t: any) => t.payload?.toolName ?? t.toolName))
     const toolData = JSON.stringify(steps.flatMap((s: any) => (s.toolResults ?? []).map((t: any) => t.payload?.result ?? t.result)))
@@ -66,7 +79,11 @@ async function runCase(c: Case) {
     const figures = (c.expected_figures ?? []).map((f) => ({ f, found: hasFigure(hay, f) }))
     const j = await judge(c, r.text, toolData)
     let cost = 0
-    for (const s of steps) { const u = s.usage?.raw?.raw ?? {}; cost += ((u.input_tokens ?? 0) * PRICE.in + (u.cache_creation_input_tokens ?? 0) * PRICE.write + (u.cache_read_input_tokens ?? 0) * PRICE.read + (u.output_tokens ?? 0) * PRICE.out) / 1e6 }
+    // Provider-neutral usage: inputTokens includes cached reads and writes on every provider.
+    for (const s of steps) {
+      const u = s.usage ?? {}, read = u.cachedInputTokens ?? 0, write = u.cacheCreationInputTokens ?? 0
+      cost += (((u.inputTokens ?? 0) - read - write) * PRICE.in + write * PRICE.write + read * PRICE.read + (u.outputTokens ?? 0) * PRICE.out) / 1e6
+    }
     const pass = figures.every((x) => x.found) && j.include.every((x) => x.met) && j.not.every((x) => !x.violated)
     return { id: c.id, q: c.q, pass, figures, include: j.include, not: j.not, note: j.note, tools: toolNames, cents: +(cost * 100).toFixed(2), secs: Math.round((Date.now() - t0) / 1000), text: r.text }
   } catch (e) {
@@ -79,7 +96,7 @@ for (let i = 0; i < cases.length; i += 3) results.push(...(await Promise.all(cas
 
 mkdirSync('evals/results', { recursive: true })
 const stamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19)
-writeFileSync(`evals/results/${stamp}.json`, JSON.stringify(results, null, 2))
+writeFileSync(`evals/results/${stamp}.json`, JSON.stringify({ model: MODEL, results }, null, 2))
 for (const r of results) {
   const miss = [...(('figures' in r && r.figures) || []).filter((x) => !x.found).map((x) => `fig:${x.f}`),
     ...(('include' in r && r.include) || []).filter((x) => !x.met).map((x) => `needs:${x.item}`),
@@ -87,5 +104,5 @@ for (const r of results) {
   console.log(`${r.pass ? 'PASS' : 'FAIL'}  ${r.id.padEnd(24)} ${String(r.cents).padStart(5)}c  [${r.tools.join(',')}]${miss.length ? `\n      ${miss.join('\n      ')}` : ''}`)
 }
 const passed = results.filter((r) => r.pass).length, cents = results.reduce((a, r) => a + r.cents, 0)
-console.log(`\n${passed}/${results.length} passed · ${(cents / results.length).toFixed(2)}c average per question · $${(cents / 100).toFixed(2)} total · evals/results/${stamp}.json`)
+console.log(`\n${MODEL}: ${passed}/${results.length} passed · ${(cents / results.length).toFixed(2)}c average per question · $${(cents / 100).toFixed(2)} total · evals/results/${stamp}.json`)
 process.exit(0)

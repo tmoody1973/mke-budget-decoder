@@ -24,7 +24,10 @@ const TOOLS = `<tools>
 Milwaukee Budget Decoder is an independent guide by Tarik Moody, not an official City of Milwaukee website. Its figures were read from the two budget PDFs into a database, checked against the budget's own totals and twenty figures read by hand, and reviewed by a person; the How it works page explains the method and the City Receipt math. For questions about how the figures were checked, say so and point to How it works.
 </this_site>`
 
-const budgetGuide = new Agent({
+export const CHAT_MODEL = 'anthropic/claude-sonnet-5'
+
+/** The budget guide on a given model; the eval runner compares models with everything else equal. */
+export const createBudgetGuide = (model: string = CHAT_MODEL) => new Agent({
   id: 'budgetGuide',
   name: 'Milwaukee Budget Decoder',
   // Marked for Anthropic prompt caching: the tool list and this prompt (~6,500 tokens) are the same on
@@ -34,7 +37,7 @@ const budgetGuide = new Agent({
     content: `${systemPrompt('tool-render')}\n\n${TOOLS}`,
     providerOptions: { anthropic: { cacheControl: { type: 'ephemeral' } } },
   },
-  model: 'anthropic/claude-sonnet-5',
+  model,
   // Per-question ceiling (D20 guardrails): at most 5 rounds of lookups plus the final answer, and
   // about 1,200 words out per model call, so no single question can run up the bill.
   defaultOptions: { maxSteps: 6, modelSettings: { maxOutputTokens: 1600 } },
@@ -44,4 +47,4 @@ const budgetGuide = new Agent({
   },
 })
 
-export const mastra = new Mastra({ agents: { budgetGuide } })
+export const mastra = new Mastra({ agents: { budgetGuide: createBudgetGuide() } })
