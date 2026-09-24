@@ -11,7 +11,7 @@ import type { Cite } from '@/lib/db/schema'
 import { bigDollars, millions } from '@/lib/format'
 import type { Receipt } from '@/lib/receipt'
 
-import { Card, Failed, Pending, parse } from './tool-renderers'
+import { Card, type CardFact, Failed, FactsList, Pending, parse } from './tool-renderers'
 
 type Row = { key: string; label: string; cells: (string | null)[]; cite: Cite; strong?: boolean }
 
@@ -48,12 +48,13 @@ export function DataRenderers() {
     name: 'getBudgetSections', parameters: z.object({}),
     render: ({ status, result }) => {
       if (status !== 'complete') return <Pending what="the budget sections" />
-      const secs = parse<{ sections: { section: string; label: string; cite: Cite; budget2026: number | null; budget2027: number | null; levy2027: number | null; rate2026: number | null; rate2027: number | null }[] }>(result)?.sections
+      const got = parse<{ facts?: CardFact[]; sections: { section: string; label: string; cite: Cite; budget2026: number | null; budget2027: number | null; levy2027: number | null; rate2026: number | null; rate2027: number | null }[] }>(result)
+      const secs = got?.sections
       if (!secs?.length) return <Failed />
       const { src, table } = ChatTable({ head: ['Section', '2026 budget', '2027 budget', '2027 levy', 'Rate / $1,000'], unit: 'Millions of dollars; rate in dollars',
         rows: secs.map((x) => ({ key: `sec-${x.section}`, label: x.section === 'TOTAL' ? 'All sections' : `${x.section}. ${x.label}`, cite: x.cite, strong: x.section === 'TOTAL',
           cells: [m(x.budget2026), m(x.budget2027), x.levy2027 ? m(x.levy2027) : null, x.rate2027 ? `$${x.rate2027.toFixed(2)}` : null] })) })
-      return <Card title="Budget sections: spending, property tax levy and tax rate" sources={src}>{table}</Card>
+      return <Card title="Budget sections: spending, property tax levy and tax rate" sources={src}>{table}<FactsList facts={got?.facts} src={src} /></Card>
     },
   }, [])
 
@@ -61,11 +62,11 @@ export function DataRenderers() {
     name: 'getRevenues', parameters: z.object({ fund: z.string() }),
     render: ({ status, result }) => {
       if (status !== 'complete') return <Pending what="revenue" />
-      const d = parse<{ fund: string; rows: { line: string; isTotal: boolean; adopted2026: number | null; requested2027: number | null; proposed2027: number | null; cite: Cite }[] }>(result)
+      const d = parse<{ fund: string; facts?: CardFact[]; rows: { line: string; isTotal: boolean; adopted2026: number | null; requested2027: number | null; proposed2027: number | null; cite: Cite }[] }>(result)
       if (!d?.rows?.length) return <Failed />
       const { src, table } = ChatTable({ head: ['Revenue', '2026 adopted', '2027 requested', '2027 proposed'], unit: 'Millions of dollars',
         rows: d.rows.map((r, i) => ({ key: `rev-${i}`, label: r.line, cite: r.cite, strong: r.isTotal, cells: [m(r.adopted2026), m(r.requested2027), m(r.proposed2027)] })) })
-      return <Card title={`Revenue: ${d.fund.replace(/-/g, ' ')}`} sources={src}>{table}</Card>
+      return <Card title={`Revenue: ${d.fund.replace(/-/g, ' ')}`} sources={src}>{table}<FactsList facts={d.facts} src={src} /></Card>
     },
   }, [])
 

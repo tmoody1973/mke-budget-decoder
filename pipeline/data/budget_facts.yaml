@@ -118,3 +118,46 @@
   cite: {doc: detailed, pdf_page: 379, printed_page: "500.1", line_no: 23}
   also_cite: [{doc: summary, pdf_page: 197, printed_page: "187", note: "same figure, same brackets, in the Summary of Expenditures table"}]
   reviewed_by: "Tarik (claude-precheck)"
+
+# --- Drafted 2026-09-23 for questions the answer check showed the chat missing (roads, borrowing,
+# new facilities, the debt fund withdrawal, the budget gap). Wording quoted from the Introduction.
+
+- id: roads-hip-2027
+  topic: roads
+  statement: "Reductions to local road investments would also have been necessary if not increased parking permit, citation, and meter fees, which will allow a $6 million transfer from the Transportation Fund for High Impact Paving (HIP). With that transfer, the combined total of investments in the HIP and local road reconstruction line items are now proposed to be $19.2 million, the highest total on record."
+  value: "19200000"
+  unit: dollars_rounded_0.1M
+  cite: {doc: summary, pdf_page: 16, printed_page: "6"}
+  reviewed_by: "Tarik (claude-precheck)"
+
+- id: borrowing-surge-2027
+  topic: borrowing
+  statement: "2027 is the final year of a planned three-year surge in levy-supported general obligation borrowing. The first two years of this surge, along with significant cash financing of capital improvements in 2024, funded public safety radios, a new enterprise resource planning system, and the port cruise dock terminal."
+  value: null
+  unit: null
+  cite: {doc: summary, pdf_page: 15, printed_page: "5"}
+  reviewed_by: "Tarik (claude-precheck)"
+
+- id: capital-new-facilities-2027
+  topic: capital_buildings
+  statement: "This year's capital budget begins funding a new Midtown library branch and continues funding a new municipal services facility in the 30th Street corridor."
+  value: null
+  unit: null
+  cite: {doc: summary, pdf_page: 15, printed_page: "5"}
+  reviewed_by: "Tarik (claude-precheck)"
+
+- id: pdaf-withdrawal-2027
+  topic: reserves
+  statement: "The Public Debt Amortization Fund (PDAF) also continued to increase in 2025, enabling the City to again withdraw $6 million to fund debt service, $3 million more than was assumed in the request."
+  value: "6000000"
+  unit: dollars
+  cite: {doc: summary, pdf_page: 15, printed_page: "5"}
+  reviewed_by: "Tarik (claude-precheck)"
+
+- id: budget-gap-drivers
+  topic: budget_gap
+  statement: "The historic pattern of these gaps can be distilled into five distinct, and recently overlapping, driving factors: 1) State Shared Revenue (SSR) was reduced between the 1990s and 2023. 2) Pension costs were no longer fully covered by the pension fund's investment returns, beginning in 2010. 3) In 2023 pension costs spiked after the discount rate was lowered during the previous five-year stable funding period. 4) The City used $394 million in federal ARPA to close gaps in 2022-2024. 5) Wisconsin Act 12, passed in the summer of 2023, enabled the city to collect a 2% sales tax and increased SSR, but also required the City to increase public safety and pension spending."
+  value: null
+  unit: null
+  cite: {doc: summary, pdf_page: 11, printed_page: "1"}
+  reviewed_by: "Tarik (claude-precheck)"

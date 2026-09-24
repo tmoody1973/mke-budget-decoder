@@ -6,7 +6,8 @@ import { z } from 'zod'
 
 import { DeptSnapshot } from '@/components/genui/budget-tables'
 import { BoxScore, headlineScores, Movers } from '@/components/genui/charts'
-import { CardSources, sourceRegistry, type Sources } from '@/components/genui/sources'
+import { CardSources, Mark, sourceRegistry, type Sources } from '@/components/genui/sources'
+import type { Cite } from '@/lib/db/schema'
 import type { getDepartmentTotals, getHeadline } from '@/lib/db/overview'
 
 type Headline = Awaited<ReturnType<typeof getHeadline>>
@@ -27,6 +28,18 @@ export function Card({ title, sources, children }: { title: string; sources: Sou
       {children}
       <CardSources sources={sources} />
     </figure>
+  )
+}
+
+export type CardFact = { id: string; statement: string; cite: Cite }
+
+/** Reviewed facts that came back with a lookup, quoted under its table with their own source marks. */
+export function FactsList({ facts, src }: { facts?: CardFact[] | null; src: Sources }) {
+  if (!facts?.length) return null
+  return (
+    <ul className="mt-3 space-y-2 border-t border-rule pt-2 text-sm leading-relaxed">
+      {facts.map((f) => <li key={f.id}>{f.statement}<Mark n={src.mark(f.cite, { id: f.id, label: f.id })} /></li>)}
+    </ul>
   )
 }
 

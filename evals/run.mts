@@ -35,6 +35,7 @@ const cases = (parse(readFileSync('evals/golden.yaml', 'utf8')) as Case[]).filte
 function variants(fig: string): string[] {
   const out = new Set([fig.toLowerCase(), fig.replace(/[$,]/g, '').toLowerCase()])
   if (/\.\d{2}$/.test(fig)) out.add(fig.replace(/[$,.]/g, ''))
+  if (/\.\d0$/.test(fig)) out.add(fig.replace(/[$,]/g, '').slice(0, -1)) // stored as 1.8 for $1.80
   if (fig.endsWith('%')) { out.add(`${parseFloat(fig).toFixed(1)}%`); out.add(`${fig.slice(0, -1)} percent`) }
   return [...out]
 }
