@@ -47,6 +47,17 @@ describe.skipIf(!url)('searchAddresses (Neon)', () => {
     expect(res[0].address.startsWith('2401')).toBe(true) // closest to 2400
   })
 
+  it('keeps the typed direction first: N 48th St before an exact number on S 48th St', async () => {
+    const res = await searchAddresses(db, '3120 N 48th St') // 3120 exists on S 48th St, not on N 48th St
+    expect(res[0].address).toMatch(/ N 48TH ST$/)
+    expect(res.findIndex((r) => / S 48TH ST$/.test(r.address))).not.toBe(0)
+  })
+
+  it('without a typed direction, an exact number still ranks first', async () => {
+    const [first] = await searchAddresses(db, '2401 Wisconsin Ave')
+    expect(first.address).toBe('2401 W WISCONSIN AV')
+  })
+
   it('matches a number inside a parcel range', async () => {
     const [r] = (await pool.query(
       'select house_nr_lo, house_nr_hi, sdir, street, taxkey from parcels where house_nr_hi > house_nr_lo + 4 and street is not null limit 1',
