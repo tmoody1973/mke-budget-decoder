@@ -88,10 +88,26 @@ export default async function HowItWorks() {
         figure you plan to use against its source page. The code is public on{' '}
         <a href="https://github.com/tmoody1973/mke-budget-decoder" className="text-ref underline underline-offset-4">GitHub</a>.
       </P>
+      <P>How the budget PDFs become cited answers:</P>
+      <ol className="mt-3 list-decimal space-y-2 pl-6 leading-relaxed text-ink">
+        <li>The city’s two budget PDFs are the only source.</li>
+        <li>A Python program reads their pages once, splitting them into figures (tables and line items) and narrative text.</li>
+        <li>The figures go through the number checks above. Only rows that pass are loaded into the database, each with its page.</li>
+        <li>The narrative text is cut into passages and indexed so it can be searched by meaning and by keyword, each passage keeping its page.</li>
+        <li>Pages and the chat read exact figures from the database tables, and background from the passage search.</li>
+      </ol>
+      <P>How the chat answers a question:</P>
+      <ol className="mt-3 list-decimal space-y-2 pl-6 leading-relaxed text-ink">
+        <li>You type a question in the chat panel.</li>
+        <li>The site checks it first: questions are limited to 500 characters, and there are limits per visitor and per day to keep costs down.</li>
+        <li>The AI model (Anthropic’s Claude) reads the question and picks from 16 read-only lookups, such as department totals, fees or a text search.</li>
+        <li>The lookups return figures from the database with their pages. The model writes the sentences around them.</li>
+        <li>The answer shows the figures as tables with source links. Each step is logged privately so wrong answers can be found and fixed.</li>
+      </ol>
       <P>
-        Two diagrams show the whole path:{' '}
-        <a href="/diagrams/rag.html" className="text-ref underline underline-offset-4">how the budget PDFs become cited answers</a>{' '}
-        and <a href="/diagrams/agent.html" className="text-ref underline underline-offset-4">how the chat answers a question</a>.
+        The same two paths as diagrams (best on a larger screen):{' '}
+        <a href="/diagrams/rag.html" className="text-ref underline underline-offset-4">the budget data</a> and{' '}
+        <a href="/diagrams/agent.html" className="text-ref underline underline-offset-4">the chat</a>.
       </P>
 
       <H2 id="receipt">How we calculate your receipt</H2>
