@@ -4,31 +4,15 @@
   "questions": 66,
   "followUps": 5,
   "buckets": {
-    "correct": 55,
-    "incomplete": 6,
-    "unsourced figure": 4,
-    "couldn't answer": 1
+    "correct": 56,
+    "incomplete": 9,
+    "unsourced figure": 1,
+    "couldn't answer": 0
   },
   "unsourcedFigures": [
     {
-      "id": "A2-household-fees",
-      "figure": "$49.20"
-    },
-    {
-      "id": "A2-household-fees",
-      "figure": "$46.40"
-    },
-    {
-      "id": "B9-borrowing",
-      "figure": "$54.4 million"
-    },
-    {
-      "id": "A6-water",
-      "figure": "$6"
-    },
-    {
-      "id": "B14-streetcar",
-      "figure": "$1.45 million"
+      "id": "R1-owner-receipt-math",
+      "figure": "$17.34"
     }
   ]
 }

@@ -43,7 +43,7 @@ export type Receipt =
       defaults: string[] // assumptions the UI must label
     }
 
-const DEFAULT_FRONTAGE_FT = 40 // the budget's own 'typical property' (docs/07 §2)
+export const DEFAULT_FRONTAGE_FT = 40 // the budget's own 'typical property' (docs/07 §2)
 const hundredths = (s: string) => Math.round(Number(s) * 100)
 const taxCents = (assessed: number, rate: string) => Math.round((assessed * hundredths(rate)) / 1000)
 const per = (c: number, share: number) => Math.round(c / share)
@@ -95,4 +95,16 @@ export function computeReceipt(input: ReceiptInput, rates: ReceiptRates): Receip
     splitRemainderC2027: lines[0].c2027 - split.reduce((a, s) => a + s.c2027, 0),
     total, perMonth: { c2026: Math.round(total.c2026 / 12), c2027: Math.round(total.c2027 / 12) }, defaults,
   }
+}
+
+const PER_FOOT: FeeKey[] = ['snow_ice', 'street_lighting']
+/** Each fee with its change, and the per-foot fees for the budget's typical 40-foot property (p.141),
+ *  worked out here so the chat quotes them instead of multiplying or subtracting (principle 1). */
+export function feeChanges(fees: ReceiptRates['fees']) {
+  return Object.fromEntries(Object.entries(fees).map(([k, f]) => {
+    const a = Number(f.v2026), b = Number(f.v2027)
+    return [k, { ...f, change: +(b - a).toFixed(2), percentChange: Math.round(((b - a) / a) * 1000) / 10,
+      ...(PER_FOOT.includes(k as FeeKey) ? { typicalProperty: { frontageFeet: DEFAULT_FRONTAGE_FT, page: '141',
+        cost2026: +(a * DEFAULT_FRONTAGE_FT).toFixed(2), cost2027: +(b * DEFAULT_FRONTAGE_FT).toFixed(2) } } : {}) }]
+  }))
 }

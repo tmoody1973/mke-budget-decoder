@@ -86,11 +86,17 @@ export async function getBudgetSections(db: Db, version: string) {
     .where(and(eq(s.sectionTotals.budgetVersionId, versionId(version)), sql`${s.sectionTotals.line} in ('budget', 'levy')`))
   const bySection = new Map<string, typeof rows>()
   for (const r of rows) bySection.set(r.section, [...(bySection.get(r.section) ?? []), r])
+  // The whole city levy is printed on the A-F subtotal (sections G-N levy nothing; TOTAL has no levy line).
+  const totalLevy = n(rows.find((r) => r.section === 'SUBTOTAL_ABCDF' && r.line === 'levy')?.proposed2027)
+  const diff = (a: number | null, b: number | null, places = 0) => (a === null || b === null ? null : +(b - a).toFixed(places))
   return [...bySection].map(([section, rs]) => {
     const b = rs.find((r) => r.line === 'budget'), l = rs.find((r) => r.line === 'levy')
-    return { section, label: (b ?? l)!.label, cite: (b ?? l)!.cite as Cite,
-      budget2026: n(b?.adopted2026), budget2027: n(b?.proposed2027), levy2026: n(l?.adopted2026), levy2027: n(l?.proposed2027),
+    const row = { budget2026: n(b?.adopted2026), budget2027: n(b?.proposed2027), levy2026: n(l?.adopted2026), levy2027: n(l?.proposed2027),
       rate2026: n(l?.taxRate2026), rate2027: n(l?.taxRate2027) }
+    // Changes and shares worked out here, so the chat quotes them instead of doing arithmetic (principle 1).
+    return { section, label: (b ?? l)!.label, cite: (b ?? l)!.cite as Cite, ...row,
+      budgetChange: diff(row.budget2026, row.budget2027), levyChange: diff(row.levy2026, row.levy2027), rateChange: diff(row.rate2026, row.rate2027, 2),
+      levySharePercent2027: row.levy2027 === null || !totalLevy ? null : Math.round((row.levy2027 / totalLevy) * 1000) / 10 }
   }).sort((a, b) => (a.section === 'TOTAL' ? 1 : b.section === 'TOTAL' ? -1 : a.section.localeCompare(b.section)))
 }
 
@@ -104,7 +110,21 @@ export async function getRevenues(db: Db, version: string, fund: Fund) {
     .from(s.revenues)
     .where(and(eq(s.revenues.budgetVersionId, versionId(version)), eq(s.revenues.fund, fund), eq(s.revenues.source, 'summary')))
   return rows.filter((r) => fund !== 'general' || r.isTotal || /withdrawal|levy/i.test(r.line))
-    .map((r) => ({ ...r, adopted2026: n(r.adopted2026), requested2027: n(r.requested2027), proposed2027: n(r.proposed2027) }))
+    .map((r) => {
+      const row = { ...r, adopted2026: n(r.adopted2026), requested2027: n(r.requested2027), proposed2027: n(r.proposed2027) }
+      const diff = (a: number | null, b: number | null) => (a === null || b === null ? null : b - a)
+      return { ...row, changeFromAdopted: diff(row.adopted2026, row.proposed2027), changeFromRequest: diff(row.requested2027, row.proposed2027) }
+    })
+}
+
+/** One printed revenue line in every fund's Summary table (e.g. Local Sales Tax: the general fund's share
+ *  p.160 and the pension fund's share p.163), so a split is quoted from the page, not subtracted. */
+export async function getRevenueLineByFund(db: Db, version: string, line: string) {
+  const rows = await db.select({ fund: s.revenues.fund, line: s.revenues.line, adopted2026: s.revenues.adopted2026,
+    requested2027: s.revenues.requested2027, proposed2027: s.revenues.proposed2027, cite: s.revenues.cite })
+    .from(s.revenues)
+    .where(and(eq(s.revenues.budgetVersionId, versionId(version)), eq(s.revenues.source, 'summary'), eq(s.revenues.line, line)))
+  return rows.map((r) => ({ ...r, adopted2026: n(r.adopted2026), requested2027: n(r.requested2027), proposed2027: n(r.proposed2027) }))
 }
 
 /** Position changes a department's Summary page lists, with the document's own reason for each. */
