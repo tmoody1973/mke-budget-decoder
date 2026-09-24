@@ -19,7 +19,7 @@ async function runCase(c: Case) {
     const a = await answer(c, MODEL)
     const figures = figuresFound(c, a.text, a.toolData)
     const j = await judge(c, a.text, a.toolData)
-    const pass = figures.every((x) => x.found) && j.include.every((x) => x.met) && j.not.every((x) => !x.violated)
+    const pass = !!a.text.trim() && figures.every((x) => x.found) && j.include.every((x) => x.met) && j.not.every((x) => !x.violated)
     const madeUp = unsupportedFigures(c, a.text, a.toolData, a.earlierData)
     return { id: c.id, q: c.q, before: c.before, pass, bucket: bucket(pass, madeUp, j.declined), madeUp, figures, include: j.include, not: j.not, note: j.note, tools: a.tools, cents: a.cents, secs: a.secs, text: a.text,
       // Evidence for a flagged answer, so a person can confirm or clear it before results are published.
