@@ -39,7 +39,7 @@ writeFileSync(`evals/results/${stamp}.json`, JSON.stringify({ model: MODEL, resu
 for (const r of results) {
   const miss = [...(('figures' in r && r.figures) || []).filter((x) => !x.found).map((x) => `fig:${x.f}`),
     ...(('include' in r && r.include) || []).filter((x) => !x.met).map((x) => `needs:${x.item}`),
-    ...(('not' in r && r.not) || []).filter((x) => x.violated).map((x) => `DID:${x.item}`), ...r.madeUp.map((f) => `UNSOURCED:${f}`),
+    ...(('not' in r && r.not) || []).filter((x) => x.violated).map((x) => `DID:${x.item}`), ...r.madeUp.map((f) => `UNSOURCED:${f}`), ...('text' in r && !r.text?.trim() ? ['EMPTY ANSWER'] : []),
     ...('error' in r ? [`error:${r.error}`] : [])]
   console.log(`${r.bucket.padEnd(15)} ${r.id.padEnd(24)} ${String(r.cents).padStart(5)}c  [${r.tools.join(',')}]${miss.length ? `\n      ${miss.join('\n      ')}` : ''}`)
 }

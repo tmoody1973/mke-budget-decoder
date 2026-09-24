@@ -295,3 +295,22 @@ The cheaper models' slips were soft (for example, saying the proposal "reflects 
 **How we'll know if this was right.** Each published run is reviewed by hand for false alarms; if more than one in ten flags turns out to be a false alarm, the check needs work. Over later runs, the unsourced-figure count should fall toward zero as the causes are fixed.
 
 **What actually happened.**
+
+## D24 — Low thinking effort and a larger output cap, so the chat never returns a blank answer
+
+**Decision.** The chat now runs Claude at low thinking effort, with a 4,000-token output cap (was 1,600), and its last allowed round has lookups switched off.
+
+**Why this came up.** The answer check found blank replies: two questions, in two of three tries each. Tracing them showed two causes. Claude's hidden thinking counts against the output cap, and on long questions it used 1,250 to 1,360 of the 1,600 tokens before writing, then ran out mid-answer. Separately, a question could spend all six rounds on lookups and never reach a writing round. A blank reply is the worst thing a visitor can get.
+
+**Options.**
+1. *Raise the cap only.* Fixes the cutoff; thinking stays long, so cost rises.
+2. *Turn thinking off.* Cheapest; risks worse lookup planning on hard questions, untested.
+3. *Low effort plus a larger cap plus a no-lookup last round* (chosen). Thinking stays, but short; the answer always has room; every question ends in writing.
+
+**What we chose and why.** Option 3 (Claude recommended after measuring; Tarik approved the fix). Anthropic's current guidance pairs adaptive thinking with an effort setting, and this job (look up, then explain) doesn't need deep reasoning. Measured on the full 66-question check: no blank answers, cost per question down from 2.65 to 1.71 cents, 55 correct against 57 the run before, which is inside the normal run-to-run spread (54 to 60 passes).
+
+**What we gave up.** Low effort could make hard, multi-step questions slightly worse in ways one run can't show. The larger cap means a single long answer can cost more than before, though the average fell.
+
+**How we'll know if this was right.** Over the next several runs, no blank answers and correct stays within the 54 to 60 band; monthly chat spend stays under the $45 cap from D20.
+
+**What actually happened.**
