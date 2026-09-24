@@ -14,6 +14,10 @@ import { receiptFromBody } from '@/lib/receipt-request'
 import { getBudgetFact, getDepartmentTotals, getHeadline } from '@/lib/db/overview'
 import { searchBudgetText as search } from '@/lib/db/search'
 
+/** Reviewed facts that match `words`, attached to a table lookup so the answer can quote them with
+ *  their page even when the model doesn't ask for facts separately. */
+const factsFor = (words: string) => findBudgetFacts(getDb(), BUDGET_VERSION, words, 3)
+
 export const getBudgetOverview = createTool({
   id: 'getBudgetOverview',
   description:
@@ -61,7 +65,11 @@ export const getDepartmentBreakdown = createTool({
   description:
     'What one department spends its money on, from its Summary table: salaries and wages, fringe benefits, operating costs, equipment, special funds, total, budgeted positions and full-time equivalents, and the revenue it brings in, each for 2025 actual, 2026 adopted, 2027 requested and 2027 proposed. Use the department slug from getDepartments (for example "police"). Renders as a cited table.',
   inputSchema: z.object({ slug: z.string().describe('Department slug, e.g. "police", "fire", "library", "dpw-operations"') }),
-  execute: async ({ slug }) => (await breakdown(getDb(), BUDGET_VERSION, slug)) ?? { error: `No department with slug "${slug}". Call getDepartments to see the slugs.` },
+  execute: async ({ slug }) => {
+    const b = await breakdown(getDb(), BUDGET_VERSION, slug)
+    if (!b) return { error: `No department with slug "${slug}". Call getDepartments to see the slugs.` }
+    return { ...b, facts: await factsFor(b.name.replace(/Department( of)?|Division|-/g, ' ')) }
+  },
 })
 
 export const searchBudgetText = createTool({
@@ -69,7 +77,10 @@ export const searchBudgetText = createTool({
   description:
     'Search the budget\'s own words (the Proposed Plan and Executive Budget Summary) for passages that explain something: why a budget changed, what a program does, capital projects and new facilities, state law such as Act 12, reserves, the budget gap, parking, streets. Returns up to 5 passages with their pages. Use their wording and figures only as written; they render as a cited source list.',
   inputSchema: z.object({ query: z.string().min(3).describe('The question or topic in plain words') }),
-  execute: async ({ query }) => ({ passages: await search(getDb(), BUDGET_VERSION, query) }),
+  execute: async ({ query }) => {
+    const [passages, facts] = await Promise.all([search(getDb(), BUDGET_VERSION, query), factsFor(query)])
+    return { facts, passages }
+  },
 })
 
 export const getBudgetFacts = createTool({
@@ -102,7 +113,7 @@ export const getBudgetSections = createTool({
   description:
     'Every budget section for 2026 adopted and 2027 proposed (Summary p.7): general city purposes, pensions, capital improvements, city debt (borrowing costs), contingent fund, Transportation Fund, grants, Water Works, sewer and others, with each section\'s property tax levy and its share of the tax rate per $1,000 of assessed value. Use it for "where does my property tax go", levy splits, capital budget and debt totals, and Water Works. Renders as a cited table.',
   inputSchema: z.object({}),
-  execute: async () => ({ sections: await sections(getDb(), BUDGET_VERSION) }),
+  execute: async () => ({ sections: await sections(getDb(), BUDGET_VERSION), facts: await factsFor('borrowing surge capital facility debt') }),
 })
 
 export const getRevenues = createTool({
@@ -110,7 +121,8 @@ export const getRevenues = createTool({
   description:
     'Revenue by fund, four stages (2026 adopted, 2027 requested, 2027 proposed): "general" = general city purposes sources, their total (requested vs proposed) and the Tax Stabilization Fund withdrawal (reserves); "transportation-fund" = parking citations, permits, meters, towing, streetcar, scooters (p.190); "sewer-maintenance-fund"; "employee-retirement". Renders as a cited table.',
   inputSchema: z.object({ fund: z.enum(['general', 'transportation-fund', 'sewer-maintenance-fund', 'employee-retirement']) }),
-  execute: async ({ fund }) => ({ fund, rows: await revenues(getDb(), BUDGET_VERSION, fund) }),
+  execute: async ({ fund }) => ({ fund, rows: await revenues(getDb(), BUDGET_VERSION, fund),
+    facts: fund === 'general' ? await factsFor('reserves withdrawal stabilization amortization requested cut') : await factsFor(fund.replace(/-/g, ' ')) }),
 })
 
 export const getCityFees = createTool({

@@ -299,6 +299,121 @@
     "input_tokens": 755,
     "seconds": 0.28
   },
+  "fact:roads-hip-2027": {
+    "key": "0cf3b4b84d795453",
+    "kind": "fact",
+    "cite": {
+      "doc": "summary",
+      "pdf_page": 16,
+      "printed_page": "6"
+    },
+    "statement": "Reductions to local road investments would also have been necessary if not increased parking permit, citation, and meter fees, which will allow a $6 million transfer from the Transportation Fund for High Impact Paving (HIP). With that transfer, the combined total of investments in the HIP and local road reconstruction line items are now proposed to be $19.2 million, the highest total on record.",
+    "passage": "2027 BUDGET INTRODUCTION Even with increased borrowing levels, much maintenance continues to be deferred. Reductions to local road investments would also have been necessary if not increased parking permit, citation, and meter fees, which will allow a $6 million transfer from the Transportation Fund for High Impact Paving (HIP). With that transfer, the combined total of investments in the HIP and local road reconstruction line items are now proposed to be $19.2 million, the highest total on record.",
+    "relation": "supports",
+    "confidence": 0.98,
+    "probabilities": {
+      "supports": 0.99,
+      "says_nothing": 0.0,
+      "contradicts": 0.01
+    },
+    "verdict": "verified",
+    "auto": true,
+    "model": "jev-1.13.0",
+    "input_tokens": 634,
+    "seconds": 0.48
+  },
+  "fact:borrowing-surge-2027": {
+    "key": "dafd56a8a3c771fd",
+    "kind": "fact",
+    "cite": {
+      "doc": "summary",
+      "pdf_page": 15,
+      "printed_page": "5"
+    },
+    "statement": "2027 is the final year of a planned three-year surge in levy-supported general obligation borrowing. The first two years of this surge, along with significant cash financing of capital improvements in 2024, funded public safety radios, a new enterprise resource planning system, and the port cruise dock terminal.",
+    "passage": "Capital Budget Highlights 2027 is the final year of a planned three-year surge in levy-supported general obligation borrowing. The first two years of this surge, along with significant cash financing of capital improvements in 2024, funded public safety radios, a new enterprise resource planning system, and the port cruise dock terminal. This year's capital budget begins funding a new Midtown library branch and continues funding a new municipal services facility in the 30th Street corridor.",
+    "relation": "supports",
+    "confidence": 1.0,
+    "probabilities": {
+      "contradicts": 0.0,
+      "says_nothing": 0.0,
+      "supports": 1.0
+    },
+    "verdict": "verified",
+    "auto": true,
+    "model": "jev-1.13.0",
+    "input_tokens": 609,
+    "seconds": 0.24
+  },
+  "fact:capital-new-facilities-2027": {
+    "key": "9c2a8f80bd077307",
+    "kind": "fact",
+    "cite": {
+      "doc": "summary",
+      "pdf_page": 15,
+      "printed_page": "5"
+    },
+    "statement": "This year's capital budget begins funding a new Midtown library branch and continues funding a new municipal services facility in the 30th Street corridor.",
+    "passage": "The first two years of this surge, along with significant cash financing of capital improvements in 2024, funded public safety radios, a new enterprise resource planning system, and the port cruise dock terminal. This year's capital budget begins funding a new Midtown library branch and continues funding a new municipal services facility in the 30th Street corridor. 2027 PROPOSED PLAN AND EXECUTIVE BUDGET SUMMARY 5",
+    "relation": "supports",
+    "confidence": 1.0,
+    "probabilities": {
+      "supports": 1.0,
+      "says_nothing": 0.0,
+      "contradicts": 0.0
+    },
+    "verdict": "verified",
+    "auto": true,
+    "model": "jev-1.13.0",
+    "input_tokens": 571,
+    "seconds": 0.19
+  },
+  "fact:pdaf-withdrawal-2027": {
+    "key": "f424ade25ab0a871",
+    "kind": "fact",
+    "cite": {
+      "doc": "summary",
+      "pdf_page": 15,
+      "printed_page": "5"
+    },
+    "statement": "The Public Debt Amortization Fund (PDAF) also continued to increase in 2025, enabling the City to again withdraw $6 million to fund debt service, $3 million more than was assumed in the request.",
+    "passage": "The unassigned General Fund balance, a subset of the TSF, was $79.6 million at end of year 2025, and the 2027 proposed budget would transfer half of that amount, $39.8 million, to maintain services. The Public Debt Amortization Fund (PDAF) also continued to increase in 2025, enabling the City to again withdraw $6 million to fund debt service, $3 million more than was assumed in the request. The sum total of these two withdrawals on the gap was $42.8 million, making this category once again the largest bottom-line factor in closing the budget gap.",
+    "relation": "supports",
+    "confidence": 1.0,
+    "probabilities": {
+      "says_nothing": 0.0,
+      "contradicts": 0.0,
+      "supports": 1.0
+    },
+    "verdict": "verified",
+    "auto": true,
+    "model": "jev-1.13.0",
+    "input_tokens": 640,
+    "seconds": 0.15
+  },
+  "fact:budget-gap-drivers": {
+    "key": "d62531e9a68f1ad2",
+    "kind": "fact",
+    "cite": {
+      "doc": "summary",
+      "pdf_page": 11,
+      "printed_page": "1"
+    },
+    "statement": "The historic pattern of these gaps can be distilled into five distinct, and recently overlapping, driving factors: 1) State Shared Revenue (SSR) was reduced between the 1990s and 2023. 2) Pension costs were no longer fully covered by the pension fund's investment returns, beginning in 2010. 3) In 2023 pension costs spiked after the discount rate was lowered during the previous five-year stable funding period. 4) The City used $394 million in federal ARPA to close gaps in 2022-2024. 5) Wisconsin Act 12, passed in the summer of 2023, enabled the city to collect a 2% sales tax and increased SSR, but also required the City to increase public safety and pension spending.",
+    "passage": "4) The City used $394 million in federal ARPA to close gaps in 2022-2024. 5) Wisconsin Act 12, passed in the summer of 2023, enabled the city to collect a 2% sales tax and increased SSR, but also required the City to increase public safety and pension spending. Prior to the COVID-19 epidemic, the City generally experienced budget gaps of $20-$60 million, averaging $40 million from 2005-2019.",
+    "relation": "supports",
+    "confidence": 0.17,
+    "probabilities": {
+      "contradicts": 0.16,
+      "says_nothing": 0.39,
+      "supports": 0.45
+    },
+    "verdict": "verified",
+    "auto": false,
+    "model": "jev-1.13.0",
+    "input_tokens": 745,
+    "seconds": 0.38
+  },
   "glossary:Proposed budget": {
     "key": "2a337404e9d16422",
     "kind": "glossary",

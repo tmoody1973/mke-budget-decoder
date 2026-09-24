@@ -12,7 +12,7 @@ import type { BreakdownRow } from '@/lib/db/chat'
 import type { Cite } from '@/lib/db/schema'
 import type { Passage } from '@/lib/db/search'
 
-import { Card, Failed, Pending, parse } from './tool-renderers'
+import { Card, type CardFact, Failed, FactsList, Pending, parse } from './tool-renderers'
 
 const excerpt = (t: string, n = 220) => { const s = t.replace(/\s+/g, ' ').trim(); return s.length > n ? `${s.slice(0, n).replace(/\s\S*$/, '')}…` : s }
 const TZ = 'America/Chicago'
@@ -28,11 +28,11 @@ export function TextRenderers() {
     parameters: z.object({ slug: z.string() }),
     render: ({ status, result }) => {
       if (status !== 'complete') return <Pending what="what the department spends on" />
-      const b = parse<{ name: string; cite: Cite; rows: BreakdownRow[] }>(result)
+      const b = parse<{ name: string; cite: Cite; rows: BreakdownRow[]; facts?: CardFact[] }>(result)
       if (!b?.rows?.length) return <Failed />
       const src = sourceRegistry()
       const lines = b.rows.map((r) => ({ ...r, id: `bd-${r.metric}`, n: src.mark(b.cite, { id: `bd-${r.metric}`, label: r.label }) }))
-      return <Card title={`${b.name}: what the money pays for`} sources={src}><DeptBreakdown lines={lines} /></Card>
+      return <Card title={`${b.name}: what the money pays for`} sources={src}><DeptBreakdown lines={lines} /><FactsList facts={b.facts} src={src} /></Card>
     },
   }, [])
 
@@ -41,13 +41,15 @@ export function TextRenderers() {
     parameters: z.object({ query: z.string() }),
     render: ({ status, result }) => {
       if (status !== 'complete') return <Pending what="what the documents say" />
-      const passages = parse<{ passages: Passage[] }>(result)?.passages
-      if (!passages?.length) return <p className="my-2 text-sm text-ink-soft">The budget text didn’t turn up a matching passage.</p>
+      const got = parse<{ passages: Passage[]; facts?: CardFact[] }>(result)
+      const passages = got?.passages
+      if (!passages?.length && !got?.facts?.length) return <p className="my-2 text-sm text-ink-soft">The budget text didn’t turn up a matching passage.</p>
       const src = sourceRegistry()
       return (
         <Card title="From the budget’s own words" sources={src}>
+          <FactsList facts={got?.facts} src={src} />
           <ul className="mt-2 space-y-2">
-            {passages.map((p) => (
+            {(passages ?? []).map((p) => (
               <li key={p.id} className="border-b border-rule pb-2 text-sm leading-relaxed">
                 <span className="block text-xs font-semibold text-ink-soft">{p.context}{p.heading ? ` · ${p.heading}` : ''}</span>
                 {excerpt(p.text)}<Mark n={src.mark(p.cite, { id: p.id, label: p.heading ?? 'passage' })} />
