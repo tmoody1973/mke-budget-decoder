@@ -6,29 +6,29 @@
   "buckets": {
     "correct": 55,
     "incomplete": 6,
-    "unsourced figure": 5,
-    "couldn't answer": 0
+    "unsourced figure": 4,
+    "couldn't answer": 1
   },
   "unsourcedFigures": [
     {
-      "id": "C1-overtime",
-      "figure": "$50,000"
+      "id": "A2-household-fees",
+      "figure": "$49.20"
     },
     {
-      "id": "D1-radio",
-      "figure": "$185 million"
+      "id": "A2-household-fees",
+      "figure": "$46.40"
+    },
+    {
+      "id": "B9-borrowing",
+      "figure": "$54.4 million"
     },
     {
       "id": "A6-water",
-      "figure": "$5.14"
+      "figure": "$6"
     },
     {
-      "id": "B10-levy-split",
-      "figure": "56%"
-    },
-    {
-      "id": "F3-followup-fee-now",
-      "figure": "$8.20"
+      "id": "B14-streetcar",
+      "figure": "$1.45 million"
     }
   ]
 }

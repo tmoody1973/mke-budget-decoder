@@ -89,6 +89,19 @@ export async function getRevenueMix(db: Db, version: string) {
   })
 }
 
+/** The changes the Summary prints beside each figure, so the chat quotes them instead of subtracting
+ *  (principle 1): change from 2026 adopted and from the department's 2027 request, as printed; the percent
+ *  change is worked out here in code, to one decimal. */
+export function changes(r: { adopted2026: unknown; changeFromAdopted: unknown; changeFromRequest: unknown }) {
+  const adopted = r.adopted2026 === null ? null : Number(r.adopted2026)
+  const fromAdopted = r.changeFromAdopted === null ? null : Number(r.changeFromAdopted)
+  return {
+    changeFromAdopted: fromAdopted,
+    changeFromRequest: r.changeFromRequest === null ? null : Number(r.changeFromRequest),
+    percentChangeFromAdopted: fromAdopted === null || !adopted ? null : Math.round((fromAdopted / adopted) * 1000) / 10,
+  }
+}
+
 // Not departments: accounting lines and account groups that live in section A.
 const NOT_DEPARTMENTS = ['fringe-benefit-offset', 'gcp-source-of-funds', 'special-purpose-accounts', 'dpw']
 
@@ -99,13 +112,14 @@ export async function getDepartmentTotals(db: Db, version: string) {
     slug: s.departments.slug, name: s.departments.name, shortName: s.departments.shortName,
     actual2025: s.deptSummary.actual2025, adopted2026: s.deptSummary.adopted2026,
     requested2027: s.deptSummary.requested2027, proposed2027: s.deptSummary.proposed2027, cite: s.deptSummary.cite,
+    changeFromAdopted: s.deptSummary.changeVsAdopted, changeFromRequest: s.deptSummary.changeVsRequested,
   }).from(s.deptSummary).innerJoin(s.departments, eq(s.deptSummary.deptId, s.departments.id))
     .where(and(eq(s.deptSummary.budgetVersionId, v), eq(s.deptSummary.metric, 'total_expenditures'),
       eq(s.departments.section, 'A'), notInArray(s.departments.slug, NOT_DEPARTMENTS)))
   return rows
     .filter((r) => r.requested2027 !== null && r.proposed2027 !== null && r.adopted2026 !== null)
     .map((r) => ({ ...r, adopted2026: Number(r.adopted2026), requested2027: Number(r.requested2027), proposed2027: Number(r.proposed2027),
-      actual2025: r.actual2025 === null ? null : Number(r.actual2025) }))
+      actual2025: r.actual2025 === null ? null : Number(r.actual2025), ...changes(r) }))
     .sort((a, b) => b.proposed2027 - a.proposed2027)
 }
 
