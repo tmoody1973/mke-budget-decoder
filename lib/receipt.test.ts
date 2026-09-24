@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { computeReceipt, feeChanges } from './receipt'
+import { computeReceipt, feeChanges, receiptInDollars } from './receipt'
 import { RATES } from './receipt.fixture'
 
 const line = (r: ReturnType<typeof computeReceipt>, key: string) => {
@@ -78,8 +78,19 @@ describe('feeChanges: ready-made changes for the chat (principle 1)', () => {
   it('garbage +$8.20, and the typical 40-foot property for the per-foot fees (p.141)', () => {
     const f = feeChanges(RATES.fees)
     expect(f.solid_waste).toMatchObject({ change: 8.2, percentChange: 3 })
-    expect(f.snow_ice.typicalProperty).toEqual({ frontageFeet: 40, page: '141', cost2026: 47.6, cost2027: 49.2 })
+    expect(f.snow_ice.typicalProperty).toEqual({ frontageFeet: 40, page: '141', cost2026: 47.6, cost2027: 49.2, costChange: 1.6 })
     expect(f.street_lighting.typicalProperty).toMatchObject({ cost2026: 44.8, cost2027: 46.4 })
     expect(f.solid_waste).not.toHaveProperty('typicalProperty')
+  })
+})
+
+describe('receiptInDollars: the owner worked example in docs/07 §4, ready for the chat to quote', () => {
+  it('$2,036.76 -> $2,080.62: +$43.86 a year, +$3.66 a month; tax +$27.32, services +$16.54, assessment +6.4%', () => {
+    const r = computeReceipt({ assessed2026: 200_000, assessed2025: 188_000, units: 1, cityGarbage: true, frontageFt: 40, view: 'owner' }, RATES)
+    if (r.kind !== 'estimate') throw new Error(r.kind)
+    const d = receiptInDollars(r, { a2025: 188_000, a2026: 200_000 })
+    expect(d.total).toEqual({ dollars2026: 2036.76, dollars2027: 2080.62, changePerYear: 43.86, changePerMonth: 3.66 })
+    expect([d.propertyTaxChange, d.serviceChargesChange, d.assessmentChangePercent]).toEqual([27.32, 16.54, 6.4])
+    expect(d.perMonth.dollars2027).toBe(173.39)
   })
 })

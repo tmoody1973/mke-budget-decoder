@@ -60,7 +60,7 @@ describe.skipIf(!url)('chat lookups, second set (Neon)', () => {
   it('revenues: parking citations and the GCP requested total', async () => {
     const t = await getRevenues(db, VERSION, 'transportation-fund')
     expect(t.find((r) => r.line === 'Parking Citation Revenue')).toMatchObject({ adopted2026: 14_000_000, requested2027: 18_000_000, proposed2027: 21_000_000,
-      changeFromAdopted: 7_000_000, changeFromRequest: 3_000_000 })
+      changeFromAdopted: 7_000_000, changeFromRequest: 3_000_000, percentChangeFromAdopted: 50 })
     const g = await getRevenues(db, VERSION, 'general')
     expect(g.some((r) => r.requested2027 === 878_902_850)).toBe(true) // G2
   }, 30_000)

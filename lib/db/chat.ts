@@ -113,7 +113,9 @@ export async function getRevenues(db: Db, version: string, fund: Fund) {
     .map((r) => {
       const row = { ...r, adopted2026: n(r.adopted2026), requested2027: n(r.requested2027), proposed2027: n(r.proposed2027) }
       const diff = (a: number | null, b: number | null) => (a === null || b === null ? null : b - a)
-      return { ...row, changeFromAdopted: diff(row.adopted2026, row.proposed2027), changeFromRequest: diff(row.requested2027, row.proposed2027) }
+      const fromAdopted = diff(row.adopted2026, row.proposed2027)
+      return { ...row, changeFromAdopted: fromAdopted, changeFromRequest: diff(row.requested2027, row.proposed2027),
+        percentChangeFromAdopted: fromAdopted === null || !row.adopted2026 ? null : Math.round((fromAdopted / row.adopted2026) * 1000) / 10 }
     })
 }
 

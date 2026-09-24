@@ -10,7 +10,7 @@ import {
   getPositionChanges as positions, getRevenues as revenues, lookupGlossary as glossary, searchBudgetLines as lines,
 } from '@/lib/db/chat'
 import { getReceiptRates } from '@/lib/db/receipt'
-import { feeChanges } from '@/lib/receipt'
+import { feeChanges, receiptInDollars } from '@/lib/receipt'
 import { receiptFromBody } from '@/lib/receipt-request'
 import { getBudgetFact, getDepartmentTotals, getHeadline } from '@/lib/db/overview'
 import { searchBudgetText as search } from '@/lib/db/search'
@@ -126,7 +126,7 @@ export const getBudgetSections = createTool({
 export const getRevenues = createTool({
   id: 'getRevenues',
   description:
-    'Revenue by fund, four stages (2026 adopted, 2027 requested, 2027 proposed): "general" = general city purposes sources, their total (requested vs proposed) and the Tax Stabilization Fund withdrawal (reserves); "transportation-fund" = parking citations, permits, meters, towing, streetcar, scooters (p.190); "sewer-maintenance-fund"; "employee-retirement". Each line carries changeFromAdopted and changeFromRequest; quote them. Renders as a cited table.',
+    'Revenue by fund, four stages (2026 adopted, 2027 requested, 2027 proposed): "general" = general city purposes sources, their total (requested vs proposed) and the Tax Stabilization Fund withdrawal (reserves); "transportation-fund" = parking citations, permits, meters, towing, streetcar, scooters (p.190); "sewer-maintenance-fund"; "employee-retirement". Each line carries changeFromAdopted, changeFromRequest and percentChangeFromAdopted; quote them. Renders as a cited table.',
   inputSchema: z.object({ fund: z.enum(['general', 'transportation-fund', 'sewer-maintenance-fund', 'employee-retirement']) }),
   execute: async ({ fund }) => ({ fund, rows: await revenues(getDb(), BUDGET_VERSION, fund),
     facts: fund === 'general' ? await factsFor('reserves withdrawal stabilization amortization requested cut') : await factsFor(fund.replace(/-/g, ' ')) }),
@@ -134,7 +134,7 @@ export const getRevenues = createTool({
 
 export const getCityFees = createTool({
   id: 'getCityFees',
-  description: 'City fees a household pays, 2026 and 2027 proposed: solid waste (garbage) per home, extra garbage cart, snow and ice and street lighting per foot of frontage, average household sewer and stormwater (p.159, 203). Each fee carries its change and percentChange; the per-foot fees also carry typicalProperty, the cost for the typical 40-foot property the budget uses (p.141). Quote these instead of calculating. Renders as a cited table.',
+  description: 'City fees a household pays, 2026 and 2027 proposed: solid waste (garbage) per home, extra garbage cart, snow and ice and street lighting per foot of frontage, average household sewer and stormwater (p.159, 203). Each fee carries its change and percentChange; the per-foot fees also carry typicalProperty, the cost and costChange for the typical 40-foot property the budget uses (p.141). Quote these instead of calculating. Renders as a cited table.',
   inputSchema: z.object({}),
   execute: async () => ({ fees: feeChanges((await getReceiptRates(getDb(), BUDGET_VERSION)).fees) }),
 })
@@ -142,7 +142,7 @@ export const getCityFees = createTool({
 export const estimateCityCharges = createTool({
   id: 'estimateCityCharges',
   description:
-    'Estimate what the city charges one home under the 2026 budget and the 2027 proposal from an assessed value the person gives (the same math as Your City Receipt): city property tax, garbage, snow and ice, street lighting (40 ft frontage assumed), sewer and stormwater, and where the property tax goes. view "renter" gives one unit\'s share of the building, paid by the owner. For an address lookup, point the person to Your City Receipt. Renders as a cited receipt.',
+    'Estimate what the city charges one home under the 2026 budget and the 2027 proposal from an assessed value the person gives (the same math as Your City Receipt): city property tax, garbage, snow and ice, street lighting (40 ft frontage assumed), sewer and stormwater, and where the property tax goes. view "renter" gives one unit\'s share of the building, paid by the owner. The receipt is in cents; quote inDollars instead: each line in dollars, the yearly totals, changePerYear, changePerMonth, the property tax and service-charge changes, and assessmentChangePercent. Never convert or divide these yourself. For an address lookup, point the person to Your City Receipt. Renders as a cited receipt.',
   inputSchema: z.object({
     assessed2026: z.number().int().positive().describe('2026 assessed value in whole dollars'),
     assessed2025: z.number().int().positive().optional().describe('2025 assessed value, if the person gave it'),
@@ -151,7 +151,9 @@ export const estimateCityCharges = createTool({
   }),
   execute: async ({ assessed2026, assessed2025, units, view }) => {
     const r = await receiptFromBody({ assessed2026, assessed2025, units, buildingUnits: units, view })
-    return 'error' in r ? { error: r.error } : { receipt: r.receipt }
+    if ('error' in r) return { error: r.error }
+    // Dollars and changes worked out in code; the receipt itself stays in cents for the card.
+    return { receipt: r.receipt, ...(r.receipt.kind === 'estimate' ? { inDollars: receiptInDollars(r.receipt, { a2025: assessed2025, a2026: assessed2026 }) } : {}) }
   },
 })
 
