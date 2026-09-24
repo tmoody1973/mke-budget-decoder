@@ -5,6 +5,7 @@ import { after } from 'next/server'
 import { CopilotRuntime, createCopilotRuntimeHandler, InMemoryAgentRunner } from '@copilotkit/runtime/v2'
 
 import { mastra } from '@/lib/agent'
+import { guardBlankAnswer } from '@/lib/chat/blank-guard'
 import { getDb } from '@/lib/db/client'
 import { takeQuestion } from '@/lib/db/chat-usage'
 import { allow, clientKey } from '@/lib/rate-limit'
@@ -66,6 +67,8 @@ export async function POST(req: Request) {
     if (!ok) return reply(body, LIMIT_TEXT)
     // Serverless functions pause after responding; send this answer's trace first (Mastra docs).
     after(() => mastra.observability?.flush())
+    const res = await handler(req)
+    return res.body ? new Response(guardBlankAnswer(res.body), { status: res.status, headers: res.headers }) : res
   }
   return handler(req)
 }

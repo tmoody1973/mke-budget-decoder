@@ -4,27 +4,31 @@
   "questions": 66,
   "followUps": 5,
   "buckets": {
-    "correct": 57,
+    "correct": 55,
     "incomplete": 6,
-    "unsourced figure": 3,
+    "unsourced figure": 5,
     "couldn't answer": 0
   },
   "unsourcedFigures": [
     {
-      "id": "A2-household-fees",
-      "figure": "$49.20"
+      "id": "C1-overtime",
+      "figure": "$50,000"
     },
     {
-      "id": "A2-household-fees",
-      "figure": "$46.40"
+      "id": "D1-radio",
+      "figure": "$185 million"
+    },
+    {
+      "id": "A6-water",
+      "figure": "$5.14"
     },
     {
       "id": "B10-levy-split",
-      "figure": "$183,608,851"
+      "figure": "56%"
     },
     {
-      "id": "F4-followup-neutral",
-      "figure": "$11.7M"
+      "id": "F3-followup-fee-now",
+      "figure": "$8.20"
     }
   ]
 }

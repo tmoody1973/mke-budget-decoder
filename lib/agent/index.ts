@@ -28,6 +28,8 @@ Milwaukee Budget Decoder is an independent guide by Tarik Moody, not an official
 
 export const CHAT_MODEL = 'anthropic/claude-sonnet-5'
 
+const MAX_STEPS = 6
+
 /** The budget guide on a given model; the eval runner compares models with everything else equal. */
 export const createBudgetGuide = (model: string = CHAT_MODEL) => new Agent({
   id: 'budgetGuide',
@@ -40,9 +42,17 @@ export const createBudgetGuide = (model: string = CHAT_MODEL) => new Agent({
     providerOptions: { anthropic: { cacheControl: { type: 'ephemeral' } } },
   },
   model,
-  // Per-question ceiling (D20 guardrails): at most 5 rounds of lookups plus the final answer, and
-  // about 1,200 words out per model call, so no single question can run up the bill.
-  defaultOptions: { maxSteps: 6, modelSettings: { maxOutputTokens: 1600 } },
+  // Per-question ceiling (D20 guardrails): at most 5 rounds of lookups plus the final answer.
+  // The output cap covers Claude's hidden thinking as well as the answer: at 1,600 a long think could
+  // use it all and return a blank reply (answer check, 2026-09-24). Low effort keeps the thinking short
+  // (this job is look up, then explain), 4,000 leaves room to write, and the last round has no lookups
+  // left to call, so every question ends in an answer.
+  defaultOptions: {
+    maxSteps: MAX_STEPS,
+    modelSettings: { maxOutputTokens: 4000 },
+    providerOptions: { anthropic: { effort: 'low' } },
+    prepareStep: ({ stepNumber }) => (stepNumber >= MAX_STEPS - 1 ? { toolChoice: 'none' } : undefined),
+  },
   tools: {
     getBudgetOverview, getDepartments, getDepartmentBreakdown, getBudgetSections, getRevenues, getCityFees, estimateCityCharges,
     getCapitalProjects, getPositionChanges, getPerformanceMeasures, searchBudgetLines, searchBudgetText, getBudgetFacts, lookupGlossary, getHearingCalendar, calculate,

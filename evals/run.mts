@@ -19,7 +19,7 @@ async function runCase(c: Case) {
     const a = await answer(c, MODEL)
     const figures = figuresFound(c, a.text, a.toolData)
     const j = await judge(c, a.text, a.toolData)
-    const pass = figures.every((x) => x.found) && j.include.every((x) => x.met) && j.not.every((x) => !x.violated)
+    const pass = !!a.text.trim() && figures.every((x) => x.found) && j.include.every((x) => x.met) && j.not.every((x) => !x.violated)
     const madeUp = unsupportedFigures(c, a.text, a.toolData, a.earlierData)
     return { id: c.id, q: c.q, before: c.before, pass, bucket: bucket(pass, madeUp, j.declined), madeUp, figures, include: j.include, not: j.not, note: j.note, tools: a.tools, cents: a.cents, secs: a.secs, text: a.text,
       // Evidence for a flagged answer, so a person can confirm or clear it before results are published.
@@ -39,7 +39,7 @@ writeFileSync(`evals/results/${stamp}.json`, JSON.stringify({ model: MODEL, resu
 for (const r of results) {
   const miss = [...(('figures' in r && r.figures) || []).filter((x) => !x.found).map((x) => `fig:${x.f}`),
     ...(('include' in r && r.include) || []).filter((x) => !x.met).map((x) => `needs:${x.item}`),
-    ...(('not' in r && r.not) || []).filter((x) => x.violated).map((x) => `DID:${x.item}`), ...r.madeUp.map((f) => `UNSOURCED:${f}`),
+    ...(('not' in r && r.not) || []).filter((x) => x.violated).map((x) => `DID:${x.item}`), ...r.madeUp.map((f) => `UNSOURCED:${f}`), ...('text' in r && !r.text?.trim() ? ['EMPTY ANSWER'] : []),
     ...('error' in r ? [`error:${r.error}`] : [])]
   console.log(`${r.bucket.padEnd(15)} ${r.id.padEnd(24)} ${String(r.cents).padStart(5)}c  [${r.tools.join(',')}]${miss.length ? `\n      ${miss.join('\n      ')}` : ''}`)
 }
