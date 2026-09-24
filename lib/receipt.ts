@@ -105,6 +105,27 @@ export function feeChanges(fees: ReceiptRates['fees']) {
     const a = Number(f.v2026), b = Number(f.v2027)
     return [k, { ...f, change: +(b - a).toFixed(2), percentChange: Math.round(((b - a) / a) * 1000) / 10,
       ...(PER_FOOT.includes(k as FeeKey) ? { typicalProperty: { frontageFeet: DEFAULT_FRONTAGE_FT, page: '141',
-        cost2026: +(a * DEFAULT_FRONTAGE_FT).toFixed(2), cost2027: +(b * DEFAULT_FRONTAGE_FT).toFixed(2) } } : {}) }]
+        cost2026: +(a * DEFAULT_FRONTAGE_FT).toFixed(2), cost2027: +(b * DEFAULT_FRONTAGE_FT).toFixed(2),
+        costChange: +((b - a) * DEFAULT_FRONTAGE_FT).toFixed(2) } } : {}) }]
   }))
+}
+
+type Estimate = Extract<Receipt, { kind: 'estimate' }>
+const dollars = (cents: number) => Math.round(cents) / 100
+/** The receipt in dollars, with every change worked out here: the chat quotes these instead of
+ *  converting cents or dividing by 12 itself (a slip there once turned $173.39 a month into "$17.34 more"). */
+export function receiptInDollars(r: Estimate, assessed?: { a2025?: number; a2026: number }) {
+  const change = (a: { c2026: number; c2027: number }) => dollars(a.c2027 - a.c2026)
+  const services = r.lines.filter((l) => l.key !== 'property_tax')
+  const servicesTotal = services.reduce((a, l) => ({ c2026: a.c2026 + l.c2026, c2027: a.c2027 + l.c2027 }), { c2026: 0, c2027: 0 })
+  const tax = r.lines.find((l) => l.key === 'property_tax')
+  return {
+    lines: r.lines.map((l) => ({ label: l.label, dollars2026: dollars(l.c2026), dollars2027: dollars(l.c2027), change: change(l) })),
+    total: { dollars2026: dollars(r.total.c2026), dollars2027: dollars(r.total.c2027), changePerYear: change(r.total),
+      changePerMonth: dollars((r.total.c2027 - r.total.c2026) / 12) },
+    perMonth: { dollars2026: dollars(r.perMonth.c2026), dollars2027: dollars(r.perMonth.c2027) },
+    propertyTaxChange: tax ? change(tax) : null,
+    serviceChargesChange: change(servicesTotal),
+    ...(assessed?.a2025 ? { assessmentChangePercent: Math.round(((assessed.a2026 - assessed.a2025) / assessed.a2025) * 1000) / 10 } : {}),
+  }
 }
