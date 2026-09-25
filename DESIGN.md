@@ -313,6 +313,8 @@ Square corners throughout (0px). Buttons, the segmented control, the suggestion 
 - **Highlight:** the targeted source, note or table row takes the mark wash and fades to paper.
 
 ### Sources and Notes (footer)
+- **Closed by default:** a one-line summary ("42 pages of the City of Milwaukee's 2027 proposed budget documents. Tap any blue number…") and a reference-blue "Show all N sources" disclosure (native `<details>`). Source marks open the PDF drawer directly, so the list is a record, not a route; every entry stays in the page because the drawer reads its data attributes, and a link to an entry opens the list.
+- **Opened:** grouped by document under an uppercase label (Budget Summary, Detailed Budget), one ruled line per page ("p. 7 (PDF 17)"), numbers unchanged. "Used for" shows three back-links, then "and N more" folds the rest into the same sentence.
 - **Style:** opens with a 2px ink rule and a semibold statement that the figures are an estimate of a proposal. Sources are an ordered list numbered in first-use order, the numeral in semibold reference blue; notes are lettered in reading order (heading note first, then rows top to bottom) with a semibold italic ink letter and soft-ink text.
 - **Back-links:** every source and note ends with "Used for" followed by underlined reference-blue links to the rows that cite it, which fire the row highlight.
 
