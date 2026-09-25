@@ -18,6 +18,7 @@
   --color-mark: var(--mark);
   --color-fund: var(--fund);
   --color-band: var(--band);
+  --color-section-tint: var(--section-tint);
   --color-receipt: var(--receipt);
   --color-tile: var(--tile);
   --color-tile-ink: var(--tile-ink);
@@ -69,6 +70,7 @@
   --mark: oklch(0.95 0.035 255);    /* footnote highlight wash */
   --fund: oklch(0.88 0.045 255);    /* self-funded budget sections in charts (ink text on it) */
   --band: oklch(0.84 0.15 80);      /* marigold frame around the City Receipt only (~#FDBE45); ink on it ~8:1 */
+  --section-tint: oklch(0.972 0.014 85); /* faint cream behind alternate Overview sections (D26) */
   --receipt: oklch(0.985 0.012 90); /* warm receipt paper (~#FDFAF1); the image route keeps hex twins */
   --tile: var(--ink);               /* treemap sections with a city tax rate */
   --tile-ink: var(--paper);
@@ -119,6 +121,7 @@
   --rule: oklch(0.36 0.025 262);    /* ~#363D4B */
   --mark: oklch(0.33 0.06 255);     /* ~#1F3654 */
   --fund: oklch(0.36 0.06 255);     /* ~#273E5C */
+  --section-tint: oklch(0.235 0.025 262); /* a step lighter than the night paper (D26) */
   --tile: oklch(0.5 0.075 262);     /* ~#4C638E: tax-rate sections, a lit navy rather than a white block */
   --tile-ink: var(--ink);
   --card: var(--paper); --card-foreground: var(--ink); --popover: var(--paper); --popover-foreground: var(--ink);
@@ -138,6 +141,7 @@
     --rule: oklch(0.36 0.025 262);    /* ~#363D4B */
     --mark: oklch(0.33 0.06 255);     /* ~#1F3654 */
     --fund: oklch(0.36 0.06 255);     /* ~#273E5C */
+    --section-tint: oklch(0.235 0.025 262); /* a step lighter than the night paper (D26) */
     --tile: oklch(0.5 0.075 262);     /* ~#4C638E: tax-rate sections, a lit navy rather than a white block */
     --tile-ink: var(--ink);
     --card: var(--paper); --card-foreground: var(--ink); --popover: var(--paper); --popover-foreground: var(--ink);
@@ -203,8 +207,18 @@ a { text-underline-offset: 0.2em; text-decoration-thickness: 1px; }
 
 /* The sticky site header covers the top ~52px, so in-page jumps land below it. */
 html { scroll-padding-top: 4.5rem; }
-/* The Overview's header adds a row of section links from 768px. */
-@media (min-width: 48rem) { html:has(nav[aria-label="Sections of this page"]) { scroll-padding-top: 7rem; } }
+/* The Overview's header adds a row: section links from 768px, the "you're in" bar below that. */
+html:has(nav[aria-label="Sections of this page"]) { scroll-padding-top: 7rem; }
+
+/* Section bands (D26): alternate blocks of the Overview sit on a faint tint that runs the full width of
+   the window, so a reader scrolling a long page can see where one part ends. The tint groups; it never
+   encodes data. The shadow paints the tint out to the window edges without changing layout; forced-color
+   modes drop both, and the heading rules still mark each section. */
+.section-band {
+  background: var(--section-tint);
+  box-shadow: 0 0 0 100vmax var(--section-tint);
+  clip-path: inset(0 -100vmax);
+}
 
 /* ---------------------------------------------------------------- chat panel (P3, DESIGN.md)
    CopilotKit's v2 chat reads shadcn tokens under [data-copilotkit]; point them at the site's ink and
