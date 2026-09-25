@@ -3,6 +3,8 @@
 // back to the rows that use it. Build the registry before rendering so numbering is deterministic.
 import type { Cite } from '@/lib/db/schema'
 
+import { OpenOnHash } from './open-on-hash'
+
 export type Use = { id: string; label: string }
 export type Sources = ReturnType<typeof sourceRegistry>
 
@@ -51,25 +53,64 @@ export function Tail({ label, children }: { label: string; children: React.React
 const where = (c: Cite) => c.printed_page === 'front matter' ? 'front matter (PDF page 4)'
   : `page ${c.printed_page}${c.line_no ? `, line ${c.line_no}` : ''} (PDF page ${c.pdf_page})`
 
+// Short form for the list, where the document name is a group heading: "p. 7 (PDF 17)".
+const short = (c: Cite) => c.printed_page === 'front matter' ? 'front matter (PDF 4)'
+  : `p. ${c.printed_page}${c.line_no ? `, line ${c.line_no}` : ''} (PDF ${c.pdf_page})`
+const GROUP = { summary: 'Budget Summary', detailed: 'Detailed Budget' } as const
+const SHOWN_USES = 3 // "Used for" lists longer than this fold behind "and N more"
+
+// "a, b and c"; with `more`, the list continues, so every join is a comma ("a, b, c and 23 more").
+const linksFor = (uses: Use[], more = false) => uses.map((u, j) => (
+  <span key={u.id}>{j > 0 && (j === uses.length - 1 && !more ? ' and ' : ', ')}<a href={`#${u.id}`} className="text-ref underline">{u.label}</a></span>
+))
+
+/** The page's sources, closed by default: tapping a figure's mark already opens its PDF page (the
+ *  source drawer reads each entry's data attributes, so every entry stays in the page). Opened, the
+ *  list is grouped by document, one line per page, numbered in first-use order as the marks are. */
 export function SourcesList({ sources, notes = [] }: { sources: Sources; notes?: { l: string; text: string }[] }) {
+  const numbered = sources.list.map((x, i) => ({ ...x, n: i + 1 }))
+  const groups = (Object.keys(GROUP) as (keyof typeof GROUP)[]).map((doc) => ({ doc, items: numbered.filter((x) => x.cite.doc === doc) }))
+    .filter((g) => g.items.length)
+  const count = sources.list.length
   return (
     <section aria-labelledby="sources" className="mt-20 border-t-2 border-ink pt-4 text-sm leading-relaxed text-ink">
+      <OpenOnHash />
       <h2 id="sources" className="text-xs font-semibold uppercase tracking-[0.06em]">Sources</h2>
-      <p className="mt-1 text-ink-soft">All from the City of Milwaukee’s 2027 proposed budget documents.</p>
-      <ol className="mt-3 space-y-2">
-        {sources.list.map(({ cite, uses }, i) => (
-          <li key={i} id={`src-${i + 1}`} className="fn-target -mx-1 px-1" data-doc={cite.doc} data-pdf-page={cite.pdf_page} data-where={where(cite)}>
-            <span className="tabular mr-1 font-semibold text-ref">{i + 1}.</span>
-            {DOCS[cite.doc]}, {where(cite)}.
-            <span className="ml-1 text-ink-soft">
-              Used for{' '}
-              {uses.map((u, j) => (
-                <span key={u.id}>{j > 0 && (j === uses.length - 1 ? ' and ' : ', ')}<a href={`#${u.id}`} className="text-ref underline">{u.label}</a></span>
-              ))}.
-            </span>
-          </li>
+      <p className="mt-1 text-ink-soft">
+        {count} {count === 1 ? 'page' : 'pages'} of the City of Milwaukee’s 2027 proposed budget documents. Tap any blue number on
+        this page to open the page it comes from.
+      </p>
+      <details className="sources-list mt-2">
+        <summary className="cursor-pointer font-semibold text-ref underline underline-offset-4">Show all {count} sources</summary>
+        {groups.map(({ doc, items }) => (
+          <div key={doc} className="mt-4">
+            <h3 className="border-b border-rule pb-1 text-xs font-semibold uppercase tracking-[0.06em]">{GROUP[doc]}</h3>
+            <ol className="mt-1 divide-y divide-rule">
+              {items.map(({ cite, uses, n }) => (
+                <li key={n} value={n} id={`src-${n}`} className="fn-target -mx-1 grid grid-cols-[1.75rem_1fr] gap-x-1 px-1 py-1.5"
+                  data-doc={cite.doc} data-pdf-page={cite.pdf_page} data-where={where(cite)}>
+                  <span className="tabular font-semibold text-ref">{n}.</span>
+                  <span>
+                    <span className="tabular font-semibold">{short(cite)}</span>
+                    <span className="ml-2 text-ink-soft">
+                      Used for {uses.length > SHOWN_USES ? (
+                        <>
+                          {linksFor(uses.slice(0, SHOWN_USES), true)}{' '}
+                          {/* The sentence's period sits inside the fold, so nothing trails the <details> box. */}
+                          <details className="more-uses inline">
+                            <summary className="inline cursor-pointer text-ref underline underline-offset-4">and {uses.length - SHOWN_USES} more</summary>
+                            <span>{linksFor([uses[SHOWN_USES - 1], ...uses.slice(SHOWN_USES)]).slice(1)}.</span>
+                          </details>
+                        </>
+                      ) : <>{linksFor(uses)}.</>}
+                    </span>
+                  </span>
+                </li>
+              ))}
+            </ol>
+          </div>
         ))}
-      </ol>
+      </details>
       {notes.length > 0 && (
         <>
           <h2 className="mt-6 text-xs font-semibold uppercase tracking-[0.06em]">Notes</h2>

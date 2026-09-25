@@ -285,3 +285,10 @@ html { scroll-padding-top: 4.5rem; }
   .tile, [aria-hidden="true"].bg-fund { border: 1px solid CanvasText; }
   .pdf-page .textLayer mark { forced-color-adjust: none; background: Highlight; outline-color: Highlight; }
 }
+
+/* Sources: the folded "and N more" sits inline in its sentence; no disclosure triangles on either toggle
+   (the link styling says it's tappable). */
+.sources-list > summary, .more-uses > summary { list-style: none; }
+.sources-list > summary::-webkit-details-marker, .more-uses > summary::-webkit-details-marker { display: none; }
+.sources-list[open] > summary { margin-bottom: 0.25rem; }
+.more-uses[open] > summary { display: none; }
