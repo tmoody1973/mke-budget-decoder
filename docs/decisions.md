@@ -333,3 +333,22 @@ The cheaper models' slips were soft (for example, saying the proposal "reflects 
 **How we'll know if this was right.** No reports of unreadable text or a flash of the wrong theme; the receipt image people share still looks like the one on screen.
 
 **What actually happened.**
+
+## D26 — Alternating section bands and a "You're in" bar, not a color per section
+
+**Decision.** Alternate blocks of the Overview sit on a faint cream tint, and on phones the header names the section you are in, with a tap opening the section list. Sections do not each get their own color.
+
+**Why this came up.** A reader wrote: "It would help if larger sections were different colors. My eyes keep getting lost in all the data." On a phone the Overview is about 17 screens long, and all seven sections shared one white background and one heading style; nothing told you where you were. Phones had the section list only inside the menu.
+
+**Options.**
+1. *A different color per section* (the reader's suggestion). Direct, but color already means things here: navy tiles are sections with a property tax rate, light blue ones have none, blue is links and sources, marigold is the receipt. Seven more hues would make color mean two things, fail people who can't tell some hues apart, and double the dark-mode work.
+2. *Alternating bands plus a "You're in" bar* (chosen). Every other block sits on a faint cream, like zebra rows for the whole page; the bar names the current section. The tint only groups, so it can't be misread.
+3. *Navigation only.* Fixes the lost place but leaves the long run of identical white sections.
+
+**What we chose and why.** Option 2 (Tarik chose it; Claude proposed it). It answers the complaint, sections that look alike, while keeping color's existing meanings. The bar does what color can't: it tells you where you are. The section links on wide screens and in the phone menu now mark the current section too (with weight and a thicker underline, not color alone).
+
+**What we gave up.** The Overview no longer reads as one sheet of printed paper. The tint is faint (1.08:1 against white) so on a dim or badly calibrated screen the bands may barely show; the headings and rules still separate sections there. The bar takes about 37px of a phone screen while you scroll.
+
+**How we'll know if this was right.** The reader who raised it, asked again, says the page is easier to follow, and no one else reports getting lost. (Taps on the bar are not tracked; add a PostHog event if we want a number.)
+
+**What actually happened.**

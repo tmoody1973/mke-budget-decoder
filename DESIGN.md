@@ -172,7 +172,8 @@ A near-monochrome navy-on-white almanac palette with a single blue reserved for 
 - **Fund Blue** (`fund`): one meaning only, in charts: a budget section with no city property tax rate (paid from its own revenue). Always carries ink text, never paper text. Because it sits close to paper in lightness, every fund-blue shape (treemap tile, legend swatch) draws a 1px inset reference-blue ring so its edge meets non-text contrast. Sections with a tax rate are ink-filled; there is no third fill.
 
 ### Neutral
-- **Offset Paper** (`paper`, white): the only ground. Also the text color on ink-filled controls.
+- **Offset Paper** (`paper`, white): the main ground. Also the text color on ink-filled controls.
+- **Section Tint** (`section-tint`, a faint cream ~#F8F5EC; one step lighter navy in dark): the second ground, behind alternate blocks of the Overview (departments / revenue / changes, and the news) so a reader can see where one part ends on a long page (D26). It groups; it never encodes data, so no chart or table meaning depends on it. Cream rather than blue so the Highlight Wash still shows on it. All text keeps AA on it: ink 13.1:1, soft ink 7.8:1, reference blue 5.1:1 (dark: 14.0, 8.9, 8.4).
 - **Soft Ink** (`ink-soft`): secondary text (hints, 2026 comparison amounts, change column, lettered notes, assessed-value lines). Kept at or above 4.5:1 on paper.
 - **Rule Gray** (`rule`, about #D9DEE7): 1px hairlines between table rows and between suggestion list items. Also the shadcn `--border` token.
 - **Highlight Wash** (`mark`): the footnote/row highlight, the active suggestion row, and `::selection`. A pale tint of the reference blue, never a fill for resting content.
@@ -190,6 +191,8 @@ The same Blue Book table printed for night reading: deep navy paper (`oklch(0.2 
 - **Browser surfaces** follow the theme: `color-scheme` for native controls and scrollbars, `theme-color` for the toolbar.
 
 ### Named Rules
+**The Section Band Rule.** Page sections are grouped by alternating paper and Section Tint, never by giving each section its own hue: color already carries meaning in the charts (tax-rate ink, Fund Blue, Reference Blue, Receipt Marigold), and a hue per section would make it mean two things. On phones the header names the current section ("You’re in …"), which does the wayfinding color alone cannot.
+
 **The One Ink Rule.** Text and structural rules share the same navy. Hierarchy comes from weight, size and rule thickness, not from extra colors.
 
 **The Reference Blue Rule.** Blue means "this points to a source or takes you somewhere" (marks, links, jump-to links, the "Show as table" disclosure, focus, caret). If a blue element does not navigate, disclose or indicate focus, it is wrong. The single structural exception is the 1px inset ring that edges a Fund Blue shape.

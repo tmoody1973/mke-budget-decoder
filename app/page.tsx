@@ -105,7 +105,7 @@ export default async function Overview() {
         </aside>
       </div>
 
-      <div className="mt-16 grid gap-12 lg:grid-cols-12 lg:gap-0">
+      <div className="section-band mt-16 grid gap-12 py-10 lg:grid-cols-12 lg:gap-0">
         <section aria-labelledby="departments" className="lg:col-span-7 lg:pr-8">
           <PanelTitle id="departments">What departments asked for, and what the Mayor proposed</PanelTitle>
           <p className="mt-2 text-sm leading-relaxed text-ink">
@@ -177,7 +177,7 @@ export default async function Overview() {
         </div>
       </section>
 
-      <section aria-labelledby="news" className="mt-16">
+      <section aria-labelledby="news" className="section-band mt-16 py-10">
         <PanelTitle id="news">What’s in the news, and what the budget says</PanelTitle>
         <p className="mt-2 max-w-[78ch] text-sm leading-relaxed text-ink">
           The topics local coverage leads with. Figures come from the budget documents, not from the stories; headlines link to each outlet.
